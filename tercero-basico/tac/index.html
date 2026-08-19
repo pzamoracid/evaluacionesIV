@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación Parcial No. 2 - TIC - Tercero Básico</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --text:#172033;
+      --muted:#667085;
+      --line:#dbe3ef;
+      --primary:#1f4f8f;
+      --primary2:#2f6db5;
+      --accent:#e9f2ff;
+      --success:#157347;
+      --warning:#9a6700;
+      --danger:#b42318;
+      --dark:#172033;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    button,input,select,textarea{font:inherit}
+    .header{
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:white;
+      padding:22px 18px;
+    }
+    .header-inner{
+      max-width:1040px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .eyebrow{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      opacity:.85;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    h1{font-size:26px;margin:0 0 4px}
+    .header p{margin:0;font-size:14px;opacity:.9}
+    .value-box{
+      min-width:135px;
+      padding:12px 16px;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.12);
+      border-radius:14px;
+      text-align:center;
+    }
+    .value-box strong{display:block;font-size:28px}
+    .wrap{max-width:1040px;margin:26px auto;padding:0 16px 36px}
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 8px 30px rgba(16,24,40,.06);
+      margin-bottom:18px;
+    }
+    .panel h2,.panel h3{margin-top:0}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    label.field{
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    input[type=text],input[type=url],select,textarea{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:11px;
+      padding:11px 12px;
+      background:#fff;
+      color:var(--text);
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:3px solid rgba(47,109,181,.18);
+      border-color:var(--primary2);
+    }
+    textarea{min-height:88px;resize:vertical}
+    .note{
+      background:#fff7e6;
+      border:1px solid #f1d99c;
+      border-radius:12px;
+      padding:13px 15px;
+      font-size:13px;
+      line-height:1.5;
+      margin:16px 0;
+    }
+    .source-summary{
+      background:#f7f9fc;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px 16px;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .btn{
+      border:0;
+      border-radius:12px;
+      padding:12px 18px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .btn-primary{background:var(--primary2);color:white}
+    .btn-primary:hover{filter:brightness(.94)}
+    .btn-secondary{background:#e8edf5;color:var(--dark)}
+    .btn-success{background:#168455;color:white}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .hidden{display:none!important}
+    .topbar{
+      position:sticky;
+      top:10px;
+      z-index:20;
+      background:rgba(23,32,51,.96);
+      color:#fff;
+      border-radius:16px;
+      padding:14px 16px;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .topbar small{color:#cbd5e1}
+    .progress-wrap{min-width:230px;flex:1;max-width:390px}
+    .progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+    .progress-track{height:9px;background:#344054;border-radius:99px;overflow:hidden}
+    .progress-bar{height:100%;width:0;background:#75a9e6;transition:width .2s ease}
+    .module-title{
+      display:inline-block;
+      background:var(--accent);
+      color:var(--primary);
+      padding:5px 9px;
+      border-radius:8px;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .question{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+      margin:14px 0;
+      background:#fbfcfe;
+    }
+    .question p{font-weight:700;line-height:1.5;margin:0 0 12px}
+    .option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:11px 12px;
+      border:1px solid #d9e0ea;
+      border-radius:10px;
+      background:#fff;
+      margin:8px 0;
+      cursor:pointer;
+      line-height:1.4;
+    }
+    .option:hover{border-color:#a8bdd8;background:#f8fbff}
+    .option input{margin-top:3px}
+    .attitude{
+      display:grid;
+      grid-template-columns:1.8fr repeat(4,1fr);
+      gap:0;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .attitude > div{
+      padding:10px;
+      border-right:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+    .attitude > div:nth-child(5n){border-right:0}
+    .attitude .head{background:#f2f5f9;font-weight:800}
+    .attitude .stmt{justify-content:flex-start;text-align:left}
+    .result{
+      text-align:center;
+      padding:30px 20px;
+    }
+    .score{
+      font-size:56px;
+      line-height:1;
+      font-weight:900;
+      color:var(--primary);
+      margin:12px 0;
+    }
+    .status{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      background:#e8eef7;
+      margin-bottom:12px;
+    }
+    .result-meta{
+      max-width:600px;
+      margin:16px auto;
+      background:#f7f9fc;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      text-align:left;
+      line-height:1.6;
+    }
+    .privacy-note{
+      color:var(--muted);
+      font-size:13px;
+      max-width:650px;
+      margin:10px auto 0;
+      line-height:1.45;
+    }
+    .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+    .required-msg{color:var(--danger);font-size:13px;font-weight:700;margin-top:8px}
+    .print-only{display:none}
+    @media(max-width:720px){
+      .grid2{grid-template-columns:1fr}
+      .attitude{grid-template-columns:1.4fr repeat(4,.72fr)}
+      .attitude > div{font-size:11px;padding:8px 4px}
+      h1{font-size:22px}
+      .score{font-size:46px}
+    }
+    @media print{
+      body{background:#fff}
+      .header,.no-print,#view-registration,#view-exam{display:none!important}
+      #view-results{display:block!important}
+      .wrap{max-width:none;margin:0;padding:0}
+      .panel{box-shadow:none;border:1px solid #aaa}
+      .print-only{display:block}
+      .result .actions,.privacy-note{display:none!important}
+    }
+  </style>
+</head>
+<body>
+  <header class="header no-print">
+    <div class="header-inner">
+      <div>
+        <div class="eyebrow">Tecnologías de la Información y Comunicación</div>
+        <h1>Evaluación Parcial No. 2 · Tercero Básico</h1>
+        <p>Integración Ofimática · Campaña digital y ciudadanía responsable</p>
+      </div>
+      <div class="value-box">
+        <span>Valor</span>
+        <strong>20 pts</strong>
+        <small>Viernes 21 Ago 2026</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="view-registration" class="panel">
+      <h2>Registro del estudiante</h2>
+      <p>Completa tus datos antes de iniciar. La evaluación integra los contenidos de las seis guías de trabajo indicadas para el segundo parcial.</p>
+
+      <div class="grid2">
+        <div>
+          <label class="field" for="student-name">Nombre completo *</label>
+          <input id="student-name" type="text" autocomplete="name" required>
+        </div>
+        <div>
+          <label class="field" for="student-section">Sección / clave *</label>
+          <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 12" required>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <label class="field" for="campaign-link">Enlace de la campaña o publicación digital (opcional)</label>
+        <input id="campaign-link" type="url" placeholder="https://...">
+      </div>
+
+      <div class="source-summary" style="margin-top:16px">
+        <strong>Contenidos integrados:</strong> identidad digital y netiqueta; propiedad intelectual y licencias Creative Commons; ciberseguridad y privacidad; planificación de campaña contra el ciberbullying; producción audiovisual de concientización; publicación y moderación ética.
+      </div>
+
+      <div class="note">
+        <strong>Forma de calificación:</strong> 10 reactivos de integración, 2 puntos cada uno. La autoevaluación actitudinal es obligatoria como evidencia de cierre, pero no altera la nota objetiva. Al finalizar se mostrará únicamente el punteo total. El sistema no indicará qué respuestas fueron incorrectas ni revelará la respuesta correcta.
+      </div>
+
+      <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+      <div id="registration-msg" class="required-msg hidden"></div>
+    </section>
+
+    <section id="view-exam" class="hidden">
+      <div class="topbar no-print">
+        <div>
+          <strong id="student-bar">Estudiante</strong><br>
+          <small>Segundo Parcial · Integración Ofimática</small>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Progreso</span>
+            <span id="progress-text">0 / 10 respondidas</span>
+          </div>
+          <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <span class="module-title">Guías 1 y 2</span>
+        <h3>Ciudadanía digital, netiqueta y propiedad intelectual</h3>
+
+        <div class="question">
+          <p>1. Un estudiante descubre que una publicación antigua con comentarios ofensivos aparece al buscar su nombre. ¿Qué acción corresponde mejor al manejo responsable de su identidad digital?</p>
+          <label class="option"><input type="radio" name="q1" value="A"> <span>A) Crear varias cuentas nuevas para ocultar la publicación.</span></label>
+          <label class="option"><input type="radio" name="q1" value="B"> <span>B) Revisar la privacidad, solicitar o realizar la eliminación del contenido cuando sea posible y cuidar futuras publicaciones.</span></label>
+          <label class="option"><input type="radio" name="q1" value="C"> <span>C) Compartir la publicación nuevamente para explicar que ya es antigua.</span></label>
+        </div>
+
+        <div class="question">
+          <p>2. Para usar una imagen con licencia Creative Commons en una infografía escolar, ¿cuál es la práctica más adecuada?</p>
+          <label class="option"><input type="radio" name="q2" value="A"> <span>A) Utilizarla sin mencionar al autor porque el trabajo es educativo.</span></label>
+          <label class="option"><input type="radio" name="q2" value="B"> <span>B) Respetar las condiciones de la licencia y colocar la atribución correspondiente.</span></label>
+          <label class="option"><input type="radio" name="q2" value="C"> <span>C) Cambiar los colores para que la imagen se considere propia.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-title">Guía 3</span>
+        <h3>Ciberseguridad, privacidad y participación ética</h3>
+
+        <div class="question">
+          <p>3. ¿Qué configuración protege mejor una cuenta personal utilizada para actividades escolares?</p>
+          <label class="option"><input type="radio" name="q3" value="A"> <span>A) Contraseña única y robusta, verificación en dos pasos y revisión de permisos de privacidad.</span></label>
+          <label class="option"><input type="radio" name="q3" value="B"> <span>B) La misma contraseña para todas las plataformas para no olvidarla.</span></label>
+          <label class="option"><input type="radio" name="q3" value="C"> <span>C) Mantener el perfil completamente público para facilitar el trabajo en grupo.</span></label>
+        </div>
+
+        <div class="question">
+          <p>4. En un foro sobre la ética del engaño en redes sociales, ¿qué participación cumple mejor con una discusión responsable?</p>
+          <label class="option"><input type="radio" name="q4" value="A"> <span>A) Atacar a quien tenga una opinión distinta para demostrar seguridad.</span></label>
+          <label class="option"><input type="radio" name="q4" value="B"> <span>B) Argumentar con respeto, responder a las ideas y evitar desinformación o suplantación.</span></label>
+          <label class="option"><input type="radio" name="q4" value="C"> <span>C) Publicar información falsa como experimento sin avisar a los participantes.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-title">Guía 4</span>
+        <h3>Planificación de campaña contra el ciberbullying</h3>
+
+        <div class="question">
+          <p>5. Un equipo va a producir un video contra el ciberbullying. ¿Cuál es el orden de planificación más coherente antes del rodaje?</p>
+          <label class="option"><input type="radio" name="q5" value="A"> <span>A) Publicar el video, escribir el guion y luego decidir las escenas.</span></label>
+          <label class="option"><input type="radio" name="q5" value="B"> <span>B) Definir el mensaje, elaborar guion literario, guion técnico y storyboard antes de grabar.</span></label>
+          <label class="option"><input type="radio" name="q5" value="C"> <span>C) Grabar escenas al azar y construir el objetivo después de editar.</span></label>
+        </div>
+
+        <div class="question">
+          <p>6. ¿Qué característica debe tener una escena de una campaña escolar que busca prevenir el acoso en red?</p>
+          <label class="option"><input type="radio" name="q6" value="A"> <span>A) Exponer públicamente a una víctima real para que el mensaje sea más impactante.</span></label>
+          <label class="option"><input type="radio" name="q6" value="B"> <span>B) Representar el problema sin humillar a personas reales y orientar hacia una respuesta responsable.</span></label>
+          <label class="option"><input type="radio" name="q6" value="C"> <span>C) Usar amenazas como recurso principal para obligar a cambiar conductas.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-title">Guías 5 y 6</span>
+        <h3>Producción audiovisual, publicación y moderación ética</h3>
+
+        <div class="question">
+          <p>7. Durante la edición de un video de concientización, ¿qué decisión se ajusta mejor al propósito indicado en la guía?</p>
+          <label class="option"><input type="radio" name="q7" value="A"> <span>A) Presentar estereotipos para hacer el video más divertido.</span></label>
+          <label class="option"><input type="radio" name="q7" value="B"> <span>B) Promover empatía y evitar estigmas hacia las personas representadas.</span></label>
+          <label class="option"><input type="radio" name="q7" value="C"> <span>C) Eliminar el mensaje preventivo para concentrarse únicamente en efectos visuales.</span></label>
+        </div>
+
+        <div class="question">
+          <p>8. Al publicar la campaña en un blog de clase, aparece un comentario burlón hacia una persona. ¿Qué debería hacer el equipo moderador?</p>
+          <label class="option"><input type="radio" name="q8" value="A"> <span>A) Mantenerlo porque todos los comentarios deben quedar visibles.</span></label>
+          <label class="option"><input type="radio" name="q8" value="B"> <span>B) Moderarlo según las normas del espacio, evitar que continúe la agresión y orientar la conversación hacia un intercambio respetuoso.</span></label>
+          <label class="option"><input type="radio" name="q8" value="C"> <span>C) Responder con otra burla para defender al grupo.</span></label>
+        </div>
+
+        <div class="question">
+          <p>9. ¿Qué evidencia permite comprobar mejor que una campaña digital fue desarrollada de manera responsable?</p>
+          <label class="option"><input type="radio" name="q9" value="A"> <span>A) Un producto publicado sin créditos, sin planificación y sin reglas de moderación.</span></label>
+          <label class="option"><input type="radio" name="q9" value="B"> <span>B) Guiones y storyboard, uso correcto de recursos, mensaje de concientización, publicación controlada y moderación ética.</span></label>
+          <label class="option"><input type="radio" name="q9" value="C"> <span>C) Únicamente la cantidad de vistas obtenidas por el video.</span></label>
+        </div>
+
+        <div class="question">
+          <p>10. En la exposición final, el equipo recibe una observación que señala que el mensaje de la campaña puede prestarse a confusión. ¿Cuál es la respuesta más adecuada?</p>
+          <label class="option"><input type="radio" name="q10" value="A"> <span>A) Ignorarla porque el proyecto ya fue publicado.</span></label>
+          <label class="option"><input type="radio" name="q10" value="B"> <span>B) Analizar el feedback, justificar las decisiones tomadas y corregir el contenido si mejora la claridad o la responsabilidad del mensaje.</span></label>
+          <label class="option"><input type="radio" name="q10" value="C"> <span>C) Eliminar todos los comentarios críticos del blog.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-title">Autoevaluación actitudinal</span>
+        <h3>Cierre personal de la campaña</h3>
+        <p>Selecciona una opción por cada afirmación. Esta sección se registra como evidencia de autoevaluación y no modifica la nota de 20 puntos.</p>
+
+        <div class="attitude">
+          <div class="head">Afirmación</div>
+          <div class="head">Siempre</div>
+          <div class="head">Casi siempre</div>
+          <div class="head">A veces</div>
+          <div class="head">Debo mejorar</div>
+
+          <div class="stmt">Respeté las ideas y la participación de mis compañeros.</div>
+          <div><input type="radio" name="a1" value="Siempre" aria-label="Siempre"></div>
+          <div><input type="radio" name="a1" value="Casi siempre" aria-label="Casi siempre"></div>
+          <div><input type="radio" name="a1" value="A veces" aria-label="A veces"></div>
+          <div><input type="radio" name="a1" value="Debo mejorar" aria-label="Debo mejorar"></div>
+
+          <div class="stmt">Cumplí con las tareas asignadas en la campaña.</div>
+          <div><input type="radio" name="a2" value="Siempre" aria-label="Siempre"></div>
+          <div><input type="radio" name="a2" value="Casi siempre" aria-label="Casi siempre"></div>
+          <div><input type="radio" name="a2" value="A veces" aria-label="A veces"></div>
+          <div><input type="radio" name="a2" value="Debo mejorar" aria-label="Debo mejorar"></div>
+
+          <div class="stmt">Cuidé la privacidad, la autoría y el trato respetuoso en el trabajo digital.</div>
+          <div><input type="radio" name="a3" value="Siempre" aria-label="Siempre"></div>
+          <div><input type="radio" name="a3" value="Casi siempre" aria-label="Casi siempre"></div>
+          <div><input type="radio" name="a3" value="A veces" aria-label="A veces"></div>
+          <div><input type="radio" name="a3" value="Debo mejorar" aria-label="Debo mejorar"></div>
+
+          <div class="stmt">Acepté y utilicé el feedback para mejorar el producto final.</div>
+          <div><input type="radio" name="a4" value="Siempre" aria-label="Siempre"></div>
+          <div><input type="radio" name="a4" value="Casi siempre" aria-label="Casi siempre"></div>
+          <div><input type="radio" name="a4" value="A veces" aria-label="A veces"></div>
+          <div><input type="radio" name="a4" value="Debo mejorar" aria-label="Debo mejorar"></div>
+        </div>
+
+        <div style="margin-top:16px">
+          <label class="field" for="commitment">Compromiso personal de mejora *</label>
+          <textarea id="commitment" placeholder="Escribe brevemente qué aspecto de tu participación o ciudadanía digital deseas mejorar."></textarea>
+        </div>
+      </section>
+
+      <section class="panel no-print">
+        <h3>Entrega del parcial</h3>
+        <p>Antes de finalizar, revisa que hayas contestado los 10 reactivos y completado la autoevaluación.</p>
+        <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+        <div id="exam-msg" class="required-msg hidden"></div>
+      </section>
+    </section>
+
+    <section id="view-results" class="panel hidden">
+      <div class="result">
+        <div class="eyebrow" style="color:var(--primary);opacity:1">Evaluación finalizada</div>
+        <h2 id="result-name">Estudiante</h2>
+        <div id="result-score" class="score">0 / 20</div>
+        <div id="result-status" class="status">Registro completado</div>
+
+        <div class="result-meta">
+          <div><strong>Grado:</strong> Tercero Básico</div>
+          <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+          <div><strong>Fecha de registro:</strong> <span id="result-date">---</span></div>
+          <div id="result-link-row" class="hidden"><strong>Campaña registrada:</strong> <span id="result-link">---</span></div>
+          <div><strong>Autoevaluación actitudinal:</strong> Completada</div>
+        </div>
+
+        <p class="privacy-note">
+          Por diseño, este reporte no muestra cuáles reactivos fueron incorrectos, no presenta el desglose de respuestas y no revela la clave correcta.
+        </p>
+
+        <div class="actions no-print">
+          <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+          <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+        </div>
+
+        <div class="print-only">
+          <p style="margin-top:28px;font-size:12px;color:#555">
+            Segundo Parcial: Integración Ofimática · Valor 20 puntos · Campaña digital y autoevaluación actitudinal.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const TOTAL = 10;
+      const POINTS = 2;
+
+      // Clave de calificación interna. No se presenta en la interfaz de resultados.
+      const KEY = {
+        q1: "B", q2: "B", q3: "A", q4: "B", q5: "B",
+        q6: "B", q7: "B", q8: "B", q9: "B", q10: "B"
+      };
+
+      const data = {
+        name: "",
+        section: "",
+        link: "",
+        score: 0,
+        date: "",
+        attitudes: {},
+        commitment: ""
+      };
+
+      const $ = (id) => document.getElementById(id);
+
+      function show(el){ el.classList.remove("hidden"); }
+      function hide(el){ el.classList.add("hidden"); }
+
+      function updateProgress(){
+        let count = 0;
+        for(let i=1;i<=TOTAL;i++){
+          if(document.querySelector(`input[name="q${i}"]:checked`)) count++;
+        }
+        $("progress-text").textContent = `${count} / ${TOTAL} respondidas`;
+        $("progress-bar").style.width = `${(count/TOTAL)*100}%`;
+      }
+
+      document.querySelectorAll('#view-exam input[type="radio"]').forEach(r => {
+        r.addEventListener("change", updateProgress);
+      });
+
+      $("start-btn").addEventListener("click", () => {
+        const name = $("student-name").value.trim();
+        const section = $("student-section").value.trim();
+        const link = $("campaign-link").value.trim();
+
+        if(!name || !section){
+          $("registration-msg").textContent = "Completa el nombre del estudiante y la sección / clave.";
+          show($("registration-msg"));
+          return;
+        }
+
+        if(link){
+          try{
+            const u = new URL(link);
+            if(!["http:","https:"].includes(u.protocol)) throw new Error();
+          }catch{
+            $("registration-msg").textContent = "El enlace de la campaña no tiene un formato válido.";
+            show($("registration-msg"));
+            return;
+          }
+        }
+
+        hide($("registration-msg"));
+        data.name = name;
+        data.section = section;
+        data.link = link;
+
+        $("student-bar").textContent = `${name} · ${section}`;
+        hide($("view-registration"));
+        show($("view-exam"));
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+
+      $("finish-btn").addEventListener("click", () => {
+        const unanswered = [];
+        let score = 0;
+
+        for(let i=1;i<=TOTAL;i++){
+          const selected = document.querySelector(`input[name="q${i}"]:checked`);
+          if(!selected) unanswered.push(i);
+          else if(selected.value === KEY[`q${i}`]) score += POINTS;
+        }
+
+        const missingAttitudes = [];
+        for(let i=1;i<=4;i++){
+          const selected = document.querySelector(`input[name="a${i}"]:checked`);
+          if(!selected) missingAttitudes.push(i);
+          else data.attitudes[`a${i}`] = selected.value;
+        }
+
+        const commitment = $("commitment").value.trim();
+
+        if(unanswered.length || missingAttitudes.length || !commitment){
+          const parts = [];
+          if(unanswered.length) parts.push(`reactivos pendientes: ${unanswered.join(", ")}`);
+          if(missingAttitudes.length) parts.push(`autoevaluación pendiente: ${missingAttitudes.join(", ")}`);
+          if(!commitment) parts.push("falta el compromiso personal de mejora");
+          $("exam-msg").textContent = "Antes de entregar, completa: " + parts.join("; ") + ".";
+          show($("exam-msg"));
+          return;
+        }
+
+        hide($("exam-msg"));
+        data.score = score;
+        data.commitment = commitment;
+        data.date = new Date().toLocaleString("es-GT");
+
+        $("result-name").textContent = data.name;
+        $("result-score").textContent = `${data.score} / 20`;
+        $("result-section").textContent = data.section;
+        $("result-date").textContent = data.date;
+
+        if(data.link){
+          $("result-link").textContent = data.link;
+          show($("result-link-row"));
+        } else {
+          hide($("result-link-row"));
+        }
+
+        const status = $("result-status");
+        if(data.score >= 18){
+          status.textContent = "Desempeño alto";
+          status.style.background = "#e6f4ec";
+          status.style.color = "#146c43";
+        } else if(data.score >= 12){
+          status.textContent = "Aprobado";
+          status.style.background = "#e8eef7";
+          status.style.color = "#1f4f8f";
+        } else {
+          status.textContent = "Requiere reforzamiento";
+          status.style.background = "#fff0d5";
+          status.style.color = "#8a5a00";
+        }
+
+        hide($("view-exam"));
+        show($("view-results"));
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+
+      $("print-btn").addEventListener("click", () => window.print());
+      $("restart-btn").addEventListener("click", () => window.location.reload());
+    })();
+  </script>
+</body>
+</html>

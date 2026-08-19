@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segundo Parcial de Robótica - Segundo Básico</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#fff; --text:#1f2937; --muted:#667085;
+  --line:#d8e0ea; --primary:#3f5f8f; --primary-dark:#2c466d;
+  --soft:#eef4fb; --success:#18794e; --warn:#8a5a00; --danger:#b42318;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}
+.header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:white;padding:22px 18px}
+.header-inner{max-width:1040px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.eyebrow{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;opacity:.85}
+.header h1{margin:4px 0 5px;font-size:27px}.header p{margin:0;font-size:14px;color:#e9eef6}
+.value-box{min-width:140px;text-align:center;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);border-radius:14px;padding:12px 16px}
+.value-box strong{display:block;font-size:28px}
+.wrap{max-width:1040px;margin:26px auto;padding:0 16px 38px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:0 8px 26px rgba(16,24,40,.05)}
+.panel h2,.panel h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+input[type=text]{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:11px 12px;background:#fff;color:var(--text)}
+input[type=text]:focus{outline:3px solid rgba(63,95,143,.16);border-color:var(--primary)}
+.info{margin-top:16px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;line-height:1.55;font-size:14px}
+.warning{margin:16px 0;padding:13px 15px;border:1px solid #edd49b;background:#fff7e6;border-radius:12px;font-size:13px;line-height:1.5}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:white}.btn-secondary{background:#e8edf3;color:var(--text)}
+.hidden{display:none!important}.error{margin-top:10px;color:var(--danger);font-size:13px;font-weight:800}
+.topbar{position:sticky;top:10px;z-index:20;background:rgba(31,41,55,.96);color:#fff;border-radius:16px;padding:14px 16px;margin-bottom:18px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.topbar small{color:#cbd5e1}.progress-area{min-width:230px;flex:1;max-width:430px}
+.progress-text{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.progress-track{height:9px;background:#374151;border-radius:99px;overflow:hidden}.progress-bar{height:100%;width:0;background:#9bbce0;transition:width .2s ease}
+.module-chip{display:inline-block;background:var(--soft);color:var(--primary-dark);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:800;margin-bottom:7px}
+.question{border:1px solid var(--line);background:#fbfcfe;border-radius:14px;padding:18px;margin:14px 0}
+.question p{margin:0 0 12px;font-weight:750;line-height:1.5}
+.option{display:flex;gap:10px;align-items:flex-start;border:1px solid #d7dfe9;background:#fff;border-radius:10px;padding:11px 12px;margin:8px 0;cursor:pointer;line-height:1.4}
+.option:hover{background:#f7fbff;border-color:#abc1da}.option input{margin-top:3px}
+.rgb-demo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.rgb-demo div{border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-weight:800;background:#f8fafc}
+.finish{text-align:center}
+.result{text-align:center;padding:30px 20px}.result-score{font-size:58px;font-weight:900;line-height:1;color:var(--primary);margin:14px 0}
+.status{display:inline-block;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800;background:#e8eef5;color:var(--primary-dark)}
+.result-data{max-width:620px;margin:18px auto;border:1px solid var(--line);background:#f8fafc;border-radius:12px;padding:14px 16px;text-align:left;line-height:1.7}
+.note-final{max-width:690px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.5}
+.actions{margin-top:20px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.print-only{display:none}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}.header h1{font-size:22px}.result-score{font-size:48px}}
+@media print{
+ body{background:#fff}.header,.no-print,#view-registration,#view-exam{display:none!important}
+ #view-results{display:block!important}.wrap{max-width:none;margin:0;padding:0}.panel{box-shadow:none;border:1px solid #aaa}
+ .actions,.note-final{display:none!important}.print-only{display:block}
+}
+</style>
+</head>
+<body>
+<header class="header no-print">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Robótica · Segundo Básico</div>
+      <h1>Segundo Parcial</h1>
+      <p>Gama RGB y mezcla aditiva · Formatos de video y audio</p>
+    </div>
+    <div class="value-box">
+      <span>Valor total</span>
+      <strong>20 pts</strong>
+      <small>10 reactivos</small>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+<section id="view-registration" class="panel">
+  <h2>Registro del estudiante</h2>
+  <p>Ingresa tus datos para iniciar la evaluación.</p>
+
+  <div class="grid2">
+    <div>
+      <label class="field-label" for="student-name">Nombre completo *</label>
+      <input id="student-name" type="text" autocomplete="name">
+    </div>
+    <div>
+      <label class="field-label" for="student-section">Sección / clave *</label>
+      <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 12">
+    </div>
+  </div>
+
+  <div class="info">
+    <strong>Temas confirmados en la captura:</strong><br>
+    Guía 4: gama RGB y mezcla aditiva.<br>
+    Guía 5: formatos de video y audio.
+  </div>
+
+  <div class="warning">
+    <strong>Nota sobre la Guía 6:</strong> el título aparece incompleto en la captura (“Diferenciar el funcionamiento, tipos y…”). Para no atribuirle un contenido que no está visible, esta versión no incluye preguntas de esa guía. Cuando se disponga del título completo puede incorporarse sin cambiar la estructura del parcial.
+  </div>
+
+  <div class="warning">
+    La prueba se califica automáticamente sobre 20 puntos. Al finalizar se mostrará únicamente la nota final y no se revelarán respuestas correctas ni reactivos incorrectos.
+  </div>
+
+  <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+  <div id="registration-error" class="error hidden"></div>
+</section>
+
+<section id="view-exam" class="hidden">
+  <div class="topbar no-print">
+    <div>
+      <strong id="student-bar">Estudiante</strong><br>
+      <small>Segundo Parcial de Robótica</small>
+    </div>
+    <div class="progress-area">
+      <div class="progress-text"><span>Progreso</span><span id="progress-label">0 / 10 respondidas</span></div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <span class="module-chip">Guía 4</span>
+    <h3>Gama RGB y mezcla aditiva</h3>
+
+    <div class="question">
+      <p>1. ¿Qué significan las letras RGB en el modelo de color digital?</p>
+      <label class="option"><input type="radio" name="q1" value="A"><span>A) Red, Green y Blue.</span></label>
+      <label class="option"><input type="radio" name="q1" value="B"><span>B) Red, Gray y Black.</span></label>
+      <label class="option"><input type="radio" name="q1" value="C"><span>C) Rose, Gold y Brown.</span></label>
+    </div>
+
+    <div class="question">
+      <p>2. En una mezcla aditiva de luz, ¿qué color se obtiene al combinar rojo y verde con intensidad alta?</p>
+      <label class="option"><input type="radio" name="q2" value="A"><span>A) Azul.</span></label>
+      <label class="option"><input type="radio" name="q2" value="B"><span>B) Amarillo.</span></label>
+      <label class="option"><input type="radio" name="q2" value="C"><span>C) Negro.</span></label>
+    </div>
+
+    <div class="question">
+      <p>3. ¿Qué combinación produce cian en el modelo RGB?</p>
+      <label class="option"><input type="radio" name="q3" value="A"><span>A) Verde + azul.</span></label>
+      <label class="option"><input type="radio" name="q3" value="B"><span>B) Rojo + verde.</span></label>
+      <label class="option"><input type="radio" name="q3" value="C"><span>C) Rojo + azul.</span></label>
+    </div>
+
+    <div class="question">
+      <p>4. Cuando rojo, verde y azul se combinan a máxima intensidad en una mezcla aditiva, ¿qué resultado se obtiene?</p>
+      <label class="option"><input type="radio" name="q4" value="A"><span>A) Blanco.</span></label>
+      <label class="option"><input type="radio" name="q4" value="B"><span>B) Negro.</span></label>
+      <label class="option"><input type="radio" name="q4" value="C"><span>C) Marrón.</span></label>
+    </div>
+
+    <div class="question">
+      <p>5. Un LED RGB necesita producir magenta. ¿Qué dos componentes de color deben combinarse?</p>
+      <label class="option"><input type="radio" name="q5" value="A"><span>A) Rojo y azul.</span></label>
+      <label class="option"><input type="radio" name="q5" value="B"><span>B) Verde y azul.</span></label>
+      <label class="option"><input type="radio" name="q5" value="C"><span>C) Rojo y verde.</span></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <span class="module-chip">Guía 5</span>
+    <h3>Formatos de video y audio</h3>
+
+    <div class="question">
+      <p>6. ¿Cuál de las siguientes extensiones corresponde normalmente a un archivo de audio?</p>
+      <label class="option"><input type="radio" name="q6" value="A"><span>A) .MP3</span></label>
+      <label class="option"><input type="radio" name="q6" value="B"><span>B) .MP4</span></label>
+      <label class="option"><input type="radio" name="q6" value="C"><span>C) .AVI</span></label>
+    </div>
+
+    <div class="question">
+      <p>7. ¿Cuál de estas extensiones se utiliza comúnmente para archivos de video?</p>
+      <label class="option"><input type="radio" name="q7" value="A"><span>A) .WAV</span></label>
+      <label class="option"><input type="radio" name="q7" value="B"><span>B) .MP4</span></label>
+      <label class="option"><input type="radio" name="q7" value="C"><span>C) .MP3</span></label>
+    </div>
+
+    <div class="question">
+      <p>8. ¿Cuál de los siguientes pares contiene únicamente formatos asociados al audio?</p>
+      <label class="option"><input type="radio" name="q8" value="A"><span>A) MP3 y WAV.</span></label>
+      <label class="option"><input type="radio" name="q8" value="B"><span>B) AVI y MOV.</span></label>
+      <label class="option"><input type="radio" name="q8" value="C"><span>C) MP4 y AVI.</span></label>
+    </div>
+
+    <div class="question">
+      <p>9. Antes de compartir un archivo multimedia, ¿por qué conviene identificar su formato?</p>
+      <label class="option"><input type="radio" name="q9" value="A"><span>A) Para saber si el dispositivo o programa puede reproducirlo correctamente.</span></label>
+      <label class="option"><input type="radio" name="q9" value="B"><span>B) Porque todos los formatos funcionan igual en cualquier programa.</span></label>
+      <label class="option"><input type="radio" name="q9" value="C"><span>C) Únicamente para cambiar el nombre del archivo.</span></label>
+    </div>
+
+    <div class="question">
+      <p>10. Un estudiante necesita entregar un clip con imagen en movimiento y sonido. ¿Qué tipo de archivo es el más adecuado?</p>
+      <label class="option"><input type="radio" name="q10" value="A"><span>A) Un archivo de video compatible, por ejemplo MP4.</span></label>
+      <label class="option"><input type="radio" name="q10" value="B"><span>B) Un archivo de audio MP3 sin imagen.</span></label>
+      <label class="option"><input type="radio" name="q10" value="C"><span>C) Un archivo de texto sin contenido multimedia.</span></label>
+    </div>
+  </section>
+
+  <section class="panel finish no-print">
+    <h3>Entrega del parcial</h3>
+    <p>Revisa que hayas contestado los 10 reactivos antes de finalizar.</p>
+    <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+    <div id="exam-error" class="error hidden"></div>
+  </section>
+</section>
+
+<section id="view-results" class="panel hidden">
+  <div class="result">
+    <div class="eyebrow" style="color:var(--primary)">Evaluación finalizada</div>
+    <h2 id="result-name">Estudiante</h2>
+    <div id="result-score" class="result-score">0 / 20</div>
+    <div id="result-status" class="status">Registro completado</div>
+
+    <div class="result-data">
+      <div><strong>Asignatura:</strong> Robótica</div>
+      <div><strong>Grado:</strong> Segundo Básico</div>
+      <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+      <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+      <div><strong>Contenidos evaluados:</strong> Gama RGB y mezcla aditiva; formatos de video y audio.</div>
+    </div>
+
+    <p class="note-final">
+      Este reporte muestra únicamente el punteo final. No contiene el desglose de respuestas, reactivos incorrectos ni la clave correcta.
+    </p>
+
+    <div class="actions no-print">
+      <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+      <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+    </div>
+
+    <div class="print-only">
+      <p style="margin-top:28px;font-size:12px;color:#555">Segundo Parcial de Robótica · Segundo Básico · Valor total: 20 puntos.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+(() => {
+  const TOTAL = 10;
+  const POINTS = 2;
+
+  const KEY = {
+    q1:"A", q2:"B", q3:"A", q4:"A", q5:"A",
+    q6:"A", q7:"B", q8:"A", q9:"A", q10:"A"
+  };
+
+  const data = { name:"", section:"", score:0, date:"" };
+  const $ = id => document.getElementById(id);
+  const show = el => el.classList.remove("hidden");
+  const hide = el => el.classList.add("hidden");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=TOTAL;i++){
+      if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+    $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+  }
+
+  document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+    radio.addEventListener("change", updateProgress);
+  });
+
+  $("start-btn").addEventListener("click", () => {
+    const name = $("student-name").value.trim();
+    const section = $("student-section").value.trim();
+
+    if(!name || !section){
+      $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+      show($("registration-error"));
+      return;
+    }
+
+    hide($("registration-error"));
+    data.name = name;
+    data.section = section;
+    $("student-bar").textContent = `${name} · ${section}`;
+    hide($("view-registration"));
+    show($("view-exam"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("finish-btn").addEventListener("click", () => {
+    const missing = [];
+    let score = 0;
+
+    for(let i=1;i<=TOTAL;i++){
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(!selected) missing.push(i);
+      else if(selected.value === KEY[`q${i}`]) score += POINTS;
+    }
+
+    if(missing.length){
+      $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+      show($("exam-error"));
+      return;
+    }
+
+    hide($("exam-error"));
+    data.score = score;
+    data.date = new Date().toLocaleString("es-GT");
+
+    $("result-name").textContent = data.name;
+    $("result-score").textContent = `${data.score} / 20`;
+    $("result-section").textContent = data.section;
+    $("result-date").textContent = data.date;
+
+    const status = $("result-status");
+    if(data.score >= 18){
+      status.textContent = "Desempeño alto";
+      status.style.background = "#e6f4ec";
+      status.style.color = "#146c43";
+    }else if(data.score >= 12){
+      status.textContent = "Aprobado";
+      status.style.background = "#e8eef5";
+      status.style.color = "#23466d";
+    }else{
+      status.textContent = "Requiere reforzamiento";
+      status.style.background = "#fff0d5";
+      status.style.color = "#8a5a00";
+    }
+
+    hide($("view-exam"));
+    show($("view-results"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("print-btn").addEventListener("click", () => window.print());
+  $("restart-btn").addEventListener("click", () => window.location.reload());
+})();
+</script>
+</body>
+</html>

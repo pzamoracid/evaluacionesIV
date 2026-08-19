@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Trabajo Digital - Parcial No. 2: Investigadores Digitales</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f1f5f9;
+        }
+
+        /* Print formatting */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            .print-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 pb-16">
+
+    <!-- Header / Banner -->
+    <header class="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-900 text-white shadow-lg no-print">
+        <div class="max-w-5xl mx-auto px-6 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-teal-500/30 text-teal-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-teal-400/30">
+                        Evaluación Parcial No. 2 &bull; Hoja de Trabajo Digital
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold mt-2 tracking-tight">
+                        Proyecto Final: "Investigadores Digitales"
+                    </h1>
+                    <p class="text-teal-200 text-sm mt-0.5">
+                        Informe Social en la Nube y Sustentación Grupal en Laboratorio
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center md:text-right w-full md:w-auto">
+                    <p class="text-xs uppercase tracking-widest text-teal-200 font-bold">Ponderación Total</p>
+                    <p class="text-3xl font-black text-amber-400">20 <span class="text-base font-normal text-white">pts</span></p>
+                    <p class="text-xs text-teal-200 mt-0.5"><i class="fa-regular fa-calendar-check mr-1"></i> Defensa: Viernes 21 Ago</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 md:px-6 mt-6 space-y-6">
+
+        <!-- Student Identification Form Box -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 no-print">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">1. Identificación del Estudiante y Equipo</h2>
+                    <p class="text-xs text-slate-500">Completa tus datos personales para habilitar la generación del reporte final impreso.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                    <label for="studentName" class="block font-semibold text-slate-700 text-xs mb-1">Nombre Completo del Estudiante *</label>
+                    <input type="text" id="studentName" oninput="syncStudentData()" placeholder="Ej. Ana Lucía Morales Ruiz" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label for="studentGrade" class="block font-semibold text-slate-700 text-xs mb-1">Grado y Sección *</label>
+                    <select id="studentGrade" onchange="syncStudentData()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 outline-none transition-all bg-white">
+                        <option value="1ro. Básico - Sección A">1ro. Básico - Sección A</option>
+                        <option value="1ro. Básico - Sección B">1ro. Básico - Sección B</option>
+                        <option value="1ro. Básico - Sección C">1ro. Básico - Sección C</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="studentKey" class="block font-semibold text-slate-700 text-xs mb-1">Número de Clave *</label>
+                    <input type="number" id="studentKey" min="1" max="60" oninput="syncStudentData()" placeholder="Ej. 14" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label for="teamName" class="block font-semibold text-slate-700 text-xs mb-1">Nombre / No. de Equipo *</label>
+                    <input type="text" id="teamName" oninput="syncStudentData()" placeholder="Ej. Equipo No. 3 - Innovadores Social Digital" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 outline-none transition-all">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="cloudLink" class="block font-semibold text-slate-700 text-xs mb-1">Enlace del Documento Colaborativo en la Nube (Google Docs / Canvas) *</label>
+                    <input type="url" idcloudLink id="cloudLink" oninput="syncStudentData()" placeholder="https://docs.google.com/document/d/..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 outline-none transition-all">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Verification Checklist (8 pts) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 no-print">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 mb-4 gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">2. Verificación de Estructura y Normas APA en la Nube</h2>
+                        <p class="text-xs text-slate-500">Marca cada requerimiento que tu equipo integró exitosamente (Valor: 8 pts / 1.6 pts c/u)</p>
+                    </div>
+                </div>
+                <span id="sec1-score-badge" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-xl">
+                    Subtotal: 0 / 8 pts
+                </span>
+            </div>
+
+            <div class="space-y-3 text-sm">
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 cursor-pointer transition-all">
+                    <input type="checkbox" class="chk-item mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500 border-slate-300" onchange="calculateTotalScore()">
+                    <div class="text-xs text-slate-700">
+                        <span class="font-bold text-slate-900 block mb-0.5">A. Portada Institucional Estandarizada:</span>
+                        Contiene título del proyecto en formato APA, nombres de todos los investigadores, grado, institución y fecha de publicación (19/08/2026).
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 cursor-pointer transition-all">
+                    <input type="checkbox" class="chk-item mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500 border-slate-300" onchange="calculateTotalScore()">
+                    <div class="text-xs text-slate-700">
+                        <span class="font-bold text-slate-900 block mb-0.5">B. Tabla de Contenidos / Índice Automatizado:</span>
+                        Generado dinámicamente utilizando jerarquías de estilos de título (Título 1, Título 2) con numeración de página sincronizada.
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 cursor-pointer transition-all">
+                    <input type="checkbox" class="chk-item mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500 border-slate-300" onchange="calculateTotalScore()">
+                    <div class="text-xs text-slate-700">
+                        <span class="font-bold text-slate-900 block mb-0.5">C. Desarrollo del Informe con Citas Formales APA:</span>
+                        Cuerpo del texto redactado con sangría de primera línea, interlineado formal, citas textuales (mayores/menores a 40 palabras) y parafraseo.
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 cursor-pointer transition-all">
+                    <input type="checkbox" class="chk-item mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500 border-slate-300" onchange="calculateTotalScore()">
+                    <div class="text-xs text-slate-700">
+                        <span class="font-bold text-slate-900 block mb-0.5">D. Lista de Referencias Bibliográficas:</span>
+                        Sección final de fuentes fidedignas ordenadas alfabéticamente con sangría francesa y enlaces activos a sitios de investigación social.
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 cursor-pointer transition-all">
+                    <input type="checkbox" class="chk-item mt-1 w-4 h-4 rounded text-teal-600 focus:ring-teal-500 border-slate-300" onchange="calculateTotalScore()">
+                    <div class="text-xs text-slate-700">
+                        <span class="font-bold text-slate-900 block mb-0.5">E. Evidencia de Historial de Coautoría en la Nube:</span>
+                        El historial de ediciones del archivo demuestra la colaboración en tiempo real y la aportación equitativa de todos los miembros.
+                    </div>
+                </label>
+            </div>
+        </section>
+
+        <!-- Section 3: Technical Knowledge Questions (6 pts) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 no-print">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 mb-4 gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-100 text-cyan-800 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">3. Fundamentación Metodológica y Tecnológica</h2>
+                        <p class="text-xs text-slate-500">Responde las preguntas de opción múltiple para validar el aprendizaje (Valor: 6 pts / 2 pts c/u)</p>
+                    </div>
+                </div>
+                <span id="sec2-score-badge" class="bg-cyan-50 text-cyan-700 border border-cyan-200 text-xs font-bold px-3 py-1.5 rounded-xl">
+                    Subtotal: 0 / 6 pts
+                </span>
+            </div>
+
+            <div class="space-y-6 text-sm">
+                <!-- Q1 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <p class="font-semibold text-slate-900 text-xs mb-3">1. ¿Qué característica técnica garantiza la creación de un Índice Automatizado profesional en el procesador de texto en la nube?</p>
+                    <div class="space-y-2 text-xs">
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q1" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>a) Escribir manualmente los títulos y colocar puntos suspensivos hasta el número de página.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q1" value="correct" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>b) Asignar los estilos predefinidos de encabezado (Título 1, Título 2) para generar la tabla dinámica.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q1" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>c) Insertar cuadros de texto independientes en cada página con el número de sección.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <p class="font-semibold text-slate-900 text-xs mb-3">2. En las Normas APA, ¿cuál es el formato correcto requerido para la lista de Referencias al final del documento?</p>
+                    <div class="space-y-2 text-xs">
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q2" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>a) Lista viñetada con números correlativos según la aparición en el texto.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q2" value="correct" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>b) Lista en orden alfabético por el apellido del autor con aplicación de sangría francesa.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q2" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>c) Párrafos centrados con hipervínculos subrayados en color azul sin fecha.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <p class="font-semibold text-slate-900 text-xs mb-3">3. ¿Qué utilidad pedagógica y de evaluación tiene el "Historial de Versiones" en la coautoría en la nube?</p>
+                    <div class="space-y-2 text-xs">
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q3" value="correct" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>a) Permite al docente verificar el aporte específico, fecha y tiempo de trabajo de cada integrante.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q3" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>b) Sirve únicamente para cambiar el color de la tipografía y el tamaño de los márgenes.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="q3" value="incorrect" onchange="calculateTotalScore()" class="text-teal-600">
+                            <span>c) Es una función para comprimir los archivos antes de enviarlos por correo electrónico.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Holistic Rubric Self-Assessment for Oral Defense (6 pts) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 no-print">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 mb-4 gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">4. Autoevaluación de la Defensa Grupal en Laboratorio</h2>
+                        <p class="text-xs text-slate-500">Selecciona el nivel de desempeño holístico alcanzado por tu equipo (Valor: 6 pts)</p>
+                    </div>
+                </div>
+                <span id="sec3-score-badge" class="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1.5 rounded-xl">
+                    Subtotal: 0 / 6 pts
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <label class="p-3 bg-emerald-50/50 border-2 border-emerald-200 rounded-xl cursor-pointer hover:border-emerald-500 transition-all flex items-start gap-3">
+                    <input type="radio" name="rubricLevel" value="6" onchange="calculateTotalScore()" class="mt-1 text-emerald-600">
+                    <div>
+                        <span class="font-bold text-emerald-900 block text-sm">Sobresaliente (6 pts)</span>
+                        <p class="text-slate-600 mt-1">Exposición fluida y articulada en 5-7 min. Dominio completo del tema social, proyección en vivo impecable y respuestas fundamentadas.</p>
+                    </div>
+                </label>
+
+                <label class="p-3 bg-teal-50/50 border-2 border-teal-200 rounded-xl cursor-pointer hover:border-teal-500 transition-all flex items-start gap-3">
+                    <input type="radio" name="rubricLevel" value="4.5" onchange="calculateTotalScore()" class="mt-1 text-teal-600">
+                    <div>
+                        <span class="font-bold text-teal-900 block text-sm">Satisfactorio (4.5 pts)</span>
+                        <p class="text-slate-600 mt-1">Exposición organizada y dentro del tiempo. Comprensión adecuada del tema con ligera dependencia de la lectura en pantalla.</p>
+                    </div>
+                </label>
+
+                <label class="p-3 bg-amber-50/50 border-2 border-amber-200 rounded-xl cursor-pointer hover:border-amber-500 transition-all flex items-start gap-3">
+                    <input type="radio" name="rubricLevel" value="3" onchange="calculateTotalScore()" class="mt-1 text-amber-600">
+                    <div>
+                        <span class="font-bold text-amber-900 block text-sm">En Proceso (3 pts)</span>
+                        <p class="text-slate-600 mt-1">Exposición poco fluida, participación desequilibrada entre integrantes y sobrelectura del documento proyectado.</p>
+                    </div>
+                </label>
+
+                <label class="p-3 bg-red-50/50 border-2 border-red-200 rounded-xl cursor-pointer hover:border-red-500 transition-all flex items-start gap-3">
+                    <input type="radio" name="rubricLevel" value="1.5" onchange="calculateTotalScore()" class="mt-1 text-red-600">
+                    <div>
+                        <span class="font-bold text-red-900 block text-sm">Debe Mejorar (1.5 pts)</span>
+                        <p class="text-slate-600 mt-1">Presentación improvisada sin manejo del documento digital ni comprensión del problema de investigación social.</p>
+                    </div>
+                </label>
+            </div>
+        </section>
+
+        <!-- Live Action & Grade Calculator Bar -->
+        <section class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl no-print flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-400">Punteo Final Calculado</span>
+                <div class="flex items-baseline gap-2 mt-1">
+                    <span id="total-score-display" class="text-4xl font-black text-amber-400">0.0</span>
+                    <span class="text-xl text-slate-300">/ 20 Puntos</span>
+                </div>
+                <p id="grade-status-msg" class="text-xs text-slate-400 mt-1">Completa los campos y secciones para calcular tu nota final.</p>
+            </div>
+
+            <!-- Custom Notification Container -->
+            <div id="validation-warning" class="hidden bg-amber-500/20 border border-amber-500/40 text-amber-200 px-4 py-2 rounded-xl text-xs max-w-xs">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                <span>Ingresa el Nombre, Grado y Clave para generar e imprimir el reporte.</span>
+            </div>
+
+            <button onclick="generateAndPrintReport()" class="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 font-extrabold px-6 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-print text-lg"></i>
+                <span>Generar e Imprimir Reporte Oficial</span>
+            </button>
+        </section>
+
+        <!-- OFFICIAL PRINTABLE REPORT (Visible in Print Mode or generated view) -->
+        <section id="printable-report" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-300 print-card">
+            
+            <!-- Institutional Header -->
+            <div class="border-b-2 border-slate-900 pb-4 mb-6 flex justify-between items-start">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-500 block">Departamento de Evaluación &bull; Ciclo Escolar 2026</span>
+                    <h1 class="text-2xl font-black text-slate-900 mt-0.5">REPORTE OFICIAL DE EVALUACIÓN PARCIAL NO. 2</h1>
+                    <p class="text-sm font-semibold text-teal-800">Proyecto Final: "Investigadores Digitales" &bull; Informe Social y Defensa</p>
+                </div>
+                <div class="text-right">
+                    <div class="border-2 border-slate-900 px-4 py-2 rounded-xl bg-slate-50 inline-block text-center">
+                        <span class="text-[10px] font-extrabold uppercase text-slate-500 block">Calificación Final</span>
+                        <span id="print-final-score" class="text-3xl font-black text-slate-900">0.0 / 20</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Metadata Grid -->
+            <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-xs mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div>
+                    <span class="font-bold text-slate-500 block">Nombre del Estudiante:</span>
+                    <span id="print-student-name" class="font-extrabold text-slate-900 text-sm">______________________________________</span>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-500 block">Número de Clave:</span>
+                    <span id="print-student-key" class="font-extrabold text-slate-900 text-sm">___</span>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-500 block">Grado y Sección:</span>
+                    <span id="print-student-grade" class="font-semibold text-slate-800">1ro. Básico</span>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-500 block">Nombre del Equipo:</span>
+                    <span id="print-team-name" class="font-semibold text-slate-800">______________________________________</span>
+                </div>
+                <div class="col-span-2">
+                    <span class="font-bold text-slate-500 block">Enlace del Proyecto en la Nube:</span>
+                    <span id="print-cloud-link" class="font-mono text-slate-700 truncate block">____________________________________________________________________</span>
+                </div>
+            </div>
+
+            <!-- Breakdown Table -->
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-2">Desglose de Ponderación Integradora</h3>
+            <table class="w-full text-left border-collapse text-xs mb-6">
+                <thead>
+                    <tr class="bg-slate-100 text-slate-800 font-bold border-b border-slate-300">
+                        <th class="p-2 border border-slate-300">Componente Evaluado</th>
+                        <th class="p-2 border border-slate-300">Descripción del Criterio</th>
+                        <th class="p-2 border border-slate-300 text-center w-24">Punteo Max.</th>
+                        <th class="p-2 border border-slate-300 text-center w-24">Obtenido</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-300">
+                    <tr>
+                        <td class="p-2 border border-slate-300 font-bold">1. Informe Social en la Nube</td>
+                        <td class="p-2 border border-slate-300">Portada, Índice Automatizado, Formato APA, Bibliografía e Historial.</td>
+                        <td class="p-2 border border-slate-300 text-center">8.0 pts</td>
+                        <td id="print-score-sec1" class="p-2 border border-slate-300 text-center font-bold">0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="p-2 border border-slate-300 font-bold">2. Fundamentación Técnica</td>
+                        <td class="p-2 border border-slate-300">Validación teórica de estilos, citas APA y herramientas en la nube.</td>
+                        <td class="p-2 border border-slate-300 text-center">6.0 pts</td>
+                        <td id="print-score-sec2" class="p-2 border border-slate-300 text-center font-bold">0.0</td>
+                    </tr>
+                    <tr>
+                        <td class="p-2 border border-slate-300 font-bold">3. Defensa Grupal en Laboratorio</td>
+                        <td class="p-2 border border-slate-300">Sustentación oral, fluidez, trabajo en equipo y proyección en vivo.</td>
+                        <td class="p-2 border border-slate-300 text-center">6.0 pts</td>
+                        <td id="print-score-sec3" class="p-2 border border-slate-300 text-center font-bold">0.0</td>
+                    </tr>
+                    <tr class="bg-slate-50 font-black">
+                        <td colspan="2" class="p-2 border border-slate-300 text-right uppercase">Total Obtenido:</td>
+                        <td class="p-2 border border-slate-300 text-center">20.0 pts</td>
+                        <td id="print-score-total" class="p-2 border border-slate-300 text-center text-teal-800 text-sm">0.0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Qualitative Performance Note -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs mb-8">
+                <span class="font-bold text-slate-800">Dictamen de Evaluación: </span>
+                <span id="print-qualitative-desc" class="text-slate-600">Pendiente de completar evaluación.</span>
+            </div>
+
+            <!-- Signatures Section -->
+            <div class="grid grid-cols-2 gap-12 pt-8 text-center text-xs">
+                <div>
+                    <div class="border-b border-slate-400 mb-1 w-3/4 mx-auto"></div>
+                    <p class="font-bold text-slate-800">Firma del Estudiante</p>
+                    <p class="text-[10px] text-slate-500">Conformidad de Calificación</p>
+                </div>
+                <div>
+                    <div class="border-b border-slate-400 mb-1 w-3/4 mx-auto"></div>
+                    <p class="font-bold text-slate-800">Firma del Docente de Asignatura</p>
+                    <p class="text-[10px] text-slate-500">Laboratorio de Computación &bull; 2026</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Sync student info from input fields to printable report
+        function syncStudentData() {
+            const name = document.getElementById('studentName').value.trim();
+            const grade = document.getElementById('studentGrade').value;
+            const key = document.getElementById('studentKey').value.trim();
+            const team = document.getElementById('teamName').value.trim();
+            const link = document.getElementById('cloudLink').value.trim();
+
+            document.getElementById('print-student-name').innerText = name || "______________________________________";
+            document.getElementById('print-student-key').innerText = key || "___";
+            document.getElementById('print-student-grade').innerText = grade;
+            document.getElementById('print-team-name').innerText = team || "______________________________________";
+            document.getElementById('print-cloud-link').innerText = link || "____________________________________________________________________";
+
+            if (name && key) {
+                document.getElementById('validation-warning').classList.add('hidden');
+            }
+        }
+
+        // Calculate total score based on user interactions
+        function calculateTotalScore() {
+            // Section 1: Checklist (8 pts max - 1.6 pts per item)
+            const checkboxes = document.querySelectorAll('.chk-item');
+            let sec1Score = 0;
+            checkboxes.forEach(chk => {
+                if (chk.checked) sec1Score += 1.6;
+            });
+
+            // Section 2: Questions (6 pts max - 2 pts each)
+            let sec2Score = 0;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+
+            if (q1 && q1.value === 'correct') sec2Score += 2.0;
+            if (q2 && q2.value === 'correct') sec2Score += 2.0;
+            if (q3 && q3.value === 'correct') sec2Score += 2.0;
+
+            // Section 3: Holistic Rubric (6 pts max)
+            let sec3Score = 0;
+            const rubricSelected = document.querySelector('input[name="rubricLevel"]:checked');
+            if (rubricSelected) {
+                sec3Score = parseFloat(rubricSelected.value);
+            }
+
+            const totalScore = sec1Score + sec2Score + sec3Score;
+
+            // Update UI Badges
+            document.getElementById('sec1-score-badge').innerText = `Subtotal: ${sec1Score.toFixed(1)} / 8 pts`;
+            document.getElementById('sec2-score-badge').innerText = `Subtotal: ${sec2Score.toFixed(1)} / 6 pts`;
+            document.getElementById('sec3-score-badge').innerText = `Subtotal: ${sec3Score.toFixed(1)} / 6 pts`;
+            
+            document.getElementById('total-score-display').innerText = totalScore.toFixed(1);
+
+            // Update Print Report Elements
+            document.getElementById('print-score-sec1').innerText = sec1Score.toFixed(1);
+            document.getElementById('print-score-sec2').innerText = sec2Score.toFixed(1);
+            document.getElementById('print-score-sec3').innerText = sec3Score.toFixed(1);
+            document.getElementById('print-score-total').innerText = `${totalScore.toFixed(1)} / 20.0`;
+            document.getElementById('print-final-score').innerText = `${totalScore.toFixed(1)} / 20`;
+
+            // Qualitative Status Message
+            const statusMsg = document.getElementById('grade-status-msg');
+            const printQualitative = document.getElementById('print-qualitative-desc');
+
+            if (totalScore >= 18) {
+                statusMsg.innerText = "Nivel Desempeño: Sobresaliente / Excelente. Cumplimiento impecable en la nube y en la defensa.";
+                printQualitative.innerText = "SOBRESALIENTE: El estudiante demuestra solvencia total en la estructuración de documentos APA en la nube y fluidez durante la defensa grupal en el laboratorio.";
+            } else if (totalScore >= 14) {
+                statusMsg.innerText = "Nivel Desempeño: Satisfactorio / Competente. Estructura sólida con pequeños ajustes recomendados.";
+                printQualitative.innerText = "SATISFACTORIO: Desempeño competente en la gestión de documentos colaborativos e integración de normas de redacción e investigación.";
+            } else if (totalScore >= 10) {
+                statusMsg.innerText = "Nivel Desempeño: En Proceso / Básico. Requiere reforzar aspectos formales de normas APA y fluidez oral.";
+                printQualitative.innerText = "EN PROCESO: Requiere continuar reforzando las competencias de automatización de índices, normas APA y sustentación oral en laboratorio.";
+            } else {
+                statusMsg.innerText = "Nivel Desempeño: Debe Mejorar / Inicial. Se requiere revisión completa de la entrega digital y sustentación.";
+                printQualitative.innerText = "DEBE MEJORAR: Inconsistencias importantes identificadas en el documento en la nube o en la sustentación presencial del equipo.";
+            }
+        }
+
+        // Validate and trigger browser print dialog
+        function generateAndPrintReport() {
+            const name = document.getElementById('studentName').value.trim();
+            const key = document.getElementById('studentKey').value.trim();
+
+            if (!name || !key) {
+                const warningBox = document.getElementById('validation-warning');
+                warningBox.classList.remove('hidden');
+                document.getElementById('studentName').focus();
+                return;
+            }
+
+            // Sync latest score & print
+            calculateTotalScore();
+            syncStudentData();
+            window.print();
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            calculateTotalScore();
+            syncStudentData();
+        }
+    </script>
+</body>
+</html>

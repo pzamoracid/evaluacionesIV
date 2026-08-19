@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segundo Parcial de Robótica - Primero Básico</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --text:#182230;
+      --muted:#667085;
+      --line:#d9e2ec;
+      --primary:#315c8c;
+      --primary-dark:#23466d;
+      --soft:#edf4fb;
+      --dark:#182230;
+      --success:#176b47;
+      --warning:#8a5a00;
+      --danger:#b42318;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    button,input{font:inherit}
+    .header{
+      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+      color:white;
+      padding:22px 18px;
+    }
+    .header-inner{
+      max-width:1040px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .header h1{margin:3px 0 5px;font-size:27px}
+    .header p{margin:0;color:#e6eef7;font-size:14px}
+    .eyebrow{
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#d8e7f7;
+    }
+    .score-box{
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.1);
+      border-radius:14px;
+      min-width:145px;
+      padding:12px 16px;
+      text-align:center;
+    }
+    .score-box strong{display:block;font-size:28px}
+    .wrap{max-width:1040px;margin:26px auto;padding:0 16px 38px}
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:24px;
+      margin-bottom:18px;
+      box-shadow:0 8px 26px rgba(16,24,40,.05);
+    }
+    .panel h2,.panel h3{margin-top:0}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field-label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+    input[type=text]{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:11px;
+      padding:11px 12px;
+      background:#fff;
+      color:var(--text);
+    }
+    input[type=text]:focus{
+      outline:3px solid rgba(49,92,140,.18);
+      border-color:var(--primary);
+    }
+    .topics{
+      margin-top:17px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      border-radius:12px;
+      line-height:1.55;
+      font-size:14px;
+    }
+    .notice{
+      margin:16px 0;
+      padding:13px 15px;
+      background:#fff7e6;
+      border:1px solid #edd49b;
+      border-radius:12px;
+      line-height:1.5;
+      font-size:13px;
+    }
+    .btn{
+      border:0;
+      border-radius:12px;
+      padding:12px 18px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-success{background:#18794e;color:#fff}
+    .btn-secondary{background:#e8edf3;color:var(--text)}
+    .hidden{display:none!important}
+    .error{
+      margin-top:10px;
+      color:var(--danger);
+      font-size:13px;
+      font-weight:800;
+    }
+    .topbar{
+      position:sticky;
+      top:10px;
+      z-index:20;
+      background:rgba(24,34,48,.96);
+      color:#fff;
+      border-radius:16px;
+      padding:14px 16px;
+      margin-bottom:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .topbar small{color:#cbd5e1}
+    .progress-area{min-width:230px;flex:1;max-width:430px}
+    .progress-text{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .progress-track{
+      height:9px;
+      border-radius:99px;
+      background:#344054;
+      overflow:hidden;
+    }
+    .progress-bar{
+      width:0;
+      height:100%;
+      background:#8fb8df;
+      transition:width .2s ease;
+    }
+    .module-chip{
+      display:inline-block;
+      background:var(--soft);
+      color:var(--primary-dark);
+      border-radius:8px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:7px;
+    }
+    .question{
+      border:1px solid var(--line);
+      background:#fbfcfe;
+      border-radius:14px;
+      padding:18px;
+      margin:14px 0;
+    }
+    .question p{
+      margin:0 0 12px;
+      font-weight:750;
+      line-height:1.5;
+    }
+    .option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid #d7dfe9;
+      background:#fff;
+      border-radius:10px;
+      padding:11px 12px;
+      margin:8px 0;
+      cursor:pointer;
+      line-height:1.4;
+    }
+    .option:hover{background:#f7fbff;border-color:#abc1da}
+    .option input{margin-top:3px}
+    .mini-table{
+      width:100%;
+      border-collapse:collapse;
+      margin:12px 0 6px;
+      font-size:14px;
+    }
+    .mini-table th,.mini-table td{
+      border:1px solid #cfd8e3;
+      padding:8px;
+      text-align:center;
+    }
+    .mini-table th{background:#eef3f8}
+    .logic-box{
+      border-left:4px solid var(--primary);
+      background:#eef4fa;
+      padding:11px 13px;
+      border-radius:8px;
+      margin:10px 0 12px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:14px;
+      white-space:pre-line;
+    }
+    .finish-box{text-align:center}
+    .result{text-align:center;padding:30px 20px}
+    .result-score{
+      font-size:58px;
+      font-weight:900;
+      line-height:1;
+      color:var(--primary);
+      margin:14px 0;
+    }
+    .status{
+      display:inline-block;
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:13px;
+      font-weight:800;
+      background:#e8eef5;
+      color:var(--primary-dark);
+    }
+    .result-data{
+      max-width:620px;
+      margin:18px auto;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      border-radius:12px;
+      padding:14px 16px;
+      text-align:left;
+      line-height:1.7;
+    }
+    .result-note{
+      max-width:680px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .actions{
+      margin-top:20px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .print-only{display:none}
+    @media(max-width:700px){
+      .grid2{grid-template-columns:1fr}
+      .header h1{font-size:22px}
+      .result-score{font-size:48px}
+    }
+    @media print{
+      body{background:#fff}
+      .header,.no-print,#view-registration,#view-exam{display:none!important}
+      #view-results{display:block!important}
+      .wrap{max-width:none;margin:0;padding:0}
+      .panel{box-shadow:none;border:1px solid #aaa}
+      .actions,.result-note{display:none!important}
+      .print-only{display:block}
+    }
+  </style>
+</head>
+<body>
+  <header class="header no-print">
+    <div class="header-inner">
+      <div>
+        <div class="eyebrow">Robótica · Primero Básico</div>
+        <h1>Segundo Parcial</h1>
+        <p>Tablas y gráficos · Animación · Estructura condicional Si–si no</p>
+      </div>
+      <div class="score-box">
+        <span>Valor total</span>
+        <strong>20 pts</strong>
+        <small>10 reactivos</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="view-registration" class="panel">
+      <h2>Registro del estudiante</h2>
+      <p>Ingresa tus datos para iniciar la evaluación de Robótica.</p>
+
+      <div class="grid2">
+        <div>
+          <label class="field-label" for="student-name">Nombre completo *</label>
+          <input id="student-name" type="text" autocomplete="name">
+        </div>
+        <div>
+          <label class="field-label" for="student-section">Sección / clave *</label>
+          <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 08">
+        </div>
+      </div>
+
+      <div class="topics">
+        <strong>Temas observados en las guías:</strong><br>
+        Guía 4: tablas y gráficos en Excel.<br>
+        Guía 5: concepto de animación y elaboración de una primera animación.<br>
+        Guía 6: estructura condicional <strong>Si – si no</strong>.
+      </div>
+
+      <div class="notice">
+        La evaluación se califica automáticamente sobre 20 puntos. Al finalizar se mostrará únicamente el punteo final. No se indicarán los reactivos incorrectos ni se revelará la clave de respuestas.
+      </div>
+
+      <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+      <div id="registration-error" class="error hidden"></div>
+    </section>
+
+    <section id="view-exam" class="hidden">
+      <div class="topbar no-print">
+        <div>
+          <strong id="student-bar">Estudiante</strong><br>
+          <small>Segundo Parcial de Robótica</small>
+        </div>
+        <div class="progress-area">
+          <div class="progress-text">
+            <span>Progreso</span>
+            <span id="progress-label">0 / 10 respondidas</span>
+          </div>
+          <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <span class="module-chip">Guía 4</span>
+        <h3>Tablas y gráficos en Excel</h3>
+
+        <div class="question">
+          <p>1. Observa la tabla. ¿Cuál es la función de los encabezados “Prueba” y “Distancia”?</p>
+          <table class="mini-table">
+            <tr><th>Prueba</th><th>Distancia</th></tr>
+            <tr><td>1</td><td>20 cm</td></tr>
+            <tr><td>2</td><td>35 cm</td></tr>
+            <tr><td>3</td><td>15 cm</td></tr>
+          </table>
+          <label class="option"><input type="radio" name="q1" value="A"><span>A) Identificar qué información contiene cada columna.</span></label>
+          <label class="option"><input type="radio" name="q1" value="B"><span>B) Decorar la hoja sin organizar los datos.</span></label>
+          <label class="option"><input type="radio" name="q1" value="C"><span>C) Reemplazar los valores numéricos de la tabla.</span></label>
+        </div>
+
+        <div class="question">
+          <p>2. Si deseas comparar rápidamente las distancias registradas en varias pruebas, ¿qué recurso ayuda a visualizar mejor las diferencias?</p>
+          <label class="option"><input type="radio" name="q2" value="A"><span>A) Cambiar el nombre del archivo.</span></label>
+          <label class="option"><input type="radio" name="q2" value="B"><span>B) Un gráfico de columnas o barras.</span></label>
+          <label class="option"><input type="radio" name="q2" value="C"><span>C) Escribir todos los datos en una sola celda.</span></label>
+        </div>
+
+        <div class="question">
+          <p>3. En una hoja de cálculo se agregan nuevos datos a la tabla de pruebas. Antes de crear un gráfico, ¿qué debe verificarse?</p>
+          <label class="option"><input type="radio" name="q3" value="A"><span>A) Que todas las celdas tengan un color diferente.</span></label>
+          <label class="option"><input type="radio" name="q3" value="B"><span>B) Que no existan títulos para evitar confusiones.</span></label>
+          <label class="option"><input type="radio" name="q3" value="C"><span>C) Que los datos estén organizados correctamente en filas y columnas.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-chip">Guía 5</span>
+        <h3>Animación y primera animación</h3>
+
+        <div class="question">
+          <p>4. ¿Qué describe mejor una animación digital?</p>
+          <label class="option"><input type="radio" name="q4" value="A"><span>A) Una imagen que siempre permanece exactamente igual.</span></label>
+          <label class="option"><input type="radio" name="q4" value="B"><span>B) Una secuencia de cambios o imágenes que produce sensación de movimiento.</span></label>
+          <label class="option"><input type="radio" name="q4" value="C"><span>C) Una tabla que solo contiene números y fórmulas.</span></label>
+        </div>
+
+        <div class="question">
+          <p>5. Para que un objeto parezca desplazarse de izquierda a derecha en una animación sencilla, ¿qué debe ocurrir?</p>
+          <label class="option"><input type="radio" name="q5" value="A"><span>A) Debe permanecer siempre en el mismo lugar.</span></label>
+          <label class="option"><input type="radio" name="q5" value="B"><span>B) Solo se debe cambiar el nombre del archivo.</span></label>
+          <label class="option"><input type="radio" name="q5" value="C"><span>C) Su posición debe cambiar de forma ordenada a lo largo de la secuencia.</span></label>
+        </div>
+
+        <div class="question">
+          <p>6. Un estudiante prepara su primera animación y quiere que el movimiento se entienda con claridad. ¿Qué decisión es más adecuada?</p>
+          <label class="option"><input type="radio" name="q6" value="A"><span>A) Organizar los cambios del objeto en una secuencia lógica.</span></label>
+          <label class="option"><input type="radio" name="q6" value="B"><span>B) Colocar los cambios sin ningún orden.</span></label>
+          <label class="option"><input type="radio" name="q6" value="C"><span>C) Evitar cualquier cambio entre un momento y otro.</span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="module-chip">Guía 6</span>
+        <h3>Estructura condicional Si – si no</h3>
+
+        <div class="question">
+          <p>7. Observa la lógica:</p>
+          <div class="logic-box">Si hay un obstáculo:
+    detener el robot
+Si no:
+    avanzar</div>
+          <p>¿Qué hará el robot cuando detecte un obstáculo?</p>
+          <label class="option"><input type="radio" name="q7" value="A"><span>A) Avanzará de todos modos.</span></label>
+          <label class="option"><input type="radio" name="q7" value="B"><span>B) Se detendrá.</span></label>
+          <label class="option"><input type="radio" name="q7" value="C"><span>C) Ignorará por completo la condición.</span></label>
+        </div>
+
+        <div class="question">
+          <p>8. En una estructura “Si – si no”, ¿cuándo se ejecuta la parte “si no”?</p>
+          <label class="option"><input type="radio" name="q8" value="A"><span>A) Siempre antes de revisar la condición.</span></label>
+          <label class="option"><input type="radio" name="q8" value="B"><span>B) Únicamente cuando se cierra el programa.</span></label>
+          <label class="option"><input type="radio" name="q8" value="C"><span>C) Cuando la condición del “Si” no se cumple.</span></label>
+        </div>
+
+        <div class="question">
+          <p>9. ¿Cuál de los siguientes ejemplos representa correctamente una decisión condicional?</p>
+          <label class="option"><input type="radio" name="q9" value="A"><span>A) Repetir una palabra sin revisar ninguna condición.</span></label>
+          <label class="option"><input type="radio" name="q9" value="B"><span>B) Si la luz está encendida, mostrar “Activo”; si no, mostrar “Apagado”.</span></label>
+          <label class="option"><input type="radio" name="q9" value="C"><span>C) Guardar una tabla sin tomar ninguna decisión.</span></label>
+        </div>
+
+        <div class="question">
+          <p>10. Un robot registra en una tabla si encontró un obstáculo y luego debe decidir qué acción realizar. ¿Cuál secuencia integra mejor los temas estudiados?</p>
+          <label class="option"><input type="radio" name="q10" value="A"><span>A) Borrar los datos y mover el robot sin revisar ninguna información.</span></label>
+          <label class="option"><input type="radio" name="q10" value="B"><span>B) Crear una imagen fija y evitar cualquier decisión lógica.</span></label>
+          <label class="option"><input type="radio" name="q10" value="C"><span>C) Registrar los datos, representarlos si es necesario y aplicar una condición para decidir entre detenerse o avanzar.</span></label>
+        </div>
+      </section>
+
+      <section class="panel finish-box no-print">
+        <h3>Entrega de la evaluación</h3>
+        <p>Revisa que hayas contestado los 10 reactivos antes de finalizar.</p>
+        <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+        <div id="exam-error" class="error hidden"></div>
+      </section>
+    </section>
+
+    <section id="view-results" class="panel hidden">
+      <div class="result">
+        <div class="eyebrow" style="color:var(--primary);">Evaluación finalizada</div>
+        <h2 id="result-name">Estudiante</h2>
+        <div id="result-score" class="result-score">0 / 20</div>
+        <div id="result-status" class="status">Registro completado</div>
+
+        <div class="result-data">
+          <div><strong>Asignatura:</strong> Robótica</div>
+          <div><strong>Grado:</strong> Primero Básico</div>
+          <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+          <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+          <div><strong>Contenidos:</strong> Tablas y gráficos, animación y estructura condicional Si–si no.</div>
+        </div>
+
+        <p class="result-note">
+          El reporte muestra únicamente la nota final. No se presentan respuestas individuales, reactivos incorrectos ni la clave correcta.
+        </p>
+
+        <div class="actions no-print">
+          <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+          <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+        </div>
+
+        <div class="print-only">
+          <p style="margin-top:28px;font-size:12px;color:#555">
+            Segundo Parcial de Robótica · Primero Básico · Valor total: 20 puntos.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const TOTAL = 10;
+      const POINTS = 2;
+
+      // Clave interna usada únicamente para el cálculo automático.
+      const KEY = {
+        q1:"A", q2:"B", q3:"C", q4:"B", q5:"C",
+        q6:"A", q7:"B", q8:"C", q9:"B", q10:"C"
+      };
+
+      const data = {
+        name:"",
+        section:"",
+        score:0,
+        date:""
+      };
+
+      const $ = id => document.getElementById(id);
+      const show = el => el.classList.remove("hidden");
+      const hide = el => el.classList.add("hidden");
+
+      function updateProgress(){
+        let answered = 0;
+        for(let i=1;i<=TOTAL;i++){
+          if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+        }
+        $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+        $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+      }
+
+      document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+        radio.addEventListener("change", updateProgress);
+      });
+
+      $("start-btn").addEventListener("click", () => {
+        const name = $("student-name").value.trim();
+        const section = $("student-section").value.trim();
+
+        if(!name || !section){
+          $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+          show($("registration-error"));
+          return;
+        }
+
+        hide($("registration-error"));
+        data.name = name;
+        data.section = section;
+        $("student-bar").textContent = `${name} · ${section}`;
+
+        hide($("view-registration"));
+        show($("view-exam"));
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+
+      $("finish-btn").addEventListener("click", () => {
+        const missing = [];
+        let score = 0;
+
+        for(let i=1;i<=TOTAL;i++){
+          const selected = document.querySelector(`input[name="q${i}"]:checked`);
+          if(!selected){
+            missing.push(i);
+          }else if(selected.value === KEY[`q${i}`]){
+            score += POINTS;
+          }
+        }
+
+        if(missing.length){
+          $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+          show($("exam-error"));
+          return;
+        }
+
+        hide($("exam-error"));
+        data.score = score;
+        data.date = new Date().toLocaleString("es-GT");
+
+        $("result-name").textContent = data.name;
+        $("result-score").textContent = `${data.score} / 20`;
+        $("result-section").textContent = data.section;
+        $("result-date").textContent = data.date;
+
+        const status = $("result-status");
+        if(data.score >= 18){
+          status.textContent = "Desempeño alto";
+          status.style.background = "#e6f4ec";
+          status.style.color = "#146c43";
+        }else if(data.score >= 12){
+          status.textContent = "Aprobado";
+          status.style.background = "#e8eef5";
+          status.style.color = "#23466d";
+        }else{
+          status.textContent = "Requiere reforzamiento";
+          status.style.background = "#fff0d5";
+          status.style.color = "#8a5a00";
+        }
+
+        hide($("view-exam"));
+        show($("view-results"));
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+
+      $("print-btn").addEventListener("click", () => window.print());
+      $("restart-btn").addEventListener("click", () => window.location.reload());
+    })();
+  </script>
+</body>
+</html>

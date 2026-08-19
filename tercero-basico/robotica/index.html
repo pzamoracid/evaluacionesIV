@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segundo Parcial de Robótica - Tercero Básico</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#fff; --text:#1f2937; --muted:#667085;
+  --line:#d8e0ea; --primary:#4a5fa3; --primary-dark:#34457a;
+  --soft:#eef2ff; --success:#18794e; --warn:#8a5a00; --danger:#b42318;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}
+.header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:white;padding:22px 18px}
+.header-inner{max-width:1040px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.eyebrow{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;opacity:.88}
+.header h1{margin:4px 0 5px;font-size:27px}
+.header p{margin:0;font-size:14px;color:#eef2ff}
+.value-box{min-width:145px;text-align:center;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);border-radius:14px;padding:12px 16px}
+.value-box strong{display:block;font-size:28px}
+.wrap{max-width:1040px;margin:26px auto;padding:0 16px 38px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:0 8px 26px rgba(16,24,40,.05)}
+.panel h2,.panel h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+input[type=text]{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:11px 12px;background:#fff;color:var(--text)}
+input[type=text]:focus{outline:3px solid rgba(74,95,163,.16);border-color:var(--primary)}
+.info{margin-top:16px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;line-height:1.55;font-size:14px}
+.warning{margin:16px 0;padding:13px 15px;border:1px solid #edd49b;background:#fff7e6;border-radius:12px;font-size:13px;line-height:1.5}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:white}.btn-secondary{background:#e8edf3;color:var(--text)}
+.hidden{display:none!important}
+.error{margin-top:10px;color:var(--danger);font-size:13px;font-weight:800}
+.topbar{position:sticky;top:10px;z-index:20;background:rgba(31,41,55,.96);color:#fff;border-radius:16px;padding:14px 16px;margin-bottom:18px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.topbar small{color:#cbd5e1}
+.progress-area{min-width:230px;flex:1;max-width:430px}
+.progress-text{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.progress-track{height:9px;background:#374151;border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;width:0;background:#9fb0eb;transition:width .2s ease}
+.module-chip{display:inline-block;background:var(--soft);color:var(--primary-dark);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:800;margin-bottom:7px}
+.question{border:1px solid var(--line);background:#fbfcfe;border-radius:14px;padding:18px;margin:14px 0}
+.question p{margin:0 0 12px;font-weight:750;line-height:1.5}
+.option{display:flex;gap:10px;align-items:flex-start;border:1px solid #d7dfe9;background:#fff;border-radius:10px;padding:11px 12px;margin:8px 0;cursor:pointer;line-height:1.4}
+.option:hover{background:#f7fbff;border-color:#abc1da}
+.option input{margin-top:3px}
+.mini-box{background:#eef4ff;border-left:4px solid var(--primary);padding:10px 12px;border-radius:8px;margin:12px 0;font-size:14px}
+.finish{text-align:center}
+.result{text-align:center;padding:30px 20px}
+.result-score{font-size:58px;font-weight:900;line-height:1;color:var(--primary);margin:14px 0}
+.status{display:inline-block;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800;background:#e8eef5;color:var(--primary-dark)}
+.result-data{max-width:640px;margin:18px auto;border:1px solid var(--line);background:#f8fafc;border-radius:12px;padding:14px 16px;text-align:left;line-height:1.7}
+.note-final{max-width:690px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.5}
+.actions{margin-top:20px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.print-only{display:none}
+@media(max-width:700px){
+  .grid2{grid-template-columns:1fr}
+  .header h1{font-size:22px}
+  .result-score{font-size:48px}
+}
+@media print{
+  body{background:#fff}
+  .header,.no-print,#view-registration,#view-exam{display:none!important}
+  #view-results{display:block!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .panel{box-shadow:none;border:1px solid #aaa}
+  .actions,.note-final{display:none!important}
+  .print-only{display:block}
+}
+</style>
+</head>
+<body>
+<header class="header no-print">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Robótica · Tercero Básico</div>
+      <h1>Segundo Parcial</h1>
+      <p>Sensores · Edición de fotografía · Fundamentos de Inteligencia Artificial</p>
+    </div>
+    <div class="value-box">
+      <span>Valor total</span>
+      <strong>20 pts</strong>
+      <small>10 reactivos</small>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="view-registration" class="panel">
+    <h2>Registro del estudiante</h2>
+    <p>Ingresa tus datos para iniciar la evaluación.</p>
+
+    <div class="grid2">
+      <div>
+        <label class="field-label" for="student-name">Nombre completo *</label>
+        <input id="student-name" type="text" autocomplete="name">
+      </div>
+      <div>
+        <label class="field-label" for="student-section">Sección / clave *</label>
+        <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 18">
+      </div>
+    </div>
+
+    <div class="info">
+      <strong>Temas tomados de la imagen:</strong><br>
+      Guía 4: la ciencia de los sensores.<br>
+      Guía 5: la edición de la fotografía.<br>
+      Guía 6: fundamentos de la inteligencia artificial.
+    </div>
+
+    <div class="warning">
+      La evaluación es interactiva y autocalificable. Al finalizar se mostrará únicamente la nota final. No se indicarán las respuestas incorrectas ni se revelará la clave correcta.
+    </div>
+
+    <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+    <div id="registration-error" class="error hidden"></div>
+  </section>
+
+  <section id="view-exam" class="hidden">
+    <div class="topbar no-print">
+      <div>
+        <strong id="student-bar">Estudiante</strong><br>
+        <small>Segundo Parcial de Robótica</small>
+      </div>
+      <div class="progress-area">
+        <div class="progress-text"><span>Progreso</span><span id="progress-label">0 / 10 respondidas</span></div>
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+      </div>
+    </div>
+
+    <section class="panel">
+      <span class="module-chip">Guía 4</span>
+      <h3>La ciencia de los sensores</h3>
+
+      <div class="question">
+        <p>1. En robótica, ¿cuál es la función principal de un sensor?</p>
+        <label class="option"><input type="radio" name="q1" value="A"><span>A) Captar información del entorno o del sistema para tomar decisiones.</span></label>
+        <label class="option"><input type="radio" name="q1" value="B"><span>B) Reemplazar completamente el programa del robot.</span></label>
+        <label class="option"><input type="radio" name="q1" value="C"><span>C) Decorar la estructura del prototipo.</span></label>
+      </div>
+
+      <div class="question">
+        <p>2. Un sensor de distancia resulta útil cuando un robot necesita:</p>
+        <label class="option"><input type="radio" name="q2" value="A"><span>A) Cambiar el color de una fotografía.</span></label>
+        <label class="option"><input type="radio" name="q2" value="B"><span>B) Detectar qué tan cerca está un objeto.</span></label>
+        <label class="option"><input type="radio" name="q2" value="C"><span>C) Guardar audio en formato digital.</span></label>
+      </div>
+
+      <div class="question">
+        <p>3. Si un robot tiene un sensor de luz, ¿qué dato puede registrar con mayor relación?</p>
+        <label class="option"><input type="radio" name="q3" value="A"><span>A) La duración exacta de una canción.</span></label>
+        <label class="option"><input type="radio" name="q3" value="B"><span>B) El tamaño de un archivo de imagen.</span></label>
+        <label class="option"><input type="radio" name="q3" value="C"><span>C) El nivel de iluminación del ambiente.</span></label>
+      </div>
+
+      <div class="mini-box">
+        Ejemplo: si un sensor detecta un obstáculo, el robot puede detenerse o cambiar de dirección.
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="module-chip">Guía 5</span>
+      <h3>La edición de la fotografía</h3>
+
+      <div class="question">
+        <p>4. ¿Cuál de las siguientes acciones corresponde a una edición básica de fotografía?</p>
+        <label class="option"><input type="radio" name="q4" value="A"><span>A) Recortar la imagen para mejorar el encuadre.</span></label>
+        <label class="option"><input type="radio" name="q4" value="B"><span>B) Cambiar un sensor físico del robot.</span></label>
+        <label class="option"><input type="radio" name="q4" value="C"><span>C) Ejecutar una red neuronal completa.</span></label>
+      </div>
+
+      <div class="question">
+        <p>5. Cuando se ajusta el brillo y el contraste de una fotografía, el propósito principal es:</p>
+        <label class="option"><input type="radio" name="q5" value="A"><span>A) Convertir una fotografía en archivo de audio.</span></label>
+        <label class="option"><input type="radio" name="q5" value="B"><span>B) Mejorar la visibilidad y la calidad visual de la imagen.</span></label>
+        <label class="option"><input type="radio" name="q5" value="C"><span>C) Evitar cualquier modificación de la imagen.</span></label>
+      </div>
+
+      <div class="question">
+        <p>6. Si una foto tiene elementos innecesarios en los bordes, ¿qué herramienta es la más adecuada?</p>
+        <label class="option"><input type="radio" name="q6" value="A"><span>A) Recorte.</span></label>
+        <label class="option"><input type="radio" name="q6" value="B"><span>B) Sensor ultrasónico.</span></label>
+        <label class="option"><input type="radio" name="q6" value="C"><span>C) Reconocimiento de voz.</span></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="module-chip">Guía 6</span>
+      <h3>Fundamentos de la inteligencia artificial</h3>
+
+      <div class="question">
+        <p>7. ¿Cuál enunciado describe mejor una idea básica de la inteligencia artificial?</p>
+        <label class="option"><input type="radio" name="q7" value="A"><span>A) Únicamente máquinas que funcionan sin electricidad.</span></label>
+        <label class="option"><input type="radio" name="q7" value="B"><span>B) Sistemas que realizan tareas para las que normalmente se requiere análisis de información o toma de decisiones.</span></label>
+        <label class="option"><input type="radio" name="q7" value="C"><span>C) Archivos de imagen sin ningún procesamiento.</span></label>
+      </div>
+
+      <div class="question">
+        <p>8. Un ejemplo sencillo de uso de inteligencia artificial es:</p>
+        <label class="option"><input type="radio" name="q8" value="A"><span>A) Un cuaderno de papel sin funciones digitales.</span></label>
+        <label class="option"><input type="radio" name="q8" value="B"><span>B) Un cable que solo transmite corriente.</span></label>
+        <label class="option"><input type="radio" name="q8" value="C"><span>C) Un programa que clasifica imágenes según lo que aparece en ellas.</span></label>
+      </div>
+
+      <div class="question">
+        <p>9. ¿Por qué es importante revisar los resultados de una herramienta de IA?</p>
+        <label class="option"><input type="radio" name="q9" value="A"><span>A) Porque siempre acierta y no necesita control.</span></label>
+        <label class="option"><input type="radio" name="q9" value="B"><span>B) Porque puede equivocarse y necesita supervisión humana.</span></label>
+        <label class="option"><input type="radio" name="q9" value="C"><span>C) Porque no utiliza datos de ningún tipo.</span></label>
+      </div>
+
+      <div class="question">
+        <p>10. ¿Qué relación expresa mejor la integración de los tres temas vistos en el parcial?</p>
+        <label class="option"><input type="radio" name="q10" value="A"><span>A) Los tres temas no tienen ninguna relación entre sí.</span></label>
+        <label class="option"><input type="radio" name="q10" value="B"><span>B) La edición de fotografías sustituye totalmente a los sensores y a la IA.</span></label>
+        <label class="option"><input type="radio" name="q10" value="C"><span>C) Los sensores obtienen datos, la fotografía puede registrar o mejorar imágenes y la IA puede analizarlas para apoyar decisiones.</span></label>
+      </div>
+    </section>
+
+    <section class="panel finish no-print">
+      <h3>Entrega del parcial</h3>
+      <p>Revisa que hayas contestado los 10 reactivos antes de finalizar.</p>
+      <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+      <div id="exam-error" class="error hidden"></div>
+    </section>
+  </section>
+
+  <section id="view-results" class="panel hidden">
+    <div class="result">
+      <div class="eyebrow" style="color:var(--primary)">Evaluación finalizada</div>
+      <h2 id="result-name">Estudiante</h2>
+      <div id="result-score" class="result-score">0 / 20</div>
+      <div id="result-status" class="status">Registro completado</div>
+
+      <div class="result-data">
+        <div><strong>Asignatura:</strong> Robótica</div>
+        <div><strong>Grado:</strong> Tercero Básico</div>
+        <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+        <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+        <div><strong>Contenidos evaluados:</strong> Sensores, edición de fotografía y fundamentos de inteligencia artificial.</div>
+      </div>
+
+      <p class="note-final">
+        El reporte final muestra únicamente el punteo obtenido. No se presenta el desglose de respuestas, reactivos incorrectos ni la clave correcta.
+      </p>
+
+      <div class="actions no-print">
+        <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+        <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+      </div>
+
+      <div class="print-only">
+        <p style="margin-top:28px;font-size:12px;color:#555">Segundo Parcial de Robótica · Tercero Básico · Valor total: 20 puntos.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const TOTAL = 10;
+  const POINTS = 2;
+
+  const KEY = {
+    q1:"A", q2:"B", q3:"C", q4:"A", q5:"B",
+    q6:"A", q7:"B", q8:"C", q9:"B", q10:"C"
+  };
+
+  const data = { name:"", section:"", score:0, date:"" };
+  const $ = id => document.getElementById(id);
+  const show = el => el.classList.remove("hidden");
+  const hide = el => el.classList.add("hidden");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=TOTAL;i++){
+      if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+    $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+  }
+
+  document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+    radio.addEventListener("change", updateProgress);
+  });
+
+  $("start-btn").addEventListener("click", () => {
+    const name = $("student-name").value.trim();
+    const section = $("student-section").value.trim();
+
+    if(!name || !section){
+      $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+      show($("registration-error"));
+      return;
+    }
+
+    hide($("registration-error"));
+    data.name = name;
+    data.section = section;
+    $("student-bar").textContent = `${name} · ${section}`;
+    hide($("view-registration"));
+    show($("view-exam"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("finish-btn").addEventListener("click", () => {
+    const missing = [];
+    let score = 0;
+
+    for(let i=1;i<=TOTAL;i++){
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(!selected) missing.push(i);
+      else if(selected.value === KEY[`q${i}`]) score += POINTS;
+    }
+
+    if(missing.length){
+      $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+      show($("exam-error"));
+      return;
+    }
+
+    hide($("exam-error"));
+    data.score = score;
+    data.date = new Date().toLocaleString("es-GT");
+
+    $("result-name").textContent = data.name;
+    $("result-score").textContent = `${data.score} / 20`;
+    $("result-section").textContent = data.section;
+    $("result-date").textContent = data.date;
+
+    const status = $("result-status");
+    if(data.score >= 18){
+      status.textContent = "Desempeño alto";
+      status.style.background = "#e6f4ec";
+      status.style.color = "#146c43";
+    } else if(data.score >= 12){
+      status.textContent = "Aprobado";
+      status.style.background = "#e8eef5";
+      status.style.color = "#23466d";
+    } else {
+      status.textContent = "Requiere reforzamiento";
+      status.style.background = "#fff0d5";
+      status.style.color = "#8a5a00";
+    }
+
+    hide($("view-exam"));
+    show($("view-results"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("print-btn").addEventListener("click", () => window.print());
+  $("restart-btn").addEventListener("click", () => window.location.reload());
+})();
+</script>
+</body>
+</html>

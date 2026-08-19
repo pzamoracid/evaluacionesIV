@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Parcial No. 2 - Laboratorio I</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        textarea.code-area {
+            min-height: 280px;
+            resize: vertical;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+            tab-size: 4;
+        }
+
+        textarea.logic-area {
+            min-height: 190px;
+            resize: vertical;
+        }
+
+        .rubrica-opcion {
+            display: flex;
+            align-items: flex-start;
+            gap: .65rem;
+            cursor: pointer;
+        }
+
+        .rubrica-opcion input[type="radio"] {
+            margin-top: .2rem;
+            width: 1rem;
+            height: 1rem;
+            flex: 0 0 auto;
+            accent-color: #7c3aed;
+        }
+
+        .fila-seleccionada {
+            outline: 2px solid rgba(124, 58, 237, .18);
+            outline-offset: -2px;
+        }
+
+        .prueba-correcta {
+            border-color: #86efac !important;
+            background-color: #f0fdf4 !important;
+        }
+
+        .prueba-incorrecta {
+            border-color: #fca5a5 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        #registro-final-impresion {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 18mm;
+            }
+
+            html,
+            body {
+                background: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            body > *:not(#registro-final-impresion) {
+                display: none !important;
+            }
+
+            #registro-final-impresion {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+                color: #0f172a !important;
+                font-family: 'Plus Jakarta Sans', Arial, sans-serif !important;
+            }
+
+            #registro-final-impresion * {
+                box-sizing: border-box;
+            }
+
+            .registro-hoja {
+                width: 100%;
+                border: 1.5px solid #cbd5e1;
+                border-radius: 16px;
+                padding: 28px 30px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .registro-encabezado {
+                border-bottom: 2px solid #7c3aed;
+                padding-bottom: 18px;
+                margin-bottom: 24px;
+            }
+
+            .registro-etiqueta {
+                font-size: 10pt;
+                font-weight: 700;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: #7c3aed;
+                margin: 0 0 7px;
+            }
+
+            .registro-titulo {
+                font-size: 23pt;
+                line-height: 1.15;
+                font-weight: 800;
+                margin: 0 0 7px;
+                color: #0f172a;
+            }
+
+            .registro-curso {
+                font-size: 12pt;
+                color: #475569;
+                margin: 0;
+            }
+
+            .registro-datos {
+                display: grid;
+                grid-template-columns: 1fr 180px;
+                gap: 16px;
+                margin-bottom: 22px;
+            }
+
+            .registro-campo {
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 14px 16px;
+            }
+
+            .registro-campo span {
+                display: block;
+                font-size: 9pt;
+                font-weight: 700;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                margin-bottom: 5px;
+            }
+
+            .registro-campo strong {
+                display: block;
+                font-size: 12.5pt;
+                color: #0f172a;
+            }
+
+            .registro-resumen {
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 15px 16px;
+                margin-bottom: 22px;
+            }
+
+            .registro-resumen p {
+                margin: 0 0 6px;
+                font-size: 10.5pt;
+                color: #334155;
+            }
+
+            .registro-resumen p:last-child {
+                margin-bottom: 0;
+            }
+
+            .registro-nota {
+                text-align: center;
+                padding: 25px 20px;
+                border-radius: 14px;
+                border: 2px solid #ddd6fe;
+                background: #f5f3ff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .registro-nota-label {
+                margin: 0 0 6px;
+                font-size: 10pt;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+                color: #475569;
+            }
+
+            .registro-nota-valor {
+                margin: 0;
+                font-size: 34pt;
+                line-height: 1;
+                font-weight: 900;
+                color: #6d28d9;
+            }
+
+            .registro-porcentaje {
+                margin: 8px 0 0;
+                font-size: 14pt;
+                font-weight: 700;
+                color: #334155;
+            }
+
+            .registro-aclaracion {
+                margin: 20px 0 0;
+                font-size: 9.5pt;
+                line-height: 1.45;
+                color: #64748b;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 pb-12">
+
+<header class="bg-gradient-to-r from-violet-950 via-purple-900 to-slate-900 text-white shadow-xl">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-violet-700/50 pb-6">
+            <div>
+                <span class="bg-violet-500/20 text-violet-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-violet-400/30">
+                    4to. Bachillerato en Ciencias y Letras con Orientación en Computación
+                </span>
+
+                <h1 class="text-3xl md:text-4xl font-extrabold mt-2 tracking-tight">
+                    Evaluación Parcial No. 2
+                </h1>
+
+                <p class="text-violet-100 text-lg font-medium mt-1">
+                    Curso: Laboratorio I
+                </p>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20 text-center md:text-right w-full md:w-auto">
+                <p class="text-xs uppercase tracking-widest text-violet-100 font-bold">Valor Total</p>
+                <p class="text-4xl font-black text-amber-400">
+                    20 <span class="text-xl font-normal text-white">pts</span>
+                </p>
+                <p class="text-xs text-violet-100 mt-1">
+                    <i class="fa-regular fa-calendar-check mr-1"></i>
+                    Entrega: viernes 21 de agosto de 2026
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
+            <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                <i class="fa-solid fa-code-branch text-violet-300 text-xl"></i>
+                <div>
+                    <p class="text-xs text-slate-400">Proyecto</p>
+                    <p class="font-semibold text-white">Lógica Multi-Lenguaje</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                <i class="fa-brands fa-python text-sky-300 text-xl"></i>
+                <div>
+                    <p class="text-xs text-slate-400">Lenguaje 1</p>
+                    <p class="font-semibold text-white">Python</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                <i class="fa-brands fa-js text-yellow-300 text-xl"></i>
+                <div>
+                    <p class="text-xs text-slate-400">Lenguaje 2</p>
+                    <p class="font-semibold text-white">JavaScript</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                <i class="fa-solid fa-file-code text-cyan-300 text-xl"></i>
+                <div>
+                    <p class="text-xs text-slate-400">Lenguaje 3</p>
+                    <p class="font-semibold text-white">C++</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 mt-8 space-y-8">
+
+    <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
+        <div class="flex items-center gap-2 text-sm text-slate-600 font-medium">
+            <i class="fa-solid fa-circle-info text-violet-600"></i>
+            <span>Resuelve un caso práctico y documenta la misma lógica en Python, JavaScript y C++.</span>
+        </div>
+
+        <button
+            type="button"
+            onclick="imprimirRegistroFinal()"
+            class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+            <i class="fa-solid fa-print"></i>
+            Imprimir resultado final
+        </button>
+    </div>
+
+    <!-- Datos del estudiante -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-user-pen"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">Datos del Estudiante</h2>
+                <p class="text-sm text-slate-500">Completa tus datos antes de iniciar.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+            <div>
+                <label for="nombre-estudiante" class="block text-sm font-semibold text-slate-700 mb-2">Nombre completo</label>
+                <input
+                    id="nombre-estudiante"
+                    type="text"
+                    autocomplete="name"
+                    placeholder="Escribe tu nombre y apellidos"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500">
+            </div>
+
+            <div>
+                <label for="fecha-estudiante" class="block text-sm font-semibold text-slate-700 mb-2">Fecha</label>
+                <input
+                    id="fecha-estudiante"
+                    type="date"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Caso práctico -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">1. Caso Práctico: Cálculo de Pago Semanal</h2>
+                <p class="text-sm text-slate-500">Resuelve el mismo problema lógico en los tres lenguajes.</p>
+            </div>
+        </div>
+
+        <div class="rounded-xl border border-blue-200 bg-blue-50 p-5 text-sm text-blue-950 leading-relaxed">
+            <p class="font-bold text-base mb-2">Situación</p>
+            <p>
+                Una pequeña empresa necesita calcular el pago semanal de un colaborador. El programa debe solicitar
+                <strong>horas trabajadas</strong> y <strong>pago por hora</strong>.
+            </p>
+            <p class="mt-3">
+                Si el colaborador trabaja <strong>40 horas o menos</strong>, todas las horas se pagan a la tarifa normal.
+                Si trabaja <strong>más de 40 horas</strong>, las primeras 40 se pagan a tarifa normal y las horas adicionales
+                se pagan a <strong>1.5 veces</strong> la tarifa por hora.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mt-5 text-sm">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Entradas</p>
+                <p class="font-semibold text-slate-900 mt-2">Horas trabajadas</p>
+                <p class="font-semibold text-slate-900">Pago por hora</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Proceso</p>
+                <p class="text-slate-700 mt-2">Determinar horas normales y horas extra.</p>
+                <p class="text-slate-700">Aplicar la tarifa correspondiente.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Salida</p>
+                <p class="font-semibold text-slate-900 mt-2">Pago semanal total</p>
+                <p class="text-slate-600">Mostrar el resultado de forma clara.</p>
+            </div>
+        </div>
+
+        <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+            <p class="font-bold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Condición mínima</p>
+            <p>
+                La solución debe utilizar una estructura condicional para diferenciar el cálculo cuando existen horas extra.
+                La misma lógica debe producir el mismo resultado en Python, JavaScript y C++.
+            </p>
+        </div>
+    </section>
+
+    <!-- Documentación lógica -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" id="documentacion-logica">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-diagram-project"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">2. Documentación de la Solución Lógica</h2>
+                <p class="text-sm text-slate-500">Describe primero la lógica antes de traducirla a los tres lenguajes.</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-5">
+            <div>
+                <label for="analisis-logico" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Análisis del problema <span class="text-red-600">*</span>
+                </label>
+                <textarea
+                    id="analisis-logico"
+                    required
+                    minlength="40"
+                    class="logic-area w-full rounded-xl border border-slate-300 p-4 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    placeholder="Explica con tus palabras qué datos recibe el programa, qué decisión debe tomar y qué resultado debe producir."></textarea>
+                <p id="mensaje-analisis" class="text-xs text-slate-500 mt-2">Obligatorio. Describe entradas, condición, proceso y salida.</p>
+            </div>
+
+            <div>
+                <label for="pseudocodigo" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Pseudocódigo <span class="text-red-600">*</span>
+                </label>
+                <textarea
+                    id="pseudocodigo"
+                    required
+                    minlength="30"
+                    class="logic-area w-full rounded-xl border border-slate-300 p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    placeholder="Escribe aquí la secuencia lógica de la solución..."></textarea>
+                <p id="mensaje-pseudocodigo" class="text-xs text-slate-500 mt-2">Obligatorio. Escribe una secuencia lógica clara antes de programar.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traducción multi-lenguaje -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-code"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">3. Traducción de la Solución</h2>
+                <p class="text-sm text-slate-500">Escribe la solución equivalente en Python, JavaScript y C++.</p>
+            </div>
+        </div>
+
+        <div class="grid xl:grid-cols-3 gap-5">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-brands fa-python text-sky-600 text-xl"></i>
+                    <label for="codigo-python" class="text-sm font-bold text-slate-800">Python</label>
+                </div>
+                <textarea
+                    id="codigo-python"
+                    spellcheck="false"
+                    class="code-area w-full rounded-xl border border-slate-300 bg-slate-950 text-slate-100 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    placeholder="# Escribe aquí tu solución en Python"></textarea>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-brands fa-js text-amber-500 text-xl"></i>
+                    <label for="codigo-js" class="text-sm font-bold text-slate-800">JavaScript</label>
+                </div>
+                <textarea
+                    id="codigo-js"
+                    spellcheck="false"
+                    class="code-area w-full rounded-xl border border-slate-300 bg-slate-950 text-slate-100 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="// Escribe aquí tu solución en JavaScript"></textarea>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-file-code text-cyan-600 text-xl"></i>
+                    <label for="codigo-cpp" class="text-sm font-bold text-slate-800">C++</label>
+                </div>
+                <textarea
+                    id="codigo-cpp"
+                    spellcheck="false"
+                    class="code-area w-full rounded-xl border border-slate-300 bg-slate-950 text-slate-100 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    placeholder="// Escribe aquí tu solución en C++"></textarea>
+            </div>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-500">
+            La página guarda temporalmente el contenido escrito en este navegador. La ejecución de Python y C++ debe realizarse
+            en el entorno de programación utilizado en clase.
+        </p>
+    </section>
+
+    <!-- Casos de prueba -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" id="seccion-pruebas">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-vial-circle-check"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">4. Casos de Prueba</h2>
+                <p class="text-sm text-slate-500">Ejecuta tus tres programas y escribe el pago total obtenido en cada caso.</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-4">
+            <div class="prueba-card rounded-xl border border-slate-200 bg-slate-50 p-5" data-prueba="1">
+                <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Caso 1</p>
+                <p class="font-bold text-slate-900 mt-2">35 horas × Q25.00</p>
+                <p class="text-sm text-slate-600 mt-1">No existen horas extra.</p>
+
+                <label for="prueba-1" class="block text-sm font-semibold text-slate-700 mt-4 mb-2">
+                    Pago total obtenido
+                </label>
+                <div class="flex gap-2">
+                    <input id="prueba-1" type="number" step="0.01" min="0"
+                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="0.00">
+                    <button type="button" data-verificar="1"
+                        class="rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 text-sm font-semibold">
+                        Verificar
+                    </button>
+                </div>
+                <p id="mensaje-prueba-1" class="text-xs mt-2 text-slate-500">Pendiente de verificación.</p>
+            </div>
+
+            <div class="prueba-card rounded-xl border border-slate-200 bg-slate-50 p-5" data-prueba="2">
+                <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Caso 2</p>
+                <p class="font-bold text-slate-900 mt-2">40 horas × Q30.00</p>
+                <p class="text-sm text-slate-600 mt-1">Límite de horas normales.</p>
+
+                <label for="prueba-2" class="block text-sm font-semibold text-slate-700 mt-4 mb-2">
+                    Pago total obtenido
+                </label>
+                <div class="flex gap-2">
+                    <input id="prueba-2" type="number" step="0.01" min="0"
+                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="0.00">
+                    <button type="button" data-verificar="2"
+                        class="rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 text-sm font-semibold">
+                        Verificar
+                    </button>
+                </div>
+                <p id="mensaje-prueba-2" class="text-xs mt-2 text-slate-500">Pendiente de verificación.</p>
+            </div>
+
+            <div class="prueba-card rounded-xl border border-slate-200 bg-slate-50 p-5" data-prueba="3">
+                <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Caso 3</p>
+                <p class="font-bold text-slate-900 mt-2">46 horas × Q20.00</p>
+                <p class="text-sm text-slate-600 mt-1">Incluye 6 horas extra.</p>
+
+                <label for="prueba-3" class="block text-sm font-semibold text-slate-700 mt-4 mb-2">
+                    Pago total obtenido
+                </label>
+                <div class="flex gap-2">
+                    <input id="prueba-3" type="number" step="0.01" min="0"
+                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="0.00">
+                    <button type="button" data-verificar="3"
+                        class="rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 text-sm font-semibold">
+                        Verificar
+                    </button>
+                </div>
+                <p id="mensaje-prueba-3" class="text-xs mt-2 text-slate-500">Pendiente de verificación.</p>
+            </div>
+        </div>
+
+        <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Progreso de pruebas</p>
+            <p id="progreso-pruebas" class="text-lg font-bold text-slate-900 mt-1">0 de 3 casos verificados correctamente</p>
+        </div>
+    </section>
+
+    <!-- Lista de cotejo -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-list-check"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">5. Lista de Cotejo Pre-Entrega</h2>
+                <p class="text-sm text-slate-500">Verifica la consistencia de tu solución antes de autoevaluarte.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 text-sm" id="lista-cotejo">
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Análisis:</strong> Identifiqué correctamente entradas, proceso, condición y salida.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Pseudocódigo:</strong> La secuencia lógica está documentada antes de escribir el código.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Condicional:</strong> Mis tres soluciones diferencian correctamente las horas normales y extra.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Python:</strong> El programa recibe los datos y muestra correctamente el pago semanal.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>JavaScript:</strong> La solución conserva la misma lógica y produce los mismos resultados.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>C++:</strong> La solución compila y conserva la misma lógica del caso práctico.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Pruebas:</strong> Comparé mis programas con los tres casos de prueba indicados.</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                <input type="checkbox" class="mt-1 w-4 h-4 accent-violet-600">
+                <span><strong>Documentación:</strong> Utilicé nombres de variables comprensibles y comentarios cuando fueron necesarios.</span>
+            </label>
+        </div>
+
+        <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Progreso de la lista</p>
+            <p id="progreso-checklist" class="text-lg font-bold text-slate-900 mt-1">0 de 8 requisitos verificados</p>
+        </div>
+    </section>
+
+    <!-- Rúbrica -->
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" id="rubrica-autoevaluacion">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-table-list"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">6. Rúbrica de Autoevaluación</h2>
+                <p class="text-sm text-slate-500">Evalúa el estado de tu solución antes de entregar.</p>
+                <p class="text-xs text-slate-400 mt-1">
+                    Excelente = 5 pts &bull; Satisfactorio = 4 pts &bull; Debe mejorar = 3 pts
+                </p>
+            </div>
+        </div>
+
+        <div class="mb-6 rounded-xl border border-violet-100 bg-violet-50/60 p-4 text-sm text-violet-950">
+            <p class="font-semibold mb-1"><i class="fa-solid fa-circle-check mr-1"></i> Uso de la rúbrica</p>
+            <p>
+                Selecciona una opción por criterio. La nota se calcula automáticamente sobre 20 puntos.
+                Esta autoevaluación sirve para revisar tu trabajo; la calificación oficial será determinada por el docente.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs md:text-sm" id="tabla-rubrica">
+                <thead>
+                    <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                        <th class="p-3 md:p-4 rounded-tl-xl">Criterio</th>
+                        <th class="p-3 md:p-4 text-emerald-800 bg-emerald-50/50">Excelente (5)</th>
+                        <th class="p-3 md:p-4 text-amber-800 bg-amber-50/50">Satisfactorio (4)</th>
+                        <th class="p-3 md:p-4 text-red-800 bg-red-50/50">Debe mejorar (3)</th>
+                        <th class="p-3 md:p-4 text-center rounded-tr-xl">Resultado</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr data-fila-criterio="1">
+                        <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                            Lógica y Documentación
+                        </td>
+                        <td class="p-3 md:p-4 bg-emerald-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-1" value="5">
+                                <span>El análisis y pseudocódigo describen con claridad las entradas, la condición, los cálculos y la salida.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-amber-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-1" value="4">
+                                <span>La lógica es comprensible, aunque presenta pequeños vacíos de documentación o detalle.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-red-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-1" value="3">
+                                <span>La documentación es incompleta o no explica con claridad cómo se resuelve el caso.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 text-center font-extrabold text-violet-700 text-base whitespace-nowrap">
+                            <span id="resultado-criterio-1">— / 5</span>
+                        </td>
+                    </tr>
+
+                    <tr data-fila-criterio="2">
+                        <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                            Solución en Python
+                        </td>
+                        <td class="p-3 md:p-4 bg-emerald-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-2" value="5">
+                                <span>El programa utiliza correctamente variables, entrada de datos, condicional y cálculo del pago.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-amber-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-2" value="4">
+                                <span>La solución funciona en general, pero necesita uno o dos ajustes menores de sintaxis, claridad o salida.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-red-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-2" value="3">
+                                <span>El programa presenta errores que impiden obtener correctamente el resultado esperado.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 text-center font-extrabold text-violet-700 text-base whitespace-nowrap">
+                            <span id="resultado-criterio-2">— / 5</span>
+                        </td>
+                    </tr>
+
+                    <tr data-fila-criterio="3">
+                        <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                            Solución en JavaScript
+                        </td>
+                        <td class="p-3 md:p-4 bg-emerald-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-3" value="5">
+                                <span>La solución traduce correctamente la lógica y produce los mismos resultados que la versión en Python.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-amber-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-3" value="4">
+                                <span>La lógica está correctamente trasladada, aunque existen pequeños detalles de sintaxis o presentación.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-red-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-3" value="3">
+                                <span>La traducción a JavaScript contiene errores que cambian o impiden el resultado esperado.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 text-center font-extrabold text-violet-700 text-base whitespace-nowrap">
+                            <span id="resultado-criterio-3">— / 5</span>
+                        </td>
+                    </tr>
+
+                    <tr data-fila-criterio="4">
+                        <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                            Solución en C++
+                        </td>
+                        <td class="p-3 md:p-4 bg-emerald-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-4" value="5">
+                                <span>El programa compila, utiliza tipos de datos adecuados y conserva correctamente la lógica del caso práctico.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-amber-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-4" value="4">
+                                <span>La solución es correcta en su estructura, pero requiere pequeños ajustes de sintaxis, tipos o presentación.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 bg-red-50/20">
+                            <label class="rubrica-opcion">
+                                <input type="radio" name="criterio-4" value="3">
+                                <span>La solución presenta errores de compilación o de lógica que impiden obtener correctamente el resultado.</span>
+                            </label>
+                        </td>
+                        <td class="p-3 md:p-4 text-center font-extrabold text-violet-700 text-base whitespace-nowrap">
+                            <span id="resultado-criterio-4">— / 5</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-6">
+            <div class="grid md:grid-cols-3 gap-4 items-center">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Progreso</p>
+                    <p id="progreso-rubrica" class="text-lg font-bold text-slate-900 mt-1">0 de 4 criterios evaluados</p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Autoevaluación</p>
+                    <p id="nota-autoevaluacion" class="text-3xl font-black text-violet-700 mt-1">— / 20</p>
+                    <p id="porcentaje-autoevaluacion" class="text-sm font-semibold text-slate-500">Completa los 4 criterios</p>
+                </div>
+
+                <div class="md:text-right no-print">
+                    <button
+                        type="button"
+                        id="reiniciar-evaluacion"
+                        class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Reiniciar
+                    </button>
+                </div>
+            </div>
+
+            <div id="retroalimentacion-rubrica" class="hidden mt-5 rounded-xl border p-4 text-sm"></div>
+        </div>
+    </section>
+
+    <footer class="text-center text-xs text-slate-500 pt-4 border-t border-slate-200">
+        <p>Laboratorio I &bull; 4to. Bachillerato con Orientación en Computación &bull; 2026</p>
+    </footer>
+
+</main>
+
+<!-- Registro final de una sola página -->
+<section id="registro-final-impresion" aria-hidden="true">
+    <div class="registro-hoja">
+        <div class="registro-encabezado">
+            <p class="registro-etiqueta">4to. Bachillerato en Ciencias y Letras con Orientación en Computación</p>
+            <h1 class="registro-titulo">Evaluación Parcial No. 2</h1>
+            <p class="registro-curso">Laboratorio I &bull; Proyecto Integrador Lógico Multi-Lenguaje</p>
+        </div>
+
+        <div class="registro-datos">
+            <div class="registro-campo">
+                <span>Nombre del estudiante</span>
+                <strong id="registro-nombre">—</strong>
+            </div>
+
+            <div class="registro-campo">
+                <span>Fecha</span>
+                <strong id="registro-fecha">—</strong>
+            </div>
+        </div>
+
+        <div class="registro-resumen">
+            <p><strong>Caso práctico:</strong> Cálculo de Pago Semanal</p>
+            <p><strong>Lenguajes:</strong> Python, JavaScript y C++</p>
+            <p><strong>Casos de prueba verificados:</strong> <span id="registro-pruebas">—</span></p>
+        </div>
+
+        <div class="registro-nota">
+            <p class="registro-nota-label">Resultado final de autoevaluación</p>
+            <p class="registro-nota-valor"><span id="registro-nota">—</span> / 20</p>
+            <p class="registro-porcentaje" id="registro-porcentaje">—</p>
+        </div>
+
+        <p class="registro-aclaracion">
+            Este resultado corresponde a la autoevaluación realizada por el estudiante con base en la rúbrica del proyecto.
+            La calificación oficial será determinada por el docente.
+        </p>
+    </div>
+</section>
+
+<script>
+(function () {
+    const storageKey = 'laboratorioI_parcial2_2026';
+
+    const nombre = document.getElementById('nombre-estudiante');
+    const fecha = document.getElementById('fecha-estudiante');
+    const analisis = document.getElementById('analisis-logico');
+    const pseudocodigo = document.getElementById('pseudocodigo');
+    const mensajeAnalisis = document.getElementById('mensaje-analisis');
+    const mensajePseudocodigo = document.getElementById('mensaje-pseudocodigo');
+    const python = document.getElementById('codigo-python');
+    const js = document.getElementById('codigo-js');
+    const cpp = document.getElementById('codigo-cpp');
+
+    const checkboxes = Array.from(document.querySelectorAll('#lista-cotejo input[type="checkbox"]'));
+    const progresoChecklist = document.getElementById('progreso-checklist');
+
+    const radios = Array.from(document.querySelectorAll('#tabla-rubrica input[type="radio"]'));
+    const progresoRubrica = document.getElementById('progreso-rubrica');
+    const nota = document.getElementById('nota-autoevaluacion');
+    const porcentaje = document.getElementById('porcentaje-autoevaluacion');
+    const retro = document.getElementById('retroalimentacion-rubrica');
+    const reiniciar = document.getElementById('reiniciar-evaluacion');
+
+    const respuestasCorrectas = {
+        1: 875,
+        2: 1200,
+        3: 980
+    };
+
+    const pruebasEstado = {
+        1: false,
+        2: false,
+        3: false
+    };
+
+
+    function validarDocumentacionVisual() {
+        const analisisValor = analisis.value.trim();
+        const pseudocodigoValor = pseudocodigo.value.trim();
+
+        const analisisValido = analisisValor.length >= 40;
+        const pseudocodigoValido = pseudocodigoValor.length >= 30;
+
+        if (!analisisValor) {
+            mensajeAnalisis.textContent = 'Obligatorio. Completa el análisis del problema.';
+            mensajeAnalisis.className = 'text-xs text-red-600 mt-2';
+        } else if (!analisisValido) {
+            mensajeAnalisis.textContent = 'Amplía el análisis: debe explicar entradas, condición, proceso y salida.';
+            mensajeAnalisis.className = 'text-xs text-amber-600 mt-2';
+        } else {
+            mensajeAnalisis.textContent = 'Análisis completado.';
+            mensajeAnalisis.className = 'text-xs text-emerald-600 mt-2';
+        }
+
+        if (!pseudocodigoValor) {
+            mensajePseudocodigo.textContent = 'Obligatorio. Completa el pseudocódigo.';
+            mensajePseudocodigo.className = 'text-xs text-red-600 mt-2';
+        } else if (!pseudocodigoValido) {
+            mensajePseudocodigo.textContent = 'Amplía el pseudocódigo para que la secuencia lógica quede clara.';
+            mensajePseudocodigo.className = 'text-xs text-amber-600 mt-2';
+        } else {
+            mensajePseudocodigo.textContent = 'Pseudocódigo completado.';
+            mensajePseudocodigo.className = 'text-xs text-emerald-600 mt-2';
+        }
+
+        return analisisValido && pseudocodigoValido;
+    }
+
+    function actualizarProgresoPruebas() {
+        const correctas = Object.values(pruebasEstado).filter(Boolean).length;
+        document.getElementById('progreso-pruebas').textContent =
+            `${correctas} de 3 casos verificados correctamente`;
+        guardarEstado();
+    }
+
+    function verificarPrueba(numero) {
+        const input = document.getElementById(`prueba-${numero}`);
+        const mensaje = document.getElementById(`mensaje-prueba-${numero}`);
+        const card = document.querySelector(`[data-prueba="${numero}"]`);
+        const valor = Number(input.value);
+
+        card.classList.remove('prueba-correcta', 'prueba-incorrecta');
+
+        if (input.value.trim() === '' || !Number.isFinite(valor)) {
+            pruebasEstado[numero] = false;
+            mensaje.textContent = 'Escribe primero el resultado obtenido por tu programa.';
+            mensaje.className = 'text-xs mt-2 text-red-600';
+            card.classList.add('prueba-incorrecta');
+            actualizarProgresoPruebas();
+            return;
+        }
+
+        if (Math.abs(valor - respuestasCorrectas[numero]) < 0.01) {
+            pruebasEstado[numero] = true;
+            mensaje.textContent = 'Resultado correcto.';
+            mensaje.className = 'text-xs mt-2 text-emerald-700 font-semibold';
+            card.classList.add('prueba-correcta');
+        } else {
+            pruebasEstado[numero] = false;
+            mensaje.textContent = 'El resultado no coincide. Revisa la lógica y vuelve a ejecutar tus programas.';
+            mensaje.className = 'text-xs mt-2 text-red-600 font-semibold';
+            card.classList.add('prueba-incorrecta');
+        }
+
+        actualizarProgresoPruebas();
+    }
+
+    document.querySelectorAll('[data-verificar]').forEach(btn => {
+        btn.addEventListener('click', () => verificarPrueba(Number(btn.dataset.verificar)));
+    });
+
+    function actualizarChecklist() {
+        const marcados = checkboxes.filter(c => c.checked).length;
+        progresoChecklist.textContent = `${marcados} de ${checkboxes.length} requisitos verificados`;
+        guardarEstado();
+    }
+
+    function actualizarRubrica() {
+        let total = 0;
+        let respondidos = 0;
+
+        for (let criterio = 1; criterio <= 4; criterio++) {
+            const seleccionado = document.querySelector(`input[name="criterio-${criterio}"]:checked`);
+            const salida = document.getElementById(`resultado-criterio-${criterio}`);
+            const fila = document.querySelector(`[data-fila-criterio="${criterio}"]`);
+
+            if (seleccionado) {
+                const puntos = Number(seleccionado.value);
+                total += puntos;
+                respondidos++;
+                salida.textContent = `${puntos} / 5`;
+                fila.classList.add('fila-seleccionada');
+            } else {
+                salida.textContent = '— / 5';
+                fila.classList.remove('fila-seleccionada');
+            }
+        }
+
+        progresoRubrica.textContent = `${respondidos} de 4 criterios evaluados`;
+
+        if (respondidos < 4) {
+            nota.textContent = '— / 20';
+            porcentaje.textContent = 'Completa los 4 criterios';
+            retro.className = 'hidden mt-5 rounded-xl border p-4 text-sm';
+            retro.textContent = '';
+        } else {
+            const pct = Math.round((total / 20) * 100);
+            nota.textContent = `${total} / 20`;
+            porcentaje.textContent = `${pct} %`;
+
+            if (total >= 18) {
+                retro.className = 'mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900';
+                retro.textContent = 'La autoevaluación indica un buen dominio de la lógica y su traducción a los tres lenguajes. Revisa por última vez los casos de prueba y la documentación.';
+            } else if (total >= 15) {
+                retro.className = 'mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900';
+                retro.textContent = 'La solución cumple con la mayoría de los criterios, pero todavía conviene revisar los lenguajes o aspectos marcados como Satisfactorio o Debe mejorar.';
+            } else {
+                retro.className = 'mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900';
+                retro.textContent = 'La autoevaluación muestra aspectos por corregir. Revisa primero la lógica base y después vuelve a traducirla y probarla en cada lenguaje.';
+            }
+        }
+
+        guardarEstado();
+    }
+
+    function guardarEstado() {
+        const estado = {
+            nombre: nombre.value,
+            fecha: fecha.value,
+            analisis: analisis.value,
+            pseudocodigo: pseudocodigo.value,
+            python: python.value,
+            js: js.value,
+            cpp: cpp.value,
+            checklist: checkboxes.map(c => c.checked),
+            pruebas: {},
+            pruebasEstado: {...pruebasEstado},
+            rubrica: {}
+        };
+
+        for (let i = 1; i <= 3; i++) {
+            estado.pruebas[i] = document.getElementById(`prueba-${i}`).value;
+        }
+
+        for (let criterio = 1; criterio <= 4; criterio++) {
+            const seleccionado = document.querySelector(`input[name="criterio-${criterio}"]:checked`);
+            if (seleccionado) {
+                estado.rubrica[`criterio-${criterio}`] = seleccionado.value;
+            }
+        }
+
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(estado));
+        } catch (e) {}
+    }
+
+    function restaurarEstado() {
+        try {
+            const estado = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+            nombre.value = estado.nombre || '';
+            fecha.value = estado.fecha || '';
+            analisis.value = estado.analisis || '';
+            pseudocodigo.value = estado.pseudocodigo || '';
+            python.value = estado.python || '';
+            js.value = estado.js || '';
+            cpp.value = estado.cpp || '';
+
+            if (Array.isArray(estado.checklist)) {
+                checkboxes.forEach((c, i) => c.checked = Boolean(estado.checklist[i]));
+            }
+
+            if (estado.pruebas) {
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById(`prueba-${i}`).value = estado.pruebas[i] || '';
+                }
+            }
+
+            if (estado.pruebasEstado) {
+                for (let i = 1; i <= 3; i++) {
+                    pruebasEstado[i] = Boolean(estado.pruebasEstado[i]);
+                    if (pruebasEstado[i]) {
+                        const card = document.querySelector(`[data-prueba="${i}"]`);
+                        const mensaje = document.getElementById(`mensaje-prueba-${i}`);
+                        card.classList.add('prueba-correcta');
+                        mensaje.textContent = 'Resultado correcto.';
+                        mensaje.className = 'text-xs mt-2 text-emerald-700 font-semibold';
+                    }
+                }
+            }
+
+            if (estado.rubrica) {
+                Object.entries(estado.rubrica).forEach(([grupo, valor]) => {
+                    const radio = document.querySelector(`input[name="${grupo}"][value="${valor}"]`);
+                    if (radio) radio.checked = true;
+                });
+            }
+        } catch (e) {}
+
+        validarDocumentacionVisual();
+        actualizarProgresoPruebas();
+        actualizarChecklist();
+        actualizarRubrica();
+    }
+
+    [nombre, fecha, analisis, pseudocodigo, python, js, cpp].forEach(campo => {
+        campo.addEventListener('input', guardarEstado);
+        campo.addEventListener('change', guardarEstado);
+    });
+
+    analisis.addEventListener('input', validarDocumentacionVisual);
+    pseudocodigo.addEventListener('input', validarDocumentacionVisual);
+
+    for (let i = 1; i <= 3; i++) {
+        document.getElementById(`prueba-${i}`).addEventListener('input', () => {
+            pruebasEstado[i] = false;
+            const card = document.querySelector(`[data-prueba="${i}"]`);
+            const mensaje = document.getElementById(`mensaje-prueba-${i}`);
+            card.classList.remove('prueba-correcta', 'prueba-incorrecta');
+            mensaje.textContent = 'Pendiente de verificación.';
+            mensaje.className = 'text-xs mt-2 text-slate-500';
+            actualizarProgresoPruebas();
+        });
+    }
+
+    checkboxes.forEach(c => c.addEventListener('change', actualizarChecklist));
+    radios.forEach(r => r.addEventListener('change', actualizarRubrica));
+
+    reiniciar.addEventListener('click', () => {
+        if (!confirm('¿Deseas borrar los datos y el progreso guardado de esta evaluación?')) return;
+
+        nombre.value = '';
+        fecha.value = '';
+        analisis.value = '';
+        pseudocodigo.value = '';
+        python.value = '';
+        js.value = '';
+        cpp.value = '';
+
+        checkboxes.forEach(c => c.checked = false);
+        radios.forEach(r => r.checked = false);
+
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`prueba-${i}`).value = '';
+            pruebasEstado[i] = false;
+            const card = document.querySelector(`[data-prueba="${i}"]`);
+            const mensaje = document.getElementById(`mensaje-prueba-${i}`);
+            card.classList.remove('prueba-correcta', 'prueba-incorrecta');
+            mensaje.textContent = 'Pendiente de verificación.';
+            mensaje.className = 'text-xs mt-2 text-slate-500';
+        }
+
+        try {
+            localStorage.removeItem(storageKey);
+        } catch (e) {}
+
+        validarDocumentacionVisual();
+        actualizarProgresoPruebas();
+        actualizarChecklist();
+        actualizarRubrica();
+    });
+
+    restaurarEstado();
+
+    window.imprimirRegistroFinal = function () {
+        const nombreValor = nombre.value.trim();
+        const fechaValor = fecha.value;
+        const correctas = Object.values(pruebasEstado).filter(Boolean).length;
+
+        if (!nombreValor) {
+            alert('Escribe el nombre completo antes de imprimir.');
+            nombre.focus();
+            return;
+        }
+
+        if (!fechaValor) {
+            alert('Selecciona la fecha antes de imprimir.');
+            fecha.focus();
+            return;
+        }
+
+        if (!validarDocumentacionVisual()) {
+            alert('Completa la sección 2: Documentación de la Solución Lógica antes de imprimir el resultado final.');
+            document.getElementById('documentacion-logica').scrollIntoView({behavior: 'smooth'});
+            return;
+        }
+
+        if (correctas < 3) {
+            alert('Verifica correctamente los tres casos de prueba antes de imprimir el resultado final.');
+            document.getElementById('seccion-pruebas').scrollIntoView({behavior: 'smooth'});
+            return;
+        }
+
+        const notaTexto = nota.textContent.trim();
+        const coincidencia = notaTexto.match(/(\d+)\s*\/\s*20/);
+
+        if (!coincidencia) {
+            alert('Completa los cuatro criterios de la rúbrica antes de imprimir.');
+            document.getElementById('rubrica-autoevaluacion').scrollIntoView({behavior: 'smooth'});
+            return;
+        }
+
+        const notaFinal = coincidencia[1];
+        const porcentajeFinal = `${Math.round((Number(notaFinal) / 20) * 100)} %`;
+
+        const partesFecha = fechaValor.split('-');
+        const fechaFormateada = partesFecha.length === 3
+            ? `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`
+            : fechaValor;
+
+        document.getElementById('registro-nombre').textContent = nombreValor;
+        document.getElementById('registro-fecha').textContent = fechaFormateada;
+        document.getElementById('registro-pruebas').textContent = '3 de 3';
+        document.getElementById('registro-nota').textContent = notaFinal;
+        document.getElementById('registro-porcentaje').textContent = porcentajeFinal;
+
+        window.print();
+    };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segundo Parcial - Producción de Contenido Digital - 5.º Bachillerato</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#ffffff; --text:#172033; --muted:#667085;
+  --line:#d9e2ec; --primary:#5b4b7a; --primary-dark:#403457;
+  --soft:#f1eef7; --success:#18794e; --warning:#8a5a00; --danger:#b42318;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input{font:inherit}
+.header{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:white;
+  padding:22px 18px;
+}
+.header-inner{
+  max-width:1080px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.eyebrow{
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  opacity:.88;
+}
+.header h1{margin:4px 0 5px;font-size:27px}
+.header p{margin:0;font-size:14px;color:#f1edf7;max-width:800px}
+.value-box{
+  min-width:145px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:12px 16px;
+}
+.value-box strong{display:block;font-size:28px}
+.wrap{max-width:1080px;margin:26px auto;padding:0 16px 38px}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:18px;
+  box-shadow:0 8px 26px rgba(16,24,40,.05);
+}
+.panel h2,.panel h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+input[type=text],input[type=url]{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:11px;
+  padding:11px 12px;
+  background:#fff;
+  color:var(--text);
+}
+input[type=text]:focus,input[type=url]:focus{
+  outline:3px solid rgba(91,75,122,.16);
+  border-color:var(--primary);
+}
+.info{
+  margin-top:16px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8fafc;
+  line-height:1.55;
+  font-size:14px;
+}
+.notice{
+  margin:16px 0;
+  padding:13px 15px;
+  border:1px solid #e5d09a;
+  background:#fff8e7;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:white}
+.btn-secondary{background:#e8edf3;color:var(--text)}
+.hidden{display:none!important}
+.error{
+  margin-top:10px;
+  color:var(--danger);
+  font-size:13px;
+  font-weight:800;
+}
+.topbar{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  background:rgba(23,32,51,.96);
+  color:#fff;
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:18px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.topbar small{color:#cbd5e1}
+.progress-area{min-width:240px;flex:1;max-width:440px}
+.progress-text{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:6px;
+}
+.progress-track{
+  height:9px;
+  background:#344054;
+  border-radius:99px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  width:0;
+  background:#b2a2d0;
+  transition:width .2s ease;
+}
+.module-chip{
+  display:inline-block;
+  background:var(--soft);
+  color:var(--primary-dark);
+  border-radius:8px;
+  padding:5px 9px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+.question{
+  border:1px solid var(--line);
+  background:#fbfcfe;
+  border-radius:14px;
+  padding:18px;
+  margin:14px 0;
+}
+.question p{
+  margin:0 0 12px;
+  font-weight:750;
+  line-height:1.5;
+}
+.option{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid #d7dfe9;
+  background:#fff;
+  border-radius:10px;
+  padding:11px 12px;
+  margin:8px 0;
+  cursor:pointer;
+  line-height:1.4;
+}
+.option:hover{
+  background:#faf8fd;
+  border-color:#b9accd;
+}
+.option input{margin-top:3px}
+.case{
+  border-left:4px solid var(--primary);
+  background:#f3f0f8;
+  padding:11px 13px;
+  border-radius:8px;
+  margin:10px 0 12px;
+  font-size:14px;
+  line-height:1.5;
+}
+.finish{text-align:center}
+.result{text-align:center;padding:30px 20px}
+.result-score{
+  font-size:58px;
+  font-weight:900;
+  line-height:1;
+  color:var(--primary);
+  margin:14px 0;
+}
+.status{
+  display:inline-block;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:800;
+  background:#ebe7f2;
+  color:var(--primary-dark);
+}
+.result-data{
+  max-width:760px;
+  margin:18px auto;
+  border:1px solid var(--line);
+  background:#f8fafc;
+  border-radius:12px;
+  padding:14px 16px;
+  text-align:left;
+  line-height:1.7;
+}
+.note-final{
+  max-width:720px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.actions{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.print-only{display:none}
+@media(max-width:720px){
+  .grid2{grid-template-columns:1fr}
+  .header h1{font-size:22px}
+  .result-score{font-size:48px}
+}
+@media print{
+  body{background:#fff}
+  .header,.no-print,#view-registration,#view-exam{display:none!important}
+  #view-results{display:block!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .panel{box-shadow:none;border:1px solid #aaa}
+  .actions,.note-final{display:none!important}
+  .print-only{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="header no-print">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Producción de Contenido Digital · 5.º Bachillerato</div>
+      <h1>Segundo Parcial</h1>
+      <p>Ciencias y Letras con orientación en Computación, Diseño y Biología · Maquetación/CMS, simulación e integración multimedia, narrativas audiovisuales</p>
+    </div>
+    <div class="value-box">
+      <span>Valor total</span>
+      <strong>20 pts</strong>
+      <small>10 reactivos</small>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="view-registration" class="panel">
+  <h2>Registro del estudiante</h2>
+  <p>Ingresa tus datos para iniciar la evaluación.</p>
+
+  <div class="grid2">
+    <div>
+      <label class="field-label" for="student-name">Nombre completo *</label>
+      <input id="student-name" type="text" autocomplete="name">
+    </div>
+    <div>
+      <label class="field-label" for="student-section">Sección / clave *</label>
+      <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 11">
+    </div>
+  </div>
+
+  <div style="margin-top:16px">
+    <label class="field-label" for="portfolio-link">Enlace del portafolio o proyecto digital (opcional)</label>
+    <input id="portfolio-link" type="url" placeholder="https://...">
+  </div>
+
+  <div class="info">
+    <strong>Contenidos identificados en la captura:</strong><br>
+    Guía 4: maquetación y portafolios CMS.<br>
+    Guía 5: simulación virtual e integración multimedia.<br>
+    Guía 6: narrativas audiovisuales modernas.
+  </div>
+
+  <div class="notice">
+    Los títulos aparecen recortados al final en la imagen. Por ello, los reactivos se mantienen dentro de los conceptos visibles y no atribuyen contenidos adicionales a las guías. La evaluación se califica automáticamente sobre 20 puntos y al finalizar solo mostrará la nota total.
+  </div>
+
+  <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+  <div id="registration-error" class="error hidden"></div>
+</section>
+
+<section id="view-exam" class="hidden">
+
+  <div class="topbar no-print">
+    <div>
+      <strong id="student-bar">Estudiante</strong><br>
+      <small>Segundo Parcial · Producción de Contenido Digital</small>
+    </div>
+    <div class="progress-area">
+      <div class="progress-text">
+        <span>Progreso</span>
+        <span id="progress-label">0 / 10 respondidas</span>
+      </div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <span class="module-chip">Guía 4</span>
+    <h3>Maquetación y portafolios CMS</h3>
+
+    <div class="question">
+      <p>1. ¿Qué función cumple la maquetación en un portafolio digital?</p>
+      <label class="option"><input type="radio" name="q1" value="A"><span>A) Organizar visualmente contenidos, secciones y elementos para facilitar su lectura y navegación.</span></label>
+      <label class="option"><input type="radio" name="q1" value="B"><span>B) Eliminar toda estructura para que cada página sea diferente.</span></label>
+      <label class="option"><input type="radio" name="q1" value="C"><span>C) Sustituir el contenido por archivos sin relación.</span></label>
+    </div>
+
+    <div class="question">
+      <p>2. En un CMS, ¿qué ventaja tiene mantener una estructura clara de páginas y categorías?</p>
+      <label class="option"><input type="radio" name="q2" value="A"><span>A) Hace innecesaria la navegación.</span></label>
+      <label class="option"><input type="radio" name="q2" value="B"><span>B) Permite organizar y localizar el contenido con mayor facilidad.</span></label>
+      <label class="option"><input type="radio" name="q2" value="C"><span>C) Obliga a colocar todo el contenido en una sola página.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> un estudiante presenta en su portafolio proyectos de computación, diseño y biología.</div>
+      <p>3. ¿Qué organización resulta más adecuada?</p>
+      <label class="option"><input type="radio" name="q3" value="A"><span>A) Separar los proyectos por secciones o categorías y mantener una navegación consistente.</span></label>
+      <label class="option"><input type="radio" name="q3" value="B"><span>B) Mezclar todos los archivos sin títulos ni secciones.</span></label>
+      <label class="option"><input type="radio" name="q3" value="C"><span>C) Ocultar la navegación y dejar solo enlaces aislados.</span></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <span class="module-chip">Guía 5</span>
+    <h3>Simulación virtual e integración multimedia</h3>
+
+    <div class="question">
+      <p>4. ¿Cuál es una ventaja de utilizar una simulación virtual en una producción digital?</p>
+      <label class="option"><input type="radio" name="q4" value="A"><span>A) Representar procesos o situaciones de forma interactiva antes de realizarlos físicamente.</span></label>
+      <label class="option"><input type="radio" name="q4" value="B"><span>B) Evitar cualquier interacción con el usuario.</span></label>
+      <label class="option"><input type="radio" name="q4" value="C"><span>C) Convertir automáticamente todos los contenidos en texto.</span></label>
+    </div>
+
+    <div class="question">
+      <p>5. ¿Qué significa integrar recursos multimedia en un producto digital?</p>
+      <label class="option"><input type="radio" name="q5" value="A"><span>A) Utilizar únicamente texto en todas las secciones.</span></label>
+      <label class="option"><input type="radio" name="q5" value="B"><span>B) Combinar de manera coherente recursos como imagen, audio, video, texto o elementos interactivos.</span></label>
+      <label class="option"><input type="radio" name="q5" value="C"><span>C) Insertar archivos sin relación con el propósito del contenido.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> se crea una simulación sobre un proceso biológico y se desea explicar cada etapa.</div>
+      <p>6. ¿Qué integración de medios resulta más coherente?</p>
+      <label class="option"><input type="radio" name="q6" value="A"><span>A) Combinar la simulación con imágenes, etiquetas y una explicación audiovisual relacionada con el proceso.</span></label>
+      <label class="option"><input type="radio" name="q6" value="B"><span>B) Añadir sonidos y videos sin relación con el tema.</span></label>
+      <label class="option"><input type="radio" name="q6" value="C"><span>C) Eliminar toda información explicativa.</span></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <span class="module-chip">Guía 6</span>
+    <h3>Narrativas audiovisuales modernas</h3>
+
+    <div class="question">
+      <p>7. En una narrativa audiovisual, ¿qué ayuda a que el público comprenda el desarrollo de una idea?</p>
+      <label class="option"><input type="radio" name="q7" value="A"><span>A) Una secuencia organizada de imágenes, sonido y acciones relacionadas con el mensaje.</span></label>
+      <label class="option"><input type="radio" name="q7" value="B"><span>B) Colocar escenas aleatorias sin relación entre sí.</span></label>
+      <label class="option"><input type="radio" name="q7" value="C"><span>C) Utilizar únicamente efectos visuales sin propósito.</span></label>
+    </div>
+
+    <div class="question">
+      <p>8. ¿Qué relación debería existir entre imagen y sonido en una producción audiovisual?</p>
+      <label class="option"><input type="radio" name="q8" value="A"><span>A) Ninguna, porque deben funcionar como proyectos separados.</span></label>
+      <label class="option"><input type="radio" name="q8" value="B"><span>B) Deben complementarse para apoyar la intención y comprensión del contenido.</span></label>
+      <label class="option"><input type="radio" name="q8" value="C"><span>C) El sonido debe ocultar siempre la información visual.</span></label>
+    </div>
+
+    <div class="question">
+      <p>9. Antes de producir una narrativa audiovisual, ¿qué acción ayuda a mantener coherencia entre escenas?</p>
+      <label class="option"><input type="radio" name="q9" value="A"><span>A) Planificar el orden de las ideas y la secuencia de lo que se desea comunicar.</span></label>
+      <label class="option"><input type="radio" name="q9" value="B"><span>B) Grabar todo sin definir propósito ni secuencia.</span></label>
+      <label class="option"><input type="radio" name="q9" value="C"><span>C) Elegir efectos antes de saber qué mensaje se comunicará.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso integrador:</strong> un estudiante debe presentar un proyecto de ciencias mediante su portafolio digital, una simulación y una pieza audiovisual.</div>
+      <p>10. ¿Qué propuesta integra mejor los tres ejes del parcial?</p>
+      <label class="option"><input type="radio" name="q10" value="A"><span>A) Organizar el proyecto en un portafolio CMS, incorporar una simulación con recursos multimedia y presentar una narrativa audiovisual coherente.</span></label>
+      <label class="option"><input type="radio" name="q10" value="B"><span>B) Publicar archivos aislados sin maquetación, relación multimedia ni secuencia audiovisual.</span></label>
+      <label class="option"><input type="radio" name="q10" value="C"><span>C) Utilizar solo una página vacía con enlaces sin descripción.</span></label>
+    </div>
+  </section>
+
+  <section class="panel finish no-print">
+    <h3>Entrega del parcial</h3>
+    <p>Revisa que hayas contestado los 10 reactivos antes de finalizar.</p>
+    <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+    <div id="exam-error" class="error hidden"></div>
+  </section>
+
+</section>
+
+<section id="view-results" class="panel hidden">
+  <div class="result">
+    <div class="eyebrow" style="color:var(--primary)">Evaluación finalizada</div>
+    <h2 id="result-name">Estudiante</h2>
+    <div id="result-score" class="result-score">0 / 20</div>
+    <div id="result-status" class="status">Registro completado</div>
+
+    <div class="result-data">
+      <div><strong>Curso:</strong> Producción de Contenido Digital</div>
+      <div><strong>Grado:</strong> 5.º Bachillerato en Ciencias y Letras</div>
+      <div><strong>Orientación:</strong> Computación, Diseño y Biología</div>
+      <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+      <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+      <div id="result-link-row" class="hidden"><strong>Portafolio / proyecto:</strong> <span id="result-link">---</span></div>
+      <div><strong>Contenidos evaluados:</strong> Maquetación y portafolios CMS; simulación virtual e integración multimedia; narrativas audiovisuales modernas.</div>
+    </div>
+
+    <p class="note-final">
+      El reporte muestra únicamente la calificación final. No presenta respuestas individuales, reactivos incorrectos ni la clave correcta.
+    </p>
+
+    <div class="actions no-print">
+      <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+      <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+    </div>
+
+    <div class="print-only">
+      <p style="margin-top:28px;font-size:12px;color:#555">
+        Segundo Parcial · Producción de Contenido Digital · 5.º Bachillerato en Ciencias y Letras con orientación en Computación, Diseño y Biología · Valor total: 20 puntos.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+  const TOTAL = 10;
+  const POINTS = 2;
+
+  const KEY = {
+    q1:"A", q2:"B", q3:"A", q4:"A", q5:"B",
+    q6:"A", q7:"A", q8:"B", q9:"A", q10:"A"
+  };
+
+  const data = {
+    name:"",
+    section:"",
+    link:"",
+    score:0,
+    date:""
+  };
+
+  const $ = id => document.getElementById(id);
+  const show = el => el.classList.remove("hidden");
+  const hide = el => el.classList.add("hidden");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=TOTAL;i++){
+      if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+    $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+  }
+
+  document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+    radio.addEventListener("change", updateProgress);
+  });
+
+  $("start-btn").addEventListener("click", () => {
+    const name = $("student-name").value.trim();
+    const section = $("student-section").value.trim();
+    const link = $("portfolio-link").value.trim();
+
+    if(!name || !section){
+      $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+      show($("registration-error"));
+      return;
+    }
+
+    if(link){
+      try{
+        const u = new URL(link);
+        if(!["http:","https:"].includes(u.protocol)) throw new Error();
+      }catch{
+        $("registration-error").textContent = "El enlace del portafolio o proyecto no tiene un formato válido.";
+        show($("registration-error"));
+        return;
+      }
+    }
+
+    hide($("registration-error"));
+    data.name = name;
+    data.section = section;
+    data.link = link;
+    $("student-bar").textContent = `${name} · ${section}`;
+
+    hide($("view-registration"));
+    show($("view-exam"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("finish-btn").addEventListener("click", () => {
+    const missing = [];
+    let score = 0;
+
+    for(let i=1;i<=TOTAL;i++){
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(!selected){
+        missing.push(i);
+      }else if(selected.value === KEY[`q${i}`]){
+        score += POINTS;
+      }
+    }
+
+    if(missing.length){
+      $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+      show($("exam-error"));
+      return;
+    }
+
+    hide($("exam-error"));
+    data.score = score;
+    data.date = new Date().toLocaleString("es-GT");
+
+    $("result-name").textContent = data.name;
+    $("result-score").textContent = `${data.score} / 20`;
+    $("result-section").textContent = data.section;
+    $("result-date").textContent = data.date;
+
+    if(data.link){
+      $("result-link").textContent = data.link;
+      show($("result-link-row"));
+    }else{
+      hide($("result-link-row"));
+    }
+
+    const status = $("result-status");
+    if(data.score >= 18){
+      status.textContent = "Desempeño alto";
+      status.style.background = "#e6f4ec";
+      status.style.color = "#146c43";
+    }else if(data.score >= 12){
+      status.textContent = "Aprobado";
+      status.style.background = "#ebe7f2";
+      status.style.color = "#403457";
+    }else{
+      status.textContent = "Requiere reforzamiento";
+      status.style.background = "#fff0d5";
+      status.style.color = "#8a5a00";
+    }
+
+    hide($("view-exam"));
+    show($("view-results"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("print-btn").addEventListener("click", () => window.print());
+  $("restart-btn").addEventListener("click", () => window.location.reload());
+})();
+</script>
+
+</body>
+</html>

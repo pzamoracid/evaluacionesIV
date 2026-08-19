@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Parcial No. 2 - TIC (Segundo Básico)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CryptoJS for Secure Hash Verification Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- html2pdf for PDF Report Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#132a63',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .gradient-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        
+        /* Ocultar el contenedor PDF sin sacarlo del flujo de dibujo */
+        #pdf-wrapper {
+            display: none;
+            width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            #pdf-wrapper {
+                display: block !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="gradient-header text-white shadow-lg no-print">
+        <div class="max-w-6xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-white/10 rounded-xl backdrop-blur-md border border-white/20">
+                    <i class="fa-solid fa-laptop-code text-2xl text-blue-200"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold tracking-wider uppercase text-blue-200">Tecnologías de la Información y Comunicación</span>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Evaluación Parcial No. 2</h1>
+                    <p class="text-xs text-blue-100">Grado: Segundo Básico | Proyecto Integrador: "Investigadores Digitales"</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4 bg-white/10 px-4 py-2 rounded-lg border border-white/15 text-xs text-blue-100">
+                <div class="text-right">
+                    <p><i class="fa-regular fa-calendar-alt mr-1"></i> <strong>Publicación:</strong> 19/08/2026</p>
+                    <p><i class="fa-solid fa-clock mr-1"></i> <strong>Evaluación:</strong> 21/08/2026</p>
+                </div>
+                <div class="border-l border-white/20 pl-3 text-center">
+                    <span class="block text-lg font-bold text-yellow-300">20 pts</span>
+                    <span class="text-[10px] uppercase tracking-wider">Valor total</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        
+        <!-- Registration View (Paso 1) -->
+        <section id="view-registration" class="max-w-xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden my-8 transition-all">
+            <div class="bg-slate-900 text-white p-6 sm:p-8">
+                <div class="inline-flex items-center space-x-2 bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-blue-400/30">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span>Registro Oficial del Estudiante</span>
+                </div>
+                <h2 class="text-2xl font-bold">Identificación del Alumno</h2>
+                <p class="text-slate-400 text-sm mt-1">Ingresa tus datos exactos para registrar tu intento de prueba parcial.</p>
+            </div>
+
+            <form id="form-registration" onsubmit="startExam(event)" class="p-6 sm:p-8 space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2" for="student-name">
+                        Nombre Completo del Estudiante <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" id="student-name" required placeholder="Ej. Ana Lucía Morales Solórzano"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 text-slate-800 text-sm font-medium transition-all">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2" for="student-grade">
+                            Grado Escolar
+                        </label>
+                        <input type="text" id="student-grade" value="Segundo Básico" readonly
+                            class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-slate-600 text-sm font-semibold cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2" for="student-section">
+                            Sección / Clave <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="student-section" required placeholder="Ej. Sección A - Clave 14"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 text-slate-800 text-sm font-medium transition-all">
+                    </div>
+                </div>
+
+                <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs space-y-2">
+                    <p class="font-bold flex items-center gap-1.5 text-amber-900">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                        Instrucciones Importantes:
+                    </p>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-700">
+                        <li>El examen consta de <strong>10 reactivos</strong> sobre las Guías de Trabajo vistas en clase.</li>
+                        <li>Dispones de <strong>40 minutos</strong> para responder de forma individual.</li>
+                        <li>Al finalizar, el sistema calculará tu nota e imprimirá tu <strong>código único de verificación antifraude (SHA-256)</strong>.</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>Comenzar Evaluación Parcial</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </section>
+
+        <!-- Exam View (Paso 2) -->
+        <section id="view-exam" class="hidden space-y-6">
+            <div class="sticky top-4 z-30 bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-4 shadow-xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-inner">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <div>
+                        <h3 id="display-student-info" class="font-bold text-sm text-white">Estudiante: Cargando...</h3>
+                        <p class="text-xs text-slate-400">Examen Parcial No. 2 • Normas APA, Nube y Ética Digital</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:block w-48">
+                        <div class="flex justify-between text-[11px] font-semibold mb-1 text-slate-300">
+                            <span>Progreso</span>
+                            <span id="progress-text">0 / 10 respondidas</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+                            <div id="progress-bar" class="bg-blue-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700 px-3.5 py-1.5 rounded-xl flex items-center space-x-2">
+                        <i class="fa-regular fa-clock text-amber-400 animate-pulse"></i>
+                        <span id="timer-display" class="font-mono text-base font-bold text-amber-300">40:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <form id="form-exam" onsubmit="submitExam(event)" class="space-y-6">
+                
+                <!-- Módulo 1 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-bold text-xs rounded-lg mb-1">MÓDULO 1</span>
+                        <h3 class="text-lg font-bold text-slate-800">Búsqueda Avanzada, Netiqueta y Gestión en la Nube</h3>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-blue-600 font-bold">1.</span> ¿Qué criterio técnico garantiza que una fuente bibliográfica sea académicamente segura?</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q1" value="A"> <span>A) Diseño atractivo con anuncios publicitarios interactivos.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q1" value="B"> <span>B) Respaldado por una institución académica, autor e identificado con dominio .edu, .org o DOI.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q1" value="C"> <span>C) Ser el primer resultado sugerido por el buscador de Google.</span></label>
+                        </div>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-blue-600 font-bold">2.</span> Permisos recomendados en Drive/OneDrive para trabajo colaborativo grupal:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q2" value="A"> <span>A) Conceder permiso de Editor a integrantes del grupo y Lector/Visor a externos o docentes.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q2" value="B"> <span>B) Dar acceso de Propietario a cualquier persona con el enlace público.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q2" value="C"> <span>C) Bloquear la carpeta con contraseña sin compartir accesos directos.</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 2 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 font-bold text-xs rounded-lg mb-1">MÓDULO 2</span>
+                        <h3 class="text-lg font-bold text-slate-800">Trabajo Colaborativo, Derechos de Autor y Plagio</h3>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-indigo-600 font-bold">3.</span> Función esencial en Google Docs para auditar aportes individuales en un equipo:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q3" value="A"> <span>A) Corrector ortográfico y gramatical automático.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q3" value="B"> <span>B) Historial de Versiones (Version History) con registro por usuario y hora.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q3" value="C"> <span>C) Vista previa de impresión.</span></label>
+                        </div>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-indigo-600 font-bold">4.</span> Copiar y pegar fragmentos de texto web en una investigación sin atribuir autoría representa:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q4" value="A"> <span>A) Uso legítimo y estándar en internet.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q4" value="B"> <span>B) Plagio académico y falta ética a los derechos de autor.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q4" value="C"> <span>C) Estructuración según la norma APA estándar.</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 3 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-lg mb-1">MÓDULO 3</span>
+                        <h3 class="text-lg font-bold text-slate-800">Normas APA 7.ª Edición: Citas Directas e Indirectas</h3>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-emerald-600 font-bold">5.</span> Formato correcto de una cita textual corta (menos de 40 palabras) en APA 7:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q5" value="A"> <span>A) Va inmersa en el párrafo entre comillas ("...") indicando autor, año y página.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q5" value="B"> <span>B) Se escribe en un bloque independiente sin comillas y con sangría de 1.27 cm.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q5" value="C"> <span>C) Debe escribirse en letra cursiva y subrayada sin paréntesis.</span></label>
+                        </div>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-emerald-600 font-bold">6.</span> Ejemplo de cita parafraseada (paréntesis al final) según APA 7:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q6" value="A"> <span>A) La tecnología transforma los entornos de aprendizaje colaborativo (Gómez, 2023).</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q6" value="B"> <span>B) "La tecnología transforma el aprendizaje" [Tomado de Internet sin autor].</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q6" value="C"> <span>C) Gómez expresa que la tecnología ayuda (ver enlace directo aquí).</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 4 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-lg mb-1">MÓDULO 4</span>
+                        <h3 class="text-lg font-bold text-slate-800">Estructuración de Referencias Bibliográficas</h3>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-amber-600 font-bold">7.</span> Orden estándar de los 4 elementos básicos de una referencia bibliográfica APA 7:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q7" value="A"> <span>A) Título -> URL -> Autor -> Año de publicación.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q7" value="B"> <span>B) Autor (¿Quién?) -> Fecha (¿Cuándo?) -> Título (¿Qué?) -> Fuente/URL (¿Dónde?).</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q7" value="C"> <span>C) Ciudad de publicación -> Editorial -> Estudiante -> Fecha.</span></label>
+                        </div>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-amber-600 font-bold">8.</span> Referencia correcta de un sitio web según la 7.ª edición APA:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q8" value="A"> <span>A) Organización Mundial de la Salud. (2024, 15 de enero). Prevención digital. https://who.int/es</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q8" value="B"> <span>B) OMS. Prevención digital. Recuperado de la web https://who.int/es el año 2024.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q8" value="C"> <span>C) https://who.int/es/prevencion-digital (Visitado en 2024).</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 5 -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 font-bold text-xs rounded-lg mb-1">MÓDULO 5</span>
+                        <h3 class="text-lg font-bold text-slate-800">Proyecto Integrador y Ética Digital</h3>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-purple-600 font-bold">9.</span> Tipo de sangría requerida en la lista final de Referencias de un informe académico:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q9" value="A"> <span>A) Sangría de primera línea en todos los renglones.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q9" value="B"> <span>B) Sangría Francesa (Hanging indent) de 1.27 cm a partir de la segunda línea.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q9" value="C"> <span>C) Texto totalmente centrado sin sangrías.</span></label>
+                        </div>
+                    </div>
+                    <div class="question-block p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <p class="font-semibold text-slate-900 text-sm sm:text-base"><span class="text-purple-600 font-bold">10.</span> Procedimiento ético ante la falta de aporte de un integrante en el proyecto integrador:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q10" value="A"> <span>A) Borrar todo el trabajo del grupo y reiniciar el proyecto.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q10" value="B"> <span>B) Revisar el Historial de Versiones y reportar el desempeño mediante la Rúbrica de Coevaluación.</span></label>
+                            <label class="flex items-start space-x-3 p-3 bg-white rounded-lg border border-slate-200 cursor-pointer"><input type="radio" name="q10" value="C"> <span>C) Colocar el nombre del compañero sin informarle al docente para evitar conflictos.</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <p class="font-bold text-sm">¿Has revisado todas tus respuestas?</p>
+                        <p class="text-xs text-slate-400">Al finalizar se calculará tu nota y podrás descargar tu reporte PDF.</p>
+                    </div>
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Finalizar y Entregar Examen</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Results View (Paso 3) -->
+        <section id="view-results" class="hidden space-y-8 my-6">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 font-bold text-xs rounded-full border border-blue-400/30 mb-2">
+                            REPORTE DE EVALUACIÓN PARCIAL NO. 2
+                        </span>
+                        <h2 id="res-student-name" class="text-2xl sm:text-3xl font-extrabold text-white">---</h2>
+                        <p id="res-student-meta" class="text-slate-400 text-sm mt-1">Segundo Básico | TIC</p>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 text-center min-w-[160px]">
+                        <span class="text-xs uppercase tracking-widest text-slate-400 block font-semibold">Punteo Obtenido</span>
+                        <div class="text-4xl font-black text-amber-400 my-1" id="res-score-number">0 / 20</div>
+                        <span id="res-score-badge" class="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-300">---</span>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-slate-50 border-b border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-blue-600"></i>
+                            Código Único de Verificación Digital (SHA-256)
+                        </span>
+                    </div>
+                    <div class="bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-xs sm:text-sm break-all shadow-inner border border-slate-800 flex items-center justify-between">
+                        <span id="res-hash-code">---</span>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-blue-600"></i>
+                        Desglose de Respuestas
+                    </h3>
+                    <div id="answers-breakdown" class="space-y-4"></div>
+
+                    <div class="no-print pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <button onclick="window.location.reload()" class="w-full sm:w-auto px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-sm transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Realizar otra evaluación
+                        </button>
+
+                        <button onclick="generatePDFReport()" class="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl shadow-lg shadow-blue-500/25 text-base transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span>Descargar Reporte PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Plantilla del PDF (Optimizada para impresión limpia en html2pdf) -->
+        <div id="pdf-wrapper">
+            <div id="pdf-report-template" style="padding: 20px; font-family: Arial, sans-serif; background-color: #ffffff; color: #0f172a; border: 1px solid #cbd5e1;">
+                
+                <table style="width: 100%; border-collapse: collapse; border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 15px;">
+                    <tr>
+                        <td style="vertical-align: top;">
+                            <h1 style="font-size: 16px; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin: 0;">Boleta Oficial de Evaluación Parcial No. 2</h1>
+                            <p style="font-size: 11px; color: #475569; margin: 4px 0 0 0;">Asignatura: Tecnologías de la Información y Comunicación (TIC)</p>
+                            <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Nivel: Segundo Básico | Ciclo Escolar 2026</p>
+                        </td>
+                        <td style="text-align: right; vertical-align: top; width: 140px;">
+                            <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 9px; color: #1e40af; font-weight: bold; text-transform: uppercase; display: block;">Punteo Final</span>
+                                <span id="pdf-score" style="font-size: 18px; font-weight: bold; color: #1e3a8a;">0 / 20</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; font-size: 11px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-collapse: collapse; margin-bottom: 15px;">
+                    <tr>
+                        <td style="padding: 8px; width: 50%; border-right: 1px solid #e2e8f0;">
+                            <strong>Estudiante:</strong> <span id="pdf-name">---</span>
+                        </td>
+                        <td style="padding: 8px; width: 50%;">
+                            <strong>Fecha:</strong> <span id="pdf-timestamp">21/08/2026</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border-right: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0;">
+                            <strong>Grado y Sección:</strong> <span id="pdf-grade">Segundo Básico</span>
+                        </td>
+                        <td style="padding: 8px; border-top: 1px solid #e2e8f0;">
+                            <strong>Estado:</strong> <span id="pdf-status" style="font-weight: bold;">---</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3 style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">Desglose de Contenidos Evaluados</h3>
+                <table style="width: 100%; font-size: 10px; border-collapse: collapse; border: 1px solid #cbd5e1; margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background-color: #f1f5f9; color: #334155; font-weight: bold;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: left;">Módulo / Contenido</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Guías</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px;">Búsqueda Avanzada, Netiqueta y Almacenamiento Nube</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Guías 1 y 2</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">4 pts</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px;">Trabajo Colaborativo en Docs, Derechos de Autor y Plagio</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Guías 3 y 4</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">4 pts</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px;">Normas APA 7.ª Edición: Citas Textuales y Parafraseadas</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Guía 5</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">4 pts</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px;">Estructuración de Referencias Bibliográficas</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Guía 6</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">4 pts</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px;">Proyecto Integrador "Investigadores Digitales"</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Parcial 2</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">4 pts</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="padding: 10px; background-color: #0f172a; color: #ffffff; border-radius: 6px;">
+                    <div style="font-size: 8px; font-weight: bold; color: #fbbf24; text-transform: uppercase;">Código de Verificación Antifraude Hash SHA-256</div>
+                    <div id="pdf-hash" style="font-family: monospace; font-size: 8px; color: #34d399; word-break: break-all; margin-top: 4px;">
+                        ---
+                    </div>
+                </div>
+
+                <p style="margin-top: 15px; text-align: center; font-size: 8px; color: #64748b;">
+                    Este reporte ha sido autogenerado por el sistema de evaluación en línea de TIC - Segundo Básico.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const EXAM_KEY = "TIC-PARCIAL2-2026-SECRET-SALT-KEY";
+        const TOTAL_QUESTIONS = 10;
+        const POINTS_PER_QUESTION = 2;
+
+        const CORRECT_ANSWERS = {
+            q1: { ans: "B", topic: "Búsqueda Avanzada y Fuentes Seguras" },
+            q2: { ans: "A", topic: "Almacenamiento y Permisos en la Nube" },
+            q3: { ans: "B", topic: "Coautoría y Historial de Versiones" },
+            q4: { ans: "B", topic: "Derechos de Autor e Identificación de Plagio" },
+            q5: { ans: "A", topic: "Citas Textuales Cortas vs Largas APA 7" },
+            q6: { ans: "A", topic: "Citas Parafraseadas Parentéticas" },
+            q7: { ans: "B", topic: "Estructura de Referencias Bibliográficas" },
+            q8: { ans: "A", topic: "Referencia de Sitios Web en APA 7" },
+            q9: { ans: "B", topic: "Sangría Francesa en Bibliografía" },
+            q10: { ans: "B", topic: "Ética y Coevaluación en Proyecto Integrador" }
+        };
+
+        let studentData = {
+            name: "",
+            grade: "Segundo Básico",
+            section: "",
+            score: 0,
+            answers: {},
+            timestamp: "",
+            hashCode: ""
+        };
+
+        let timerInterval = null;
+        let timeLeft = 40 * 60;
+
+        function startExam(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById("student-name").value.trim();
+            const sectionInput = document.getElementById("student-section").value.trim();
+
+            if (!nameInput || !sectionInput) return;
+
+            studentData.name = nameInput;
+            studentData.section = sectionInput;
+
+            document.getElementById("view-registration").classList.add("hidden");
+            document.getElementById("view-exam").classList.remove("hidden");
+            document.getElementById("display-student-info").textContent = `Estudiante: ${studentData.name} (${studentData.section})`;
+
+            startTimer();
+            setupRadioListeners();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setupRadioListeners() {
+            const radios = document.querySelectorAll('#form-exam input[type="radio"]');
+            radios.forEach(radio => radio.addEventListener('change', updateProgressBar));
+        }
+
+        function updateProgressBar() {
+            let answeredCount = 0;
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) answeredCount++;
+            }
+            const percent = (answeredCount / TOTAL_QUESTIONS) * 100;
+            document.getElementById("progress-bar").style.width = `${percent}%`;
+            document.getElementById("progress-text").textContent = `${answeredCount} / ${TOTAL_QUESTIONS} respondidas`;
+        }
+
+        function startTimer() {
+            const timerEl = document.getElementById("timer-display");
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam(new Event('submit'));
+                }
+            }, 1000);
+        }
+
+        function submitExam(event) {
+            if (event) event.preventDefault();
+            clearInterval(timerInterval);
+
+            let calculatedScore = 0;
+            studentData.answers = {};
+
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const answerVal = selected ? selected.value : "Sin Respuesta";
+                studentData.answers[`q${i}`] = answerVal;
+
+                if (answerVal === CORRECT_ANSWERS[`q${i}`].ans) {
+                    calculatedScore += POINTS_PER_QUESTION;
+                }
+            }
+
+            studentData.score = calculatedScore;
+            studentData.timestamp = new Date().toLocaleString("es-GT");
+
+            const rawHashPayload = `${studentData.name.toLowerCase()}|${studentData.section.toLowerCase()}|${studentData.score}|${studentData.timestamp}|${EXAM_KEY}`;
+            studentData.hashCode = "TIC2B-2026-" + CryptoJS.SHA256(rawHashPayload).toString(CryptoJS.enc.Hex).substring(0, 24).toUpperCase();
+
+            renderResultsView();
+
+            document.getElementById("view-exam").classList.add("hidden");
+            document.getElementById("view-results").classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderResultsView() {
+            document.getElementById("res-student-name").textContent = studentData.name;
+            document.getElementById("res-student-meta").textContent = `${studentData.grade} • ${studentData.section} | Fecha: ${studentData.timestamp}`;
+            document.getElementById("res-score-number").textContent = `${studentData.score} / 20`;
+            document.getElementById("res-hash-code").textContent = studentData.hashCode;
+
+            const badgeEl = document.getElementById("res-score-badge");
+            if (studentData.score >= 18) {
+                badgeEl.textContent = "EXCELENTE (A+)";
+                badgeEl.className = "inline-block text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500 text-slate-950";
+            } else if (studentData.score >= 12) {
+                badgeEl.textContent = "APROBADO";
+                badgeEl.className = "inline-block text-[11px] font-bold px-3 py-1 rounded-full bg-blue-500 text-white";
+            } else {
+                badgeEl.textContent = "REFORZAMIENTO";
+                badgeEl.className = "inline-block text-[11px] font-bold px-3 py-1 rounded-full bg-amber-500 text-slate-950";
+            }
+
+            const container = document.getElementById("answers-breakdown");
+            container.innerHTML = "";
+
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                const userAns = studentData.answers[`q${i}`];
+                const correctObj = CORRECT_ANSWERS[`q${i}`];
+                const isCorrect = userAns === correctObj.ans;
+
+                const itemHtml = `
+                    <div class="p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50/60 border-emerald-200' : 'bg-red-50/60 border-red-200'} space-y-1 text-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-800">Pregunta ${i}: ${correctObj.topic}</span>
+                            <span class="font-bold text-xs px-2.5 py-0.5 rounded-full ${isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900'}">
+                                ${isCorrect ? 'Correcto (+2 pts)' : 'Incorrecto (0 pts)'}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-600">
+                            <strong>Tu respuesta:</strong> Opción ${userAns} 
+                            ${!isCorrect ? `| <strong class="text-emerald-700">Respuesta correcta: Opción ${correctObj.ans}</strong>` : ''}
+                        </p>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', itemHtml);
+            }
+
+            // Mantener sincronizada la plantilla que se usará al imprimir o generar el PDF.
+            updatePDFFields();
+        }
+
+        function updatePDFFields() {
+            document.getElementById("pdf-name").textContent = studentData.name || "Estudiante";
+            document.getElementById("pdf-grade").textContent = `${studentData.grade} (${studentData.section || 'Sección A'})`;
+            document.getElementById("pdf-score").textContent = `${studentData.score} / 20 pts`;
+            document.getElementById("pdf-status").textContent = studentData.score >= 12 ? "APROBADO" : "EN REVISIÓN";
+            document.getElementById("pdf-hash").textContent = studentData.hashCode;
+            document.getElementById("pdf-timestamp").textContent = studentData.timestamp;
+        }
+
+        // Si el usuario imprime con Ctrl+P / Cmd+P, cargar primero
+        // nombre, grado/sección, nota, estado, fecha y código de verificación.
+        window.addEventListener("beforeprint", updatePDFFields);
+
+        async function generatePDFReport() {
+            updatePDFFields();
+
+            const element = document.getElementById("pdf-report-template");
+            const safeName = (studentData.name || "Estudiante")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-zA-Z0-9_-]+/g, "_")
+                .replace(/^_+|_+$/g, "");
+
+            const opt = {
+                margin: 0,
+                filename: `Reporte_Parcial2_${safeName || 'Estudiante'}.pdf`,
+                image: { type: 'jpeg', quality: 0.95 },
+                html2canvas: { scale: 1, useCORS: true, logging: false },
+                jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' }
+            };
+
+            try {
+                /*
+                 * html2pdf sigue utilizándose para crear/descargar el archivo,
+                 * pero el contenido de la boleta se dibuja directamente con jsPDF.
+                 * Así no dependemos de que html2canvas pueda capturar correctamente
+                 * un contenedor que normalmente está oculto en pantalla.
+                 */
+                const worker = html2pdf().set(opt).from(element).toPdf();
+
+                await worker.get('pdf').then((pdf) => {
+                    // Mantener una sola página.
+                    while (pdf.getNumberOfPages() > 1) {
+                        pdf.deletePage(pdf.getNumberOfPages());
+                    }
+                    pdf.setPage(1);
+
+                    const pageW = pdf.internal.pageSize.getWidth();
+                    const pageH = pdf.internal.pageSize.getHeight();
+                    const margin = 36;
+                    const contentW = pageW - (margin * 2);
+
+                    // Limpiar por completo cualquier captura HTML previa.
+                    pdf.setFillColor(255, 255, 255);
+                    pdf.rect(0, 0, pageW, pageH, 'F');
+
+                    // Encabezado.
+                    pdf.setDrawColor(30, 58, 138);
+                    pdf.setLineWidth(1.5);
+                    pdf.line(margin, 86, pageW - margin, 86);
+
+                    pdf.setTextColor(30, 58, 138);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(13);
+                    pdf.text('BOLETA OFICIAL DE EVALUACION PARCIAL No. 2', margin, 45);
+
+                    pdf.setTextColor(71, 85, 105);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(9.5);
+                    pdf.text('Asignatura: Tecnologias de la Informacion y Comunicacion (TIC)', margin, 61);
+                    pdf.setFontSize(8.5);
+                    pdf.text('Nivel: Segundo Basico | Ciclo Escolar 2026', margin, 75);
+
+                    // Caja de punteo.
+                    const scoreX = pageW - margin - 122;
+                    pdf.setFillColor(239, 246, 255);
+                    pdf.setDrawColor(191, 219, 254);
+                    pdf.roundedRect(scoreX, 30, 122, 46, 5, 5, 'FD');
+                    pdf.setTextColor(30, 64, 175);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(7.5);
+                    pdf.text('PUNTEO FINAL', scoreX + 61, 43, { align: 'center' });
+                    pdf.setTextColor(30, 58, 138);
+                    pdf.setFontSize(15);
+                    pdf.text(`${studentData.score} / 20 pts`, scoreX + 61, 63, { align: 'center' });
+
+                    // Datos del estudiante.
+                    let y = 103;
+                    const cellW = contentW / 2;
+                    const rowH = 35;
+                    pdf.setFillColor(248, 250, 252);
+                    pdf.setDrawColor(226, 232, 240);
+                    pdf.rect(margin, y, contentW, rowH * 2, 'FD');
+                    pdf.line(margin + cellW, y, margin + cellW, y + rowH * 2);
+                    pdf.line(margin, y + rowH, pageW - margin, y + rowH);
+
+                    const writeCell = (label, value, x, yy, maxW) => {
+                        pdf.setTextColor(15, 23, 42);
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(8.5);
+                        pdf.text(label, x, yy);
+                        const labelW = pdf.getTextWidth(label) + 4;
+                        pdf.setFont('helvetica', 'normal');
+                        const lines = pdf.splitTextToSize(String(value || '---'), maxW - labelW);
+                        pdf.text(lines, x + labelW, yy);
+                    };
+
+                    writeCell('Estudiante:', studentData.name || 'Estudiante', margin + 8, y + 14, cellW - 16);
+                    writeCell('Fecha:', studentData.timestamp || new Date().toLocaleString('es-GT'), margin + cellW + 8, y + 14, cellW - 16);
+                    writeCell('Grado y Seccion:', `${studentData.grade} (${studentData.section || '---'})`, margin + 8, y + rowH + 14, cellW - 16);
+                    writeCell('Estado:', studentData.score >= 12 ? 'APROBADO' : 'EN REVISION', margin + cellW + 8, y + rowH + 14, cellW - 16);
+
+                    // Tabla de contenidos evaluados.
+                    y += rowH * 2 + 28;
+                    pdf.setTextColor(51, 65, 85);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8.5);
+                    pdf.text('DESGLOSE DE CONTENIDOS EVALUADOS', margin, y);
+                    y += 10;
+
+                    const col1 = 342;
+                    const col2 = 104;
+                    const col3 = contentW - col1 - col2;
+                    const headerH = 24;
+
+                    pdf.setFillColor(241, 245, 249);
+                    pdf.setDrawColor(203, 213, 225);
+                    pdf.rect(margin, y, contentW, headerH, 'FD');
+                    pdf.line(margin + col1, y, margin + col1, y + headerH);
+                    pdf.line(margin + col1 + col2, y, margin + col1 + col2, y + headerH);
+                    pdf.setTextColor(51, 65, 85);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.text('Modulo / Contenido', margin + 7, y + 15);
+                    pdf.text('Guias', margin + col1 + (col2 / 2), y + 15, { align: 'center' });
+                    pdf.text('Valor', margin + col1 + col2 + (col3 / 2), y + 15, { align: 'center' });
+                    y += headerH;
+
+                    const rows = [
+                        ['Busqueda Avanzada, Netiqueta y Almacenamiento en la Nube', 'Guias 1 y 2', '4 pts'],
+                        ['Trabajo Colaborativo en Docs, Derechos de Autor y Plagio', 'Guias 3 y 4', '4 pts'],
+                        ['Normas APA 7a edicion: Citas Textuales y Parafraseadas', 'Guia 5', '4 pts'],
+                        ['Estructuracion de Referencias Bibliograficas', 'Guia 6', '4 pts'],
+                        ['Proyecto Integrador "Investigadores Digitales"', 'Parcial 2', '4 pts']
+                    ];
+
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(7.8);
+                    rows.forEach((row) => {
+                        const lines = pdf.splitTextToSize(row[0], col1 - 14);
+                        const h = Math.max(31, (lines.length * 9) + 12);
+                        pdf.setFillColor(255, 255, 255);
+                        pdf.setDrawColor(203, 213, 225);
+                        pdf.rect(margin, y, contentW, h, 'FD');
+                        pdf.line(margin + col1, y, margin + col1, y + h);
+                        pdf.line(margin + col1 + col2, y, margin + col1 + col2, y + h);
+                        pdf.setTextColor(15, 23, 42);
+                        pdf.text(lines, margin + 7, y + 13);
+                        pdf.text(row[1], margin + col1 + (col2 / 2), y + (h / 2) + 3, { align: 'center' });
+                        pdf.text(row[2], margin + col1 + col2 + (col3 / 2), y + (h / 2) + 3, { align: 'center' });
+                        y += h;
+                    });
+
+                    // Codigo de verificacion.
+                    y += 18;
+                    const hashH = 56;
+                    pdf.setFillColor(15, 23, 42);
+                    pdf.setDrawColor(15, 23, 42);
+                    pdf.roundedRect(margin, y, contentW, hashH, 5, 5, 'FD');
+                    pdf.setTextColor(251, 191, 36);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(7.5);
+                    pdf.text('CODIGO DE VERIFICACION ANTIFRAUDE HASH SHA-256', margin + 10, y + 16);
+                    pdf.setTextColor(52, 211, 153);
+                    pdf.setFont('courier', 'normal');
+                    pdf.setFontSize(7.5);
+                    const hashLines = pdf.splitTextToSize(studentData.hashCode || '---', contentW - 20);
+                    pdf.text(hashLines, margin + 10, y + 34);
+
+                    // Pie.
+                    pdf.setTextColor(100, 116, 139);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(7.5);
+                    pdf.text(
+                        'Reporte autogenerado por el sistema de evaluacion en linea de TIC - Segundo Basico.',
+                        pageW / 2,
+                        Math.min(pageH - 30, y + hashH + 28),
+                        { align: 'center' }
+                    );
+                });
+
+                await worker.save();
+            } catch (err) {
+                console.error('Error al generar el PDF:', err);
+                alert('Hubo un problema al generar el archivo PDF. Recarga la pagina e intenta de nuevo.');
+            }
+        }
+    </script>
+</body>
+</html>

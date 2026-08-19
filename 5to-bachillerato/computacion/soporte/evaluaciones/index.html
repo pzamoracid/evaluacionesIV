@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación Parcial - Soporte de Computadoras</title>
+<style>
+:root{
+  --bg:#f4f7fb; --panel:#ffffff; --text:#172033; --muted:#667085;
+  --line:#d9e2ec; --primary:#334e68; --primary-dark:#243b53;
+  --soft:#eef3f7; --success:#18794e; --warning:#8a5a00; --danger:#b42318;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input{font:inherit}
+.header{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:white;
+  padding:22px 18px;
+}
+.header-inner{
+  max-width:1080px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.eyebrow{
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  opacity:.88;
+}
+.header h1{margin:4px 0 5px;font-size:27px}
+.header p{margin:0;font-size:14px;color:#eaf1f5}
+.value-box{
+  min-width:150px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:12px 16px;
+}
+.value-box strong{display:block;font-size:28px}
+.wrap{max-width:1080px;margin:26px auto;padding:0 16px 38px}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:18px;
+  box-shadow:0 8px 26px rgba(16,24,40,.05);
+}
+.panel h2,.panel h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+input[type=text]{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:11px;
+  padding:11px 12px;
+  background:#fff;
+  color:var(--text);
+}
+input[type=text]:focus{
+  outline:3px solid rgba(51,78,104,.16);
+  border-color:var(--primary);
+}
+.info{
+  margin-top:16px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8fafc;
+  line-height:1.55;
+  font-size:14px;
+}
+.notice{
+  margin:16px 0;
+  padding:13px 15px;
+  border:1px solid #e5d09a;
+  background:#fff8e7;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}
+.btn-secondary{background:#e8edf3;color:var(--text)}
+.hidden{display:none!important}
+.error{
+  margin-top:10px;
+  color:var(--danger);
+  font-size:13px;
+  font-weight:800;
+}
+.topbar{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  background:rgba(23,32,51,.96);
+  color:#fff;
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:18px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.topbar small{color:#cbd5e1}
+.progress-area{min-width:240px;flex:1;max-width:440px}
+.progress-text{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:6px;
+}
+.progress-track{
+  height:9px;
+  background:#344054;
+  border-radius:99px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  width:0;
+  background:#9cb4c7;
+  transition:width .2s ease;
+}
+.module-chip{
+  display:inline-block;
+  background:var(--soft);
+  color:var(--primary-dark);
+  border-radius:8px;
+  padding:5px 9px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+.question{
+  border:1px solid var(--line);
+  background:#fbfcfe;
+  border-radius:14px;
+  padding:18px;
+  margin:14px 0;
+}
+.question p{
+  margin:0 0 12px;
+  font-weight:750;
+  line-height:1.5;
+}
+.option{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid #d7dfe9;
+  background:#fff;
+  border-radius:10px;
+  padding:11px 12px;
+  margin:8px 0;
+  cursor:pointer;
+  line-height:1.4;
+}
+.option:hover{
+  background:#f7fbfd;
+  border-color:#a9c0ce;
+}
+.option input{margin-top:3px}
+.case{
+  border-left:4px solid var(--primary);
+  background:#eef4f7;
+  padding:11px 13px;
+  border-radius:8px;
+  margin:10px 0 12px;
+  font-size:14px;
+  line-height:1.5;
+}
+.finish{text-align:center}
+.result{text-align:center;padding:30px 20px}
+.result-score{
+  font-size:58px;
+  font-weight:900;
+  line-height:1;
+  color:var(--primary);
+  margin:14px 0;
+}
+.status{
+  display:inline-block;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:800;
+  background:#e8eef5;
+  color:var(--primary-dark);
+}
+.result-data{
+  max-width:720px;
+  margin:18px auto;
+  border:1px solid var(--line);
+  background:#f8fafc;
+  border-radius:12px;
+  padding:14px 16px;
+  text-align:left;
+  line-height:1.7;
+}
+.note-final{
+  max-width:720px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.actions{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.print-only{display:none}
+@media(max-width:720px){
+  .grid2{grid-template-columns:1fr}
+  .header h1{font-size:22px}
+  .result-score{font-size:48px}
+}
+@media print{
+  body{background:#fff}
+  .header,.no-print,#view-registration,#view-exam{display:none!important}
+  #view-results{display:block!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .panel{box-shadow:none;border:1px solid #aaa}
+  .actions,.note-final{display:none!important}
+  .print-only{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="header no-print">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Soporte de Computadoras</div>
+      <h1>Evaluación Parcial</h1>
+      <p>Configuración de BIOS/UEFI y particionamiento · Instalación limpia de sistema operativo</p>
+    </div>
+    <div class="value-box">
+      <span>Valor total</span>
+      <strong>30 pts</strong>
+      <small>15 reactivos</small>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="view-registration" class="panel">
+  <h2>Registro del estudiante</h2>
+  <p>Ingresa tus datos antes de iniciar la evaluación.</p>
+
+  <div class="grid2">
+    <div>
+      <label class="field-label" for="student-name">Nombre completo *</label>
+      <input id="student-name" type="text" autocomplete="name">
+    </div>
+    <div>
+      <label class="field-label" for="student-section">Sección / clave *</label>
+      <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 07">
+    </div>
+  </div>
+
+  <div class="info">
+    <strong>Temas identificados en el documento adjunto:</strong><br>
+    Guía 4: configuración de BIOS/UEFI y particionamiento.<br>
+    Guía 5: instalación limpia de sistema operativo.
+  </div>
+
+  <div class="notice">
+    Los títulos aparecen recortados al final en la captura, por lo que la evaluación se mantiene dentro de los contenidos visibles. Son 15 reactivos de 2 puntos cada uno. Al finalizar se mostrará únicamente la nota total; no se revelarán las respuestas correctas ni los reactivos incorrectos.
+  </div>
+
+  <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+  <div id="registration-error" class="error hidden"></div>
+</section>
+
+<section id="view-exam" class="hidden">
+
+  <div class="topbar no-print">
+    <div>
+      <strong id="student-bar">Estudiante</strong><br>
+      <small>Evaluación de Soporte de Computadoras</small>
+    </div>
+    <div class="progress-area">
+      <div class="progress-text">
+        <span>Progreso</span>
+        <span id="progress-label">0 / 15 respondidas</span>
+      </div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <span class="module-chip">Guía 4</span>
+    <h3>Configuración de BIOS/UEFI y particionamiento</h3>
+
+    <div class="question">
+      <p>1. ¿Qué función cumple BIOS/UEFI al encender una computadora?</p>
+      <label class="option"><input type="radio" name="q1" value="A"><span>A) Editar documentos del usuario.</span></label>
+      <label class="option"><input type="radio" name="q1" value="B"><span>B) Inicializar el hardware y preparar el proceso de arranque.</span></label>
+      <label class="option"><input type="radio" name="q1" value="C"><span>C) Reemplazar el sistema operativo.</span></label>
+    </div>
+
+    <div class="question">
+      <p>2. Si se desea iniciar una instalación desde una memoria USB, ¿qué configuración debe revisarse principalmente?</p>
+      <label class="option"><input type="radio" name="q2" value="A"><span>A) El orden o prioridad de arranque.</span></label>
+      <label class="option"><input type="radio" name="q2" value="B"><span>B) El fondo de pantalla.</span></label>
+      <label class="option"><input type="radio" name="q2" value="C"><span>C) El nombre del usuario.</span></label>
+    </div>
+
+    <div class="question">
+      <p>3. ¿Qué riesgo existe al modificar opciones de BIOS/UEFI sin conocer su función?</p>
+      <label class="option"><input type="radio" name="q3" value="A"><span>A) Ninguno, porque todas las opciones se corrigen automáticamente.</span></label>
+      <label class="option"><input type="radio" name="q3" value="B"><span>B) El equipo puede presentar problemas de arranque o funcionamiento.</span></label>
+      <label class="option"><input type="radio" name="q3" value="C"><span>C) Solo cambia el color de la pantalla.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> una memoria USB de instalación está conectada, pero el equipo sigue iniciando desde el disco interno.</div>
+      <p>4. ¿Qué revisión es la más lógica antes de asumir que la memoria USB está dañada?</p>
+      <label class="option"><input type="radio" name="q4" value="A"><span>A) Verificar la prioridad de arranque en BIOS/UEFI.</span></label>
+      <label class="option"><input type="radio" name="q4" value="B"><span>B) Cambiar el teclado.</span></label>
+      <label class="option"><input type="radio" name="q4" value="C"><span>C) Borrar todos los archivos personales.</span></label>
+    </div>
+
+    <div class="question">
+      <p>5. ¿Qué significa particionar una unidad de almacenamiento?</p>
+      <label class="option"><input type="radio" name="q5" value="A"><span>A) Dividir lógicamente el espacio de la unidad en una o más secciones.</span></label>
+      <label class="option"><input type="radio" name="q5" value="B"><span>B) Cambiar físicamente el tamaño del disco.</span></label>
+      <label class="option"><input type="radio" name="q5" value="C"><span>C) Desactivar la memoria RAM.</span></label>
+    </div>
+
+    <div class="question">
+      <p>6. Antes de eliminar o modificar particiones de un equipo que contiene información importante, ¿qué acción es la más adecuada?</p>
+      <label class="option"><input type="radio" name="q6" value="A"><span>A) Realizar un respaldo de los datos necesarios.</span></label>
+      <label class="option"><input type="radio" name="q6" value="B"><span>B) Desconectar el monitor.</span></label>
+      <label class="option"><input type="radio" name="q6" value="C"><span>C) Cambiar el nombre de la computadora.</span></label>
+    </div>
+
+    <div class="question">
+      <p>7. Durante una instalación limpia, el instalador muestra varias particiones. ¿Qué debe hacerse antes de eliminarlas?</p>
+      <label class="option"><input type="radio" name="q7" value="A"><span>A) Identificar correctamente la unidad y comprobar que los datos importantes estén respaldados.</span></label>
+      <label class="option"><input type="radio" name="q7" value="B"><span>B) Eliminar todas sin revisar.</span></label>
+      <label class="option"><input type="radio" name="q7" value="C"><span>C) Apagar el equipo inmediatamente.</span></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <span class="module-chip">Guía 5</span>
+    <h3>Instalación limpia de sistema operativo</h3>
+
+    <div class="question">
+      <p>8. ¿Qué caracteriza una instalación limpia de un sistema operativo?</p>
+      <label class="option"><input type="radio" name="q8" value="A"><span>A) Instalar el sistema desde cero en la unidad seleccionada, sin conservar la instalación anterior como base.</span></label>
+      <label class="option"><input type="radio" name="q8" value="B"><span>B) Cambiar únicamente el fondo de pantalla.</span></label>
+      <label class="option"><input type="radio" name="q8" value="C"><span>C) Copiar accesos directos a otra carpeta.</span></label>
+    </div>
+
+    <div class="question">
+      <p>9. ¿Cuál es una acción recomendable antes de comenzar una instalación limpia?</p>
+      <label class="option"><input type="radio" name="q9" value="A"><span>A) Respaldar los archivos necesarios y preparar el medio de instalación.</span></label>
+      <label class="option"><input type="radio" name="q9" value="B"><span>B) Eliminar los datos sin verificar nada.</span></label>
+      <label class="option"><input type="radio" name="q9" value="C"><span>C) Desconectar permanentemente la unidad de almacenamiento.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> el equipo inicia correctamente desde el USB y el instalador solicita elegir dónde instalar el sistema.</div>
+      <p>10. ¿Qué debe comprobar el técnico antes de continuar?</p>
+      <label class="option"><input type="radio" name="q10" value="A"><span>A) Que la unidad y partición seleccionadas correspondan al destino correcto.</span></label>
+      <label class="option"><input type="radio" name="q10" value="B"><span>B) Que el mouse tenga iluminación.</span></label>
+      <label class="option"><input type="radio" name="q10" value="C"><span>C) Que el fondo del instalador tenga el color esperado.</span></label>
+    </div>
+
+    <div class="question">
+      <p>11. Después de instalar el sistema operativo, ¿qué tarea forma parte de la puesta a punto del equipo?</p>
+      <label class="option"><input type="radio" name="q11" value="A"><span>A) Verificar controladores y actualizaciones necesarias.</span></label>
+      <label class="option"><input type="radio" name="q11" value="B"><span>B) Eliminar el sistema recién instalado.</span></label>
+      <label class="option"><input type="radio" name="q11" value="C"><span>C) Desactivar todos los dispositivos.</span></label>
+    </div>
+
+    <div class="question">
+      <p>12. ¿Por qué es importante contar con el medio de instalación preparado correctamente?</p>
+      <label class="option"><input type="radio" name="q12" value="A"><span>A) Porque permite iniciar el instalador y disponer de los archivos necesarios para instalar el sistema.</span></label>
+      <label class="option"><input type="radio" name="q12" value="B"><span>B) Porque reemplaza físicamente el disco duro.</span></label>
+      <label class="option"><input type="radio" name="q12" value="C"><span>C) Porque aumenta automáticamente la memoria RAM.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> tras una instalación limpia, el sistema funciona, pero un dispositivo de red no es reconocido.</div>
+      <p>13. ¿Cuál es el siguiente paso técnico más razonable?</p>
+      <label class="option"><input type="radio" name="q13" value="A"><span>A) Revisar e instalar el controlador correspondiente.</span></label>
+      <label class="option"><input type="radio" name="q13" value="B"><span>B) Formatear nuevamente sin revisar el problema.</span></label>
+      <label class="option"><input type="radio" name="q13" value="C"><span>C) Cambiar la resolución de pantalla.</span></label>
+    </div>
+
+    <div class="question">
+      <p>14. ¿Cuál secuencia representa mejor un procedimiento ordenado de instalación limpia?</p>
+      <label class="option"><input type="radio" name="q14" value="A"><span>A) Respaldar → preparar medio → configurar arranque → seleccionar unidad/partición → instalar → verificar controladores y actualizaciones.</span></label>
+      <label class="option"><input type="radio" name="q14" value="B"><span>B) Instalar → borrar datos → preparar USB → revisar BIOS.</span></label>
+      <label class="option"><input type="radio" name="q14" value="C"><span>C) Cambiar fondo → apagar → borrar particiones al azar.</span></label>
+    </div>
+
+    <div class="question">
+      <p>15. Un técnico debe reinstalar completamente un equipo. ¿Qué decisión integra mejor los dos temas evaluados?</p>
+      <label class="option"><input type="radio" name="q15" value="A"><span>A) Configurar correctamente el arranque en BIOS/UEFI, verificar el particionamiento y realizar la instalación limpia con respaldo previo.</span></label>
+      <label class="option"><input type="radio" name="q15" value="B"><span>B) Eliminar todas las particiones sin identificar la unidad y luego buscar un instalador.</span></label>
+      <label class="option"><input type="radio" name="q15" value="C"><span>C) Evitar revisar BIOS/UEFI y confiar en que el equipo iniciará desde cualquier dispositivo.</span></label>
+    </div>
+  </section>
+
+  <section class="panel finish no-print">
+    <h3>Entrega de la evaluación</h3>
+    <p>Revisa que hayas contestado los 15 reactivos antes de finalizar.</p>
+    <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+    <div id="exam-error" class="error hidden"></div>
+  </section>
+
+</section>
+
+<section id="view-results" class="panel hidden">
+  <div class="result">
+    <div class="eyebrow" style="color:var(--primary)">Evaluación finalizada</div>
+    <h2 id="result-name">Estudiante</h2>
+    <div id="result-score" class="result-score">0 / 30</div>
+    <div id="result-status" class="status">Registro completado</div>
+
+    <div class="result-data">
+      <div><strong>Asignatura:</strong> Soporte de Computadoras</div>
+      <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+      <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+      <div><strong>Contenidos evaluados:</strong> Configuración de BIOS/UEFI y particionamiento; instalación limpia de sistema operativo.</div>
+      <div><strong>Valor total:</strong> 30 puntos</div>
+    </div>
+
+    <p class="note-final">
+      El reporte muestra únicamente la calificación final. No presenta respuestas individuales, reactivos incorrectos ni la clave correcta.
+    </p>
+
+    <div class="actions no-print">
+      <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+      <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+    </div>
+
+    <div class="print-only">
+      <p style="margin-top:28px;font-size:12px;color:#555">
+        Evaluación de Soporte de Computadoras · Valor total: 30 puntos.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+  const TOTAL = 15;
+  const POINTS = 2;
+
+  const KEY = {
+    q1:"B", q2:"A", q3:"B", q4:"A", q5:"A",
+    q6:"A", q7:"A", q8:"A", q9:"A", q10:"A",
+    q11:"A", q12:"A", q13:"A", q14:"A", q15:"A"
+  };
+
+  const data = { name:"", section:"", score:0, date:"" };
+  const $ = id => document.getElementById(id);
+  const show = el => el.classList.remove("hidden");
+  const hide = el => el.classList.add("hidden");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=TOTAL;i++){
+      if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+    $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+  }
+
+  document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+    radio.addEventListener("change", updateProgress);
+  });
+
+  $("start-btn").addEventListener("click", () => {
+    const name = $("student-name").value.trim();
+    const section = $("student-section").value.trim();
+
+    if(!name || !section){
+      $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+      show($("registration-error"));
+      return;
+    }
+
+    hide($("registration-error"));
+    data.name = name;
+    data.section = section;
+    $("student-bar").textContent = `${name} · ${section}`;
+
+    hide($("view-registration"));
+    show($("view-exam"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("finish-btn").addEventListener("click", () => {
+    const missing = [];
+    let score = 0;
+
+    for(let i=1;i<=TOTAL;i++){
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(!selected){
+        missing.push(i);
+      }else if(selected.value === KEY[`q${i}`]){
+        score += POINTS;
+      }
+    }
+
+    if(missing.length){
+      $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+      show($("exam-error"));
+      return;
+    }
+
+    hide($("exam-error"));
+    data.score = score;
+    data.date = new Date().toLocaleString("es-GT");
+
+    $("result-name").textContent = data.name;
+    $("result-score").textContent = `${data.score} / 30`;
+    $("result-section").textContent = data.section;
+    $("result-date").textContent = data.date;
+
+    const status = $("result-status");
+    if(data.score >= 27){
+      status.textContent = "Desempeño alto";
+      status.style.background = "#e6f4ec";
+      status.style.color = "#146c43";
+    }else if(data.score >= 18){
+      status.textContent = "Aprobado";
+      status.style.background = "#e8eef5";
+      status.style.color = "#243b53";
+    }else{
+      status.textContent = "Requiere reforzamiento";
+      status.style.background = "#fff0d5";
+      status.style.color = "#8a5a00";
+    }
+
+    hide($("view-exam"));
+    show($("view-results"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("print-btn").addEventListener("click", () => window.print());
+  $("restart-btn").addEventListener("click", () => window.location.reload());
+})();
+</script>
+
+</body>
+</html>

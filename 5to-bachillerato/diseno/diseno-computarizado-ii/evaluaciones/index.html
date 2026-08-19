@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parcial No. 2 - Diseño Computarizado II - 5.º Bachillerato</title>
+<style>
+:root{
+  --bg:#f6f4f7; --panel:#ffffff; --text:#221b26; --muted:#6c6470;
+  --line:#e0d8e2; --primary:#7a4f6b; --primary-dark:#55374b;
+  --soft:#f5edf2; --success:#18794e; --warning:#8a5a00; --danger:#b42318;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input{font:inherit}
+.header{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:white;
+  padding:22px 18px;
+}
+.header-inner{
+  max-width:1080px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.eyebrow{
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  opacity:.88;
+}
+.header h1{margin:4px 0 5px;font-size:27px}
+.header p{margin:0;font-size:14px;color:#f6edf3;max-width:800px}
+.value-box{
+  min-width:150px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:12px 16px;
+}
+.value-box strong{display:block;font-size:28px}
+.wrap{max-width:1080px;margin:26px auto;padding:0 16px 38px}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:18px;
+  box-shadow:0 8px 26px rgba(35,24,32,.05);
+}
+.panel h2,.panel h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+input[type=text],input[type=url]{
+  width:100%;
+  border:1px solid #cec4cf;
+  border-radius:11px;
+  padding:11px 12px;
+  background:#fff;
+  color:var(--text);
+}
+input[type=text]:focus,input[type=url]:focus{
+  outline:3px solid rgba(122,79,107,.16);
+  border-color:var(--primary);
+}
+.info{
+  margin-top:16px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#faf8fa;
+  line-height:1.55;
+  font-size:14px;
+}
+.notice{
+  margin:16px 0;
+  padding:13px 15px;
+  border:1px solid #e5d09a;
+  background:#fff8e7;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:white}
+.btn-secondary{background:#ece8ed;color:var(--text)}
+.hidden{display:none!important}
+.error{
+  margin-top:10px;
+  color:var(--danger);
+  font-size:13px;
+  font-weight:800;
+}
+.topbar{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  background:rgba(34,27,38,.96);
+  color:#fff;
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:18px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.topbar small{color:#d7ced9}
+.progress-area{min-width:240px;flex:1;max-width:440px}
+.progress-text{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:6px;
+}
+.progress-track{
+  height:9px;
+  background:#4b414d;
+  border-radius:99px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  width:0;
+  background:#c9a8bd;
+  transition:width .2s ease;
+}
+.module-chip{
+  display:inline-block;
+  background:var(--soft);
+  color:var(--primary-dark);
+  border-radius:8px;
+  padding:5px 9px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+.question{
+  border:1px solid var(--line);
+  background:#fcfbfc;
+  border-radius:14px;
+  padding:18px;
+  margin:14px 0;
+}
+.question p{
+  margin:0 0 12px;
+  font-weight:750;
+  line-height:1.5;
+}
+.option{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid #ddd4df;
+  background:#fff;
+  border-radius:10px;
+  padding:11px 12px;
+  margin:8px 0;
+  cursor:pointer;
+  line-height:1.4;
+}
+.option:hover{
+  background:#fbf7fa;
+  border-color:#c6adbd;
+}
+.option input{margin-top:3px}
+.case{
+  border-left:4px solid var(--primary);
+  background:#f7f0f5;
+  padding:11px 13px;
+  border-radius:8px;
+  margin:10px 0 12px;
+  font-size:14px;
+  line-height:1.5;
+}
+.finish{text-align:center}
+.result{text-align:center;padding:30px 20px}
+.result-score{
+  font-size:58px;
+  font-weight:900;
+  line-height:1;
+  color:var(--primary);
+  margin:14px 0;
+}
+.status{
+  display:inline-block;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:800;
+  background:#efe8ed;
+  color:var(--primary-dark);
+}
+.result-data{
+  max-width:760px;
+  margin:18px auto;
+  border:1px solid var(--line);
+  background:#faf8fa;
+  border-radius:12px;
+  padding:14px 16px;
+  text-align:left;
+  line-height:1.7;
+}
+.note-final{
+  max-width:720px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.actions{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.print-only{display:none}
+@media(max-width:720px){
+  .grid2{grid-template-columns:1fr}
+  .header h1{font-size:22px}
+  .result-score{font-size:48px}
+}
+@media print{
+  body{background:#fff}
+  .header,.no-print,#view-registration,#view-exam{display:none!important}
+  #view-results{display:block!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .panel{box-shadow:none;border:1px solid #aaa}
+  .actions,.note-final{display:none!important}
+  .print-only{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="header no-print">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">Diseño Computarizado II · 5.º Bachillerato</div>
+      <h1>Parcial No. 2</h1>
+      <p>Bachillerato en Ciencias y Letras con orientación en Diseño · Figurines, modas base, colección cultural y texturas</p>
+    </div>
+    <div class="value-box">
+      <span>Valor total</span>
+      <strong>30 pts</strong>
+      <small>15 reactivos</small>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="view-registration" class="panel">
+  <h2>Registro del estudiante</h2>
+  <p>Ingresa tus datos antes de comenzar la evaluación.</p>
+
+  <div class="grid2">
+    <div>
+      <label class="field-label" for="student-name">Nombre completo *</label>
+      <input id="student-name" type="text" autocomplete="name">
+    </div>
+    <div>
+      <label class="field-label" for="student-section">Sección / clave *</label>
+      <input id="student-section" type="text" placeholder="Ej. Sección A - Clave 15">
+    </div>
+  </div>
+
+  <div style="margin-top:16px">
+    <label class="field-label" for="portfolio-link">Enlace del portafolio, figurín o colección digital (opcional)</label>
+    <input id="portfolio-link" type="url" placeholder="https://...">
+  </div>
+
+  <div class="info">
+    <strong>Contenidos identificados en el archivo adjunto:</strong><br>
+    Guía 4: creación de figurines y modas base.<br>
+    Guía 5: colección cultural y texturas.
+  </div>
+
+  <div class="notice">
+    Los títulos aparecen recortados al final de la captura. Por ello, la evaluación se limita a los conceptos visibles y no agrega contenidos no confirmados. Son 15 reactivos de 2 puntos cada uno. Al finalizar se mostrará únicamente la nota final.
+  </div>
+
+  <button id="start-btn" class="btn btn-primary" type="button">Comenzar evaluación</button>
+  <div id="registration-error" class="error hidden"></div>
+</section>
+
+<section id="view-exam" class="hidden">
+
+  <div class="topbar no-print">
+    <div>
+      <strong id="student-bar">Estudiante</strong><br>
+      <small>Parcial No. 2 · Diseño Computarizado II</small>
+    </div>
+    <div class="progress-area">
+      <div class="progress-text">
+        <span>Progreso</span>
+        <span id="progress-label">0 / 15 respondidas</span>
+      </div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <span class="module-chip">Guía 4</span>
+    <h3>Creación de figurines y modas base</h3>
+
+    <div class="question">
+      <p>1. ¿Cuál es la función principal de un figurín dentro del proceso de diseño de moda?</p>
+      <label class="option"><input type="radio" name="q1" value="A"><span>A) Representar visualmente una propuesta de vestuario sobre una figura humana estilizada.</span></label>
+      <label class="option"><input type="radio" name="q1" value="B"><span>B) Sustituir toda planificación del diseño.</span></label>
+      <label class="option"><input type="radio" name="q1" value="C"><span>C) Servir únicamente como fondo decorativo.</span></label>
+    </div>
+
+    <div class="question">
+      <p>2. Al construir una base de figurín, ¿qué aspecto ayuda a mantener coherencia visual en el cuerpo?</p>
+      <label class="option"><input type="radio" name="q2" value="A"><span>A) Cambiar las proporciones en cada parte sin criterio.</span></label>
+      <label class="option"><input type="radio" name="q2" value="B"><span>B) Mantener proporciones y ejes corporales consistentes.</span></label>
+      <label class="option"><input type="radio" name="q2" value="C"><span>C) Eliminar brazos y piernas para simplificar.</span></label>
+    </div>
+
+    <div class="question">
+      <p>3. ¿Por qué resulta útil trabajar con una moda base antes de desarrollar varias propuestas?</p>
+      <label class="option"><input type="radio" name="q3" value="A"><span>A) Permite conservar una estructura común y explorar variaciones de prendas, color o detalle.</span></label>
+      <label class="option"><input type="radio" name="q3" value="B"><span>B) Impide crear más de una propuesta.</span></label>
+      <label class="option"><input type="radio" name="q3" value="C"><span>C) Obliga a usar el mismo diseño sin modificaciones.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> una estudiante crea tres propuestas de vestuario sobre el mismo figurín base.</div>
+      <p>4. ¿Qué debe conservar para que las tres propuestas puedan compararse con claridad?</p>
+      <label class="option"><input type="radio" name="q4" value="A"><span>A) La misma estructura corporal y escala del figurín.</span></label>
+      <label class="option"><input type="radio" name="q4" value="B"><span>B) Una escala diferente en cada propuesta.</span></label>
+      <label class="option"><input type="radio" name="q4" value="C"><span>C) Un fondo distinto que oculte el diseño.</span></label>
+    </div>
+
+    <div class="question">
+      <p>5. En un diseño digital de moda, ¿qué decisión ayuda a representar mejor el volumen de una prenda?</p>
+      <label class="option"><input type="radio" name="q5" value="A"><span>A) Considerar pliegues, caída y relación de la prenda con el cuerpo.</span></label>
+      <label class="option"><input type="radio" name="q5" value="B"><span>B) Dibujar toda la prenda como una figura plana sin relación con el cuerpo.</span></label>
+      <label class="option"><input type="radio" name="q5" value="C"><span>C) Eliminar cualquier detalle de forma.</span></label>
+    </div>
+
+    <div class="question">
+      <p>6. Si una propuesta de moda incluye varias prendas, ¿qué principio favorece una presentación ordenada?</p>
+      <label class="option"><input type="radio" name="q6" value="A"><span>A) Mantener coherencia de estilo, proporción y lectura visual entre los elementos.</span></label>
+      <label class="option"><input type="radio" name="q6" value="B"><span>B) Usar elementos sin relación entre sí.</span></label>
+      <label class="option"><input type="radio" name="q6" value="C"><span>C) Superponer todos los detalles sin jerarquía.</span></label>
+    </div>
+
+    <div class="question">
+      <p>7. ¿Qué ventaja ofrece elaborar figurines digitalmente?</p>
+      <label class="option"><input type="radio" name="q7" value="A"><span>A) Facilita realizar ajustes, duplicar bases y probar variaciones sin rehacer todo desde cero.</span></label>
+      <label class="option"><input type="radio" name="q7" value="B"><span>B) Impide modificar colores o formas.</span></label>
+      <label class="option"><input type="radio" name="q7" value="C"><span>C) Elimina la necesidad de tomar decisiones de diseño.</span></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <span class="module-chip">Guía 5</span>
+    <h3>Colección cultural y texturas</h3>
+
+    <div class="question">
+      <p>8. ¿Qué caracteriza a una colección de diseño con una referencia cultural clara?</p>
+      <label class="option"><input type="radio" name="q8" value="A"><span>A) La utilización consciente de elementos visuales relacionados con un contexto cultural definido.</span></label>
+      <label class="option"><input type="radio" name="q8" value="B"><span>B) La mezcla de símbolos aleatorios sin investigación ni relación.</span></label>
+      <label class="option"><input type="radio" name="q8" value="C"><span>C) La ausencia total de concepto.</span></label>
+    </div>
+
+    <div class="question">
+      <p>9. Antes de incorporar elementos culturales a una colección, ¿qué práctica es más adecuada?</p>
+      <label class="option"><input type="radio" name="q9" value="A"><span>A) Investigar su origen, significado y contexto antes de reinterpretarlos.</span></label>
+      <label class="option"><input type="radio" name="q9" value="B"><span>B) Copiarlos sin identificar su procedencia.</span></label>
+      <label class="option"><input type="radio" name="q9" value="C"><span>C) Utilizarlos solo porque tienen colores llamativos.</span></label>
+    </div>
+
+    <div class="question">
+      <p>10. ¿Qué función cumple una textura en la representación digital de una prenda?</p>
+      <label class="option"><input type="radio" name="q10" value="A"><span>A) Ayudar a comunicar visualmente características de superficie o material.</span></label>
+      <label class="option"><input type="radio" name="q10" value="B"><span>B) Sustituir completamente la forma de la prenda.</span></label>
+      <label class="option"><input type="radio" name="q10" value="C"><span>C) Eliminar la percepción de material.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso:</strong> una colección digital está inspirada en patrones culturales y utiliza varias texturas textiles.</div>
+      <p>11. ¿Qué decisión ayuda a mantener unidad visual?</p>
+      <label class="option"><input type="radio" name="q11" value="A"><span>A) Definir una paleta, formas y texturas relacionadas con el concepto general de la colección.</span></label>
+      <label class="option"><input type="radio" name="q11" value="B"><span>B) Cambiar completamente el concepto en cada prenda.</span></label>
+      <label class="option"><input type="radio" name="q11" value="C"><span>C) Usar cualquier textura sin considerar color o estilo.</span></label>
+    </div>
+
+    <div class="question">
+      <p>12. Si una textura digital se aplica sobre una prenda, ¿qué debe cuidarse para que el resultado sea creíble?</p>
+      <label class="option"><input type="radio" name="q12" value="A"><span>A) La escala, dirección y adaptación de la textura a la forma de la prenda.</span></label>
+      <label class="option"><input type="radio" name="q12" value="B"><span>B) Colocarla siempre con el mismo tamaño, sin importar la superficie.</span></label>
+      <label class="option"><input type="radio" name="q12" value="C"><span>C) Eliminar cualquier relación con el volumen.</span></label>
+    </div>
+
+    <div class="question">
+      <p>13. ¿Qué diferencia existe entre utilizar una textura como recurso visual y copiar un diseño completo?</p>
+      <label class="option"><input type="radio" name="q13" value="A"><span>A) Una textura puede integrarse como parte de una propuesta propia, mientras copiar un diseño completo reproduce una solución ajena.</span></label>
+      <label class="option"><input type="radio" name="q13" value="B"><span>B) No existe ninguna diferencia.</span></label>
+      <label class="option"><input type="radio" name="q13" value="C"><span>C) Copiar un diseño completo siempre genera una propuesta original.</span></label>
+    </div>
+
+    <div class="question">
+      <p>14. ¿Qué evidencia muestra mejor que una colección digital fue planificada como un conjunto?</p>
+      <label class="option"><input type="radio" name="q14" value="A"><span>A) Coherencia entre concepto, figurines, color, texturas y variaciones de las prendas.</span></label>
+      <label class="option"><input type="radio" name="q14" value="B"><span>B) Diseños sin relación visual entre sí.</span></label>
+      <label class="option"><input type="radio" name="q14" value="C"><span>C) Una sola prenda sin proceso ni concepto.</span></label>
+    </div>
+
+    <div class="question">
+      <div class="case"><strong>Caso integrador:</strong> se debe presentar una colección cultural digital formada por varios figurines.</div>
+      <p>15. ¿Qué procedimiento integra mejor los contenidos del parcial?</p>
+      <label class="option"><input type="radio" name="q15" value="A"><span>A) Construir una base de figurín, desarrollar variaciones de moda, investigar el referente cultural y aplicar texturas coherentes con el concepto.</span></label>
+      <label class="option"><input type="radio" name="q15" value="B"><span>B) Elegir imágenes aleatorias y colocarlas sobre cualquier figura sin planificación.</span></label>
+      <label class="option"><input type="radio" name="q15" value="C"><span>C) Crear cada prenda con proporciones y conceptos totalmente desconectados.</span></label>
+    </div>
+  </section>
+
+  <section class="panel finish no-print">
+    <h3>Entrega del parcial</h3>
+    <p>Revisa que hayas contestado los 15 reactivos antes de finalizar.</p>
+    <button id="finish-btn" class="btn btn-success" type="button">Finalizar y obtener nota</button>
+    <div id="exam-error" class="error hidden"></div>
+  </section>
+
+</section>
+
+<section id="view-results" class="panel hidden">
+  <div class="result">
+    <div class="eyebrow" style="color:var(--primary)">Evaluación finalizada</div>
+    <h2 id="result-name">Estudiante</h2>
+    <div id="result-score" class="result-score">0 / 30</div>
+    <div id="result-status" class="status">Registro completado</div>
+
+    <div class="result-data">
+      <div><strong>Curso:</strong> Diseño Computarizado II</div>
+      <div><strong>Evaluación:</strong> Parcial No. 2</div>
+      <div><strong>Grado:</strong> 5.º Bachillerato en Ciencias y Letras</div>
+      <div><strong>Orientación:</strong> Diseño</div>
+      <div><strong>Sección / clave:</strong> <span id="result-section">---</span></div>
+      <div><strong>Fecha de entrega:</strong> <span id="result-date">---</span></div>
+      <div id="result-link-row" class="hidden"><strong>Portafolio / colección:</strong> <span id="result-link">---</span></div>
+      <div><strong>Contenidos evaluados:</strong> Creación de figurines y modas base; colección cultural y texturas.</div>
+      <div><strong>Valor total:</strong> 30 puntos</div>
+    </div>
+
+    <p class="note-final">
+      El reporte muestra únicamente la calificación final. No presenta respuestas individuales, reactivos incorrectos ni la clave correcta.
+    </p>
+
+    <div class="actions no-print">
+      <button id="print-btn" class="btn btn-primary" type="button">Imprimir / Guardar PDF</button>
+      <button id="restart-btn" class="btn btn-secondary" type="button">Nueva evaluación</button>
+    </div>
+
+    <div class="print-only">
+      <p style="margin-top:28px;font-size:12px;color:#555">
+        Parcial No. 2 · Diseño Computarizado II · 5.º Bachillerato en Ciencias y Letras con orientación en Diseño · Valor total: 30 puntos.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+  const TOTAL = 15;
+  const POINTS = 2;
+
+  const KEY = {
+    q1:"A", q2:"B", q3:"A", q4:"A", q5:"A",
+    q6:"A", q7:"A", q8:"A", q9:"A", q10:"A",
+    q11:"A", q12:"A", q13:"A", q14:"A", q15:"A"
+  };
+
+  const data = {
+    name:"",
+    section:"",
+    link:"",
+    score:0,
+    date:""
+  };
+
+  const $ = id => document.getElementById(id);
+  const show = el => el.classList.remove("hidden");
+  const hide = el => el.classList.add("hidden");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=TOTAL;i++){
+      if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    $("progress-label").textContent = `${answered} / ${TOTAL} respondidas`;
+    $("progress-bar").style.width = `${(answered/TOTAL)*100}%`;
+  }
+
+  document.querySelectorAll('#view-exam input[type="radio"]').forEach(radio => {
+    radio.addEventListener("change", updateProgress);
+  });
+
+  $("start-btn").addEventListener("click", () => {
+    const name = $("student-name").value.trim();
+    const section = $("student-section").value.trim();
+    const link = $("portfolio-link").value.trim();
+
+    if(!name || !section){
+      $("registration-error").textContent = "Completa el nombre del estudiante y la sección / clave.";
+      show($("registration-error"));
+      return;
+    }
+
+    if(link){
+      try{
+        const u = new URL(link);
+        if(!["http:","https:"].includes(u.protocol)) throw new Error();
+      }catch{
+        $("registration-error").textContent = "El enlace del portafolio o colección no tiene un formato válido.";
+        show($("registration-error"));
+        return;
+      }
+    }
+
+    hide($("registration-error"));
+    data.name = name;
+    data.section = section;
+    data.link = link;
+    $("student-bar").textContent = `${name} · ${section}`;
+
+    hide($("view-registration"));
+    show($("view-exam"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("finish-btn").addEventListener("click", () => {
+    const missing = [];
+    let score = 0;
+
+    for(let i=1;i<=TOTAL;i++){
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if(!selected){
+        missing.push(i);
+      }else if(selected.value === KEY[`q${i}`]){
+        score += POINTS;
+      }
+    }
+
+    if(missing.length){
+      $("exam-error").textContent = `Falta responder: ${missing.join(", ")}.`;
+      show($("exam-error"));
+      return;
+    }
+
+    hide($("exam-error"));
+    data.score = score;
+    data.date = new Date().toLocaleString("es-GT");
+
+    $("result-name").textContent = data.name;
+    $("result-score").textContent = `${data.score} / 30`;
+    $("result-section").textContent = data.section;
+    $("result-date").textContent = data.date;
+
+    if(data.link){
+      $("result-link").textContent = data.link;
+      show($("result-link-row"));
+    }else{
+      hide($("result-link-row"));
+    }
+
+    const status = $("result-status");
+    if(data.score >= 27){
+      status.textContent = "Desempeño alto";
+      status.style.background = "#e6f4ec";
+      status.style.color = "#146c43";
+    }else if(data.score >= 18){
+      status.textContent = "Aprobado";
+      status.style.background = "#efe8ed";
+      status.style.color = "#55374b";
+    }else{
+      status.textContent = "Requiere reforzamiento";
+      status.style.background = "#fff0d5";
+      status.style.color = "#8a5a00";
+    }
+
+    hide($("view-exam"));
+    show($("view-results"));
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  $("print-btn").addEventListener("click", () => window.print());
+  $("restart-btn").addEventListener("click", () => window.location.reload());
+})();
+</script>
+
+</body>
+</html>

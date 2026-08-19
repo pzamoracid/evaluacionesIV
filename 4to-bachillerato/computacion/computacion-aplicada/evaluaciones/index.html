@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Parcial No. 2 - Computación Aplicada</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .rubrica-opcion {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            cursor: pointer;
+        }
+
+        .rubrica-opcion input[type="radio"] {
+            margin-top: 0.2rem;
+            width: 1rem;
+            height: 1rem;
+            flex: 0 0 auto;
+            accent-color: #2563eb;
+        }
+
+        .fila-seleccionada {
+            outline: 2px solid rgba(37, 99, 235, 0.18);
+            outline-offset: -2px;
+        }
+
+        #registro-final-impresion {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 18mm;
+            }
+
+            html,
+            body {
+                background: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            body > *:not(#registro-final-impresion) {
+                display: none !important;
+            }
+
+            #registro-final-impresion {
+                display: block !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                color: #0f172a !important;
+                background: #ffffff !important;
+                font-family: 'Plus Jakarta Sans', Arial, sans-serif !important;
+            }
+
+            #registro-final-impresion * {
+                box-sizing: border-box;
+            }
+
+            .registro-hoja {
+                width: 100%;
+                border: 1.5px solid #cbd5e1;
+                border-radius: 16px;
+                padding: 28px 30px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .registro-encabezado {
+                border-bottom: 2px solid #2563eb;
+                padding-bottom: 18px;
+                margin-bottom: 24px;
+            }
+
+            .registro-etiqueta {
+                font-size: 10pt;
+                font-weight: 700;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: #2563eb;
+                margin: 0 0 7px;
+            }
+
+            .registro-titulo {
+                font-size: 23pt;
+                line-height: 1.15;
+                font-weight: 800;
+                margin: 0 0 7px;
+                color: #0f172a;
+            }
+
+            .registro-curso {
+                font-size: 12pt;
+                color: #475569;
+                margin: 0;
+            }
+
+            .registro-datos {
+                display: grid;
+                grid-template-columns: 1fr 180px;
+                gap: 16px;
+                margin-bottom: 16px;
+            }
+
+            .registro-campo,
+            .registro-url {
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 14px 16px;
+            }
+
+            .registro-url {
+                margin-bottom: 24px;
+                overflow-wrap: anywhere;
+            }
+
+            .registro-campo span,
+            .registro-url span {
+                display: block;
+                font-size: 9pt;
+                font-weight: 700;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                margin-bottom: 5px;
+            }
+
+            .registro-campo strong,
+            .registro-url strong {
+                display: block;
+                font-size: 12.5pt;
+                color: #0f172a;
+            }
+
+            .registro-nota {
+                text-align: center;
+                padding: 25px 20px;
+                border-radius: 14px;
+                border: 2px solid #bfdbfe;
+                background: #eff6ff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .registro-nota-label {
+                margin: 0 0 6px;
+                font-size: 10pt;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+                color: #475569;
+            }
+
+            .registro-nota-valor {
+                margin: 0;
+                font-size: 34pt;
+                line-height: 1;
+                font-weight: 900;
+                color: #1d4ed8;
+            }
+
+            .registro-porcentaje {
+                margin: 8px 0 0;
+                font-size: 14pt;
+                font-weight: 700;
+                color: #334155;
+            }
+
+            .registro-aclaracion {
+                margin: 20px 0 0;
+                font-size: 9.5pt;
+                line-height: 1.45;
+                color: #64748b;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 pb-12">
+
+    <!-- Encabezado -->
+    <header class="bg-gradient-to-r from-blue-950 via-sky-900 to-slate-900 text-white shadow-xl">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-blue-700/50 pb-6">
+                <div>
+                    <span class="bg-blue-500/20 text-blue-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-blue-400/30">
+                        4to. Bachillerato en Ciencias y Letras
+                    </span>
+
+                    <h1 class="text-3xl md:text-4xl font-extrabold mt-2 tracking-tight">
+                        Evaluación Parcial No. 2
+                    </h1>
+
+                    <p class="text-blue-100 text-lg font-medium mt-1">
+                        Curso: Computación Aplicada
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20 text-center md:text-right w-full md:w-auto">
+                    <p class="text-xs uppercase tracking-widest text-blue-100 font-bold">Valor Total</p>
+                    <p class="text-4xl font-black text-amber-400">
+                        20 <span class="text-xl font-normal text-white">pts</span>
+                    </p>
+                    <p class="text-xs text-blue-100 mt-1">
+                        <i class="fa-regular fa-calendar-check mr-1"></i>
+                        Entrega: viernes 21 de agosto de 2026
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
+                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-globe text-sky-400 text-xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-400">Proyecto Final</p>
+                        <p class="font-semibold text-white">Portafolio Académico Anual</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-diagram-project text-cyan-400 text-xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-400">Integración</p>
+                        <p class="font-semibold text-white">Guías 1 a 6</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-link text-emerald-400 text-xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-400">Entregable</p>
+                        <p class="font-semibold text-white">Sitio Publicado</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-clipboard-check text-amber-400 text-xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-400">Evaluación</p>
+                        <p class="font-semibold text-white">Rúbrica Autoevaluable</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 mt-8 space-y-8">
+
+        <!-- Barra de acciones -->
+        <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
+            <div class="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                <i class="fa-solid fa-circle-info text-blue-600"></i>
+                <span>Parcial integrador: Guías 1 a 6 + despliegue del portafolio académico anual</span>
+            </div>
+
+            <button
+                type="button"
+                onclick="imprimirRegistroFinal()"
+                class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+                <i class="fa-solid fa-print"></i>
+                Imprimir resultado final
+            </button>
+        </div>
+
+        <!-- Datos del estudiante -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 shadow-card">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Datos del Estudiante</h2>
+                    <p class="text-sm text-slate-500">Completa los datos antes de realizar la autoevaluación.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <label for="nombre-estudiante" class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nombre completo
+                    </label>
+                    <input
+                        id="nombre-estudiante"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Escribe tu nombre y apellidos"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label for="fecha-estudiante" class="block text-sm font-semibold text-slate-700 mb-2">
+                        Fecha
+                    </label>
+                    <input
+                        id="fecha-estudiante"
+                        type="date"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label for="orientacion-estudiante" class="block text-sm font-semibold text-slate-700 mb-2">
+                        Orientación
+                    </label>
+                    <select
+                        id="orientacion-estudiante"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Selecciona tu orientación</option>
+                        <option value="Computación">Computación</option>
+                        <option value="Diseño">Diseño</option>
+                        <option value="Biología">Biología</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="url-portafolio" class="block text-sm font-semibold text-slate-700 mb-2">
+                        Enlace público del portafolio
+                    </label>
+                    <input
+                        id="url-portafolio"
+                        type="url"
+                        inputmode="url"
+                        placeholder="https://..."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p id="mensaje-url" class="text-xs text-slate-500 mt-2">
+                        Debe ser un enlace público que permita revisar el sitio.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-5 no-print">
+                <button
+                    type="button"
+                    id="abrir-portafolio"
+                    class="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    Abrir portafolio
+                </button>
+            </div>
+        </section>
+
+        <!-- Descripción del proyecto -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">1. Descripción del Parcial</h2>
+                    <p class="text-sm text-slate-500">Lanzamiento del Portafolio Académico Anual</p>
+                </div>
+            </div>
+
+            <p class="text-slate-700 leading-relaxed">
+                El <strong>Parcial No. 2</strong> integra el trabajo desarrollado en las seis guías del curso.
+                El estudiante debe presentar su <strong>sitio o portafolio académico anual terminado y publicado</strong>,
+                con una estructura de navegación clara, identidad visual propia, secciones funcionales, selección de trabajos
+                académicos y las mejoras realizadas a partir de la revisión por pares.
+            </p>
+
+            <div class="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+                <p class="font-bold mb-1">
+                    <i class="fa-solid fa-cloud-arrow-up mr-1"></i>
+                    Requisito de despliegue
+                </p>
+                <p>
+                    El portafolio debe estar publicado y disponible mediante un enlace web que pueda abrirse para su revisión.
+                    La plataforma utilizada puede variar; el enlace entregado permitirá identificar dónde fue creado y publicado.
+                </p>
+            </div>
+        </section>
+
+        <!-- Integración de guías -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">2. Integración de las Guías 1 a 6</h2>
+                    <p class="text-sm text-slate-500">El portafolio final debe reflejar el proceso desarrollado durante el curso.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 1</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Diseño Tipográfico y Herramientas de Dibujo</h3>
+                    <p class="text-slate-600 mt-2">
+                        Diseño tipográfico estructurado y recursos gráficos para la conceptualización de la marca personal.
+                    </p>
+                </article>
+
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 2</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Mapa de Navegación del Sitio (Estructura UX)</h3>
+                    <p class="text-slate-600 mt-2">
+                        Arquitectura de información y mapa de navegación del sitio web personal o proyecto educativo.
+                    </p>
+                </article>
+
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 3</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Laboratorio 1: Home Page y “Sobre mí”</h3>
+                    <p class="text-slate-600 mt-2">
+                        Creación y maquetación inicial de la página principal y sección de presentación personal.
+                    </p>
+                </article>
+
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 4</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Laboratorio 2: Contacto y Galería</h3>
+                    <p class="text-slate-600 mt-2">
+                        Integración de formulario de contacto y galería de trabajos organizada dentro del portafolio.
+                    </p>
+                </article>
+
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 5</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Mi Marca Personal en la Red</h3>
+                    <p class="text-slate-600 mt-2">
+                        Curación de contenidos y selección de los mejores proyectos interactivos y académicos del año.
+                    </p>
+                </article>
+
+                <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Guía 6</span>
+                    <h3 class="font-bold text-slate-900 mt-1">Revisión por Pares y Feedback Colaborativo</h3>
+                    <p class="text-slate-600 mt-2">
+                        Corrección y optimización del portafolio a partir de la retroalimentación recibida.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Lista de cotejo -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">3. Lista de Cotejo Pre-Entrega</h2>
+                    <p class="text-sm text-slate-500">Comprueba que tu portafolio esté listo antes de completar la rúbrica.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 text-sm" id="lista-cotejo">
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Identidad visual:</strong> El portafolio incorpora diseño tipográfico y recursos gráficos relacionados con tu marca personal.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Navegación:</strong> La estructura del sitio es clara y permite desplazarse entre las secciones principales sin confusión.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Home Page:</strong> La página principal presenta correctamente el propósito y contenido del portafolio.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Sobre mí:</strong> Incluye una presentación personal o académica clara y apropiada.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Galería:</strong> Los trabajos académicos seleccionados están organizados y se pueden visualizar correctamente.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Contacto:</strong> El sitio incluye la sección o formulario de contacto trabajado durante el curso.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Revisión:</strong> Se aplicaron correcciones o mejoras a partir de la retroalimentación de la Guía 6.</span>
+                </label>
+
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded accent-blue-600">
+                    <span><strong>Despliegue:</strong> El portafolio está publicado y el enlace abre correctamente desde otro navegador o dispositivo.</span>
+                </label>
+            </div>
+
+            <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Progreso de la lista</p>
+                <p id="progreso-checklist" class="text-lg font-bold text-slate-900 mt-1">0 de 8 requisitos verificados</p>
+            </div>
+        </section>
+
+        <!-- Rúbrica autoevaluable -->
+        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" id="rubrica-autoevaluacion">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-table-list"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">4. Rúbrica de Autoevaluación</h2>
+                    <p class="text-sm text-slate-500">Selecciona el nivel que mejor describa el estado actual de tu portafolio.</p>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Excelente = 5 pts &bull; Satisfactorio = 4 pts &bull; Debe mejorar = 3 pts
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-6 rounded-xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-blue-950">
+                <p class="font-semibold mb-1">
+                    <i class="fa-solid fa-circle-check mr-1"></i>
+                    Uso de la rúbrica
+                </p>
+                <p>
+                    Marca una opción por criterio después de revisar el sitio publicado. El resultado se calculará automáticamente.
+                    Esta autoevaluación sirve para detectar ajustes antes de la entrega y no sustituye la calificación final del docente.
+                </p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm" id="tabla-rubrica">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <th class="p-3 md:p-4 rounded-tl-xl">Criterio</th>
+                            <th class="p-3 md:p-4 text-emerald-800 bg-emerald-50/50">Excelente (5)</th>
+                            <th class="p-3 md:p-4 text-amber-800 bg-amber-50/50">Satisfactorio (4)</th>
+                            <th class="p-3 md:p-4 text-red-800 bg-red-50/50">Debe mejorar (3)</th>
+                            <th class="p-3 md:p-4 text-center rounded-tr-xl">Resultado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+
+                        <tr data-fila-criterio="1">
+                            <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                                Estructura UX y Navegación
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-emerald-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-1" value="5">
+                                    <span>La navegación es clara, coherente y permite acceder fácilmente a todas las secciones del portafolio.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-amber-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-1" value="4">
+                                    <span>La estructura funciona, aunque existen pequeños problemas de organización, enlaces o continuidad entre secciones.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-red-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-1" value="3">
+                                    <span>La navegación presenta dificultades, enlaces poco claros o una organización que complica el recorrido del sitio.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 text-center font-extrabold text-blue-700 text-base whitespace-nowrap">
+                                <span id="resultado-criterio-1">— / 5</span>
+                            </td>
+                        </tr>
+
+                        <tr data-fila-criterio="2">
+                            <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                                Diseño Visual e Identidad Personal
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-emerald-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-2" value="5">
+                                    <span>El portafolio presenta identidad visual coherente, tipografía legible y recursos gráficos bien integrados con la marca personal.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-amber-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-2" value="4">
+                                    <span>La apariencia general es adecuada, pero algunos elementos visuales o tipográficos todavía necesitan ajustes de coherencia.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-red-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-2" value="3">
+                                    <span>La identidad visual es poco consistente o existen problemas de legibilidad, jerarquía o integración de recursos gráficos.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 text-center font-extrabold text-blue-700 text-base whitespace-nowrap">
+                                <span id="resultado-criterio-2">— / 5</span>
+                            </td>
+                        </tr>
+
+                        <tr data-fila-criterio="3">
+                            <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                                Contenido, Secciones y Funcionalidad
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-emerald-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-3" value="5">
+                                    <span>Incluye Home Page, “Sobre mí”, galería de trabajos y contacto, con contenidos completos y funcionamiento correcto.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-amber-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-3" value="4">
+                                    <span>Las secciones principales están presentes, pero alguna necesita completar contenido, mejorar organización o corregir un detalle funcional.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-red-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-3" value="3">
+                                    <span>Faltan secciones, existen contenidos incompletos o hay elementos que no funcionan correctamente.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 text-center font-extrabold text-blue-700 text-base whitespace-nowrap">
+                                <span id="resultado-criterio-3">— / 5</span>
+                            </td>
+                        </tr>
+
+                        <tr data-fila-criterio="4">
+                            <td class="p-3 md:p-4 font-bold text-slate-900 bg-slate-50/50">
+                                Despliegue, Accesibilidad y Presentación Final
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-emerald-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-4" value="5">
+                                    <span>El sitio está publicado, abre correctamente, mantiene buena legibilidad y puede revisarse sin problemas desde su enlace público.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-amber-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-4" value="4">
+                                    <span>El sitio está publicado y disponible, pero presenta pequeños detalles de visualización, legibilidad o adaptación que conviene corregir.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 bg-red-50/20">
+                                <label class="rubrica-opcion">
+                                    <input type="radio" name="criterio-4" value="3">
+                                    <span>El enlace presenta dificultades de acceso o el sitio tiene problemas visibles que afectan su revisión o lectura.</span>
+                                </label>
+                            </td>
+
+                            <td class="p-3 md:p-4 text-center font-extrabold text-blue-700 text-base whitespace-nowrap">
+                                <span id="resultado-criterio-4">— / 5</span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-6">
+                <div class="grid md:grid-cols-3 gap-4 items-center">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Progreso</p>
+                        <p id="progreso-rubrica" class="text-lg font-bold text-slate-900 mt-1">
+                            0 de 4 criterios evaluados
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Autoevaluación</p>
+                        <p id="nota-autoevaluacion" class="text-3xl font-black text-blue-700 mt-1">— / 20</p>
+                        <p id="porcentaje-autoevaluacion" class="text-sm font-semibold text-slate-500">
+                            Completa los 4 criterios
+                        </p>
+                    </div>
+
+                    <div class="md:text-right no-print">
+                        <button
+                            type="button"
+                            id="reiniciar-evaluacion"
+                            class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="retroalimentacion-rubrica" class="hidden mt-5 rounded-xl border p-4 text-sm"></div>
+            </div>
+        </section>
+
+        <footer class="text-center text-xs text-slate-500 pt-4 border-t border-slate-200">
+            <p>Computación Aplicada &bull; 4to. Bachillerato &bull; 2026</p>
+        </footer>
+
+    </main>
+
+    <!-- Registro final: solo aparece al imprimir -->
+    <section id="registro-final-impresion" aria-hidden="true">
+        <div class="registro-hoja">
+            <div class="registro-encabezado">
+                <p class="registro-etiqueta">4to. Bachillerato en Ciencias y Letras</p>
+                <h1 class="registro-titulo">Evaluación Parcial No. 2</h1>
+                <p class="registro-curso">Computación Aplicada &bull; Portafolio Académico Anual</p>
+            </div>
+
+            <div class="registro-datos">
+                <div class="registro-campo">
+                    <span>Nombre del estudiante</span>
+                    <strong id="registro-nombre">—</strong>
+                </div>
+
+                <div class="registro-campo">
+                    <span>Fecha</span>
+                    <strong id="registro-fecha">—</strong>
+                </div>
+
+                <div class="registro-campo">
+                    <span>Orientación</span>
+                    <strong id="registro-orientacion">—</strong>
+                </div>
+
+                <div class="registro-campo">
+                    <span>Valor del parcial</span>
+                    <strong>20 puntos</strong>
+                </div>
+            </div>
+
+            <div class="registro-url">
+                <span>Enlace público del portafolio</span>
+                <strong id="registro-url">—</strong>
+            </div>
+
+            <div class="registro-nota">
+                <p class="registro-nota-label">Resultado final de autoevaluación</p>
+                <p class="registro-nota-valor"><span id="registro-nota">—</span> / 20</p>
+                <p class="registro-porcentaje" id="registro-porcentaje">—</p>
+            </div>
+
+            <p class="registro-aclaracion">
+                Este resultado corresponde a la autoevaluación realizada por el estudiante con base en la rúbrica del proyecto.
+                La calificación oficial será determinada por el docente.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        (function () {
+            const storageKey = 'computacionAplicada_parcial2_2026';
+
+            const nombre = document.getElementById('nombre-estudiante');
+            const fecha = document.getElementById('fecha-estudiante');
+            const orientacion = document.getElementById('orientacion-estudiante');
+            const url = document.getElementById('url-portafolio');
+            const mensajeUrl = document.getElementById('mensaje-url');
+            const botonAbrir = document.getElementById('abrir-portafolio');
+
+            const checkboxes = Array.from(document.querySelectorAll('#lista-cotejo input[type="checkbox"]'));
+            const progresoChecklist = document.getElementById('progreso-checklist');
+
+            const radios = Array.from(document.querySelectorAll('#tabla-rubrica input[type="radio"]'));
+            const progresoRubrica = document.getElementById('progreso-rubrica');
+            const nota = document.getElementById('nota-autoevaluacion');
+            const porcentaje = document.getElementById('porcentaje-autoevaluacion');
+            const retro = document.getElementById('retroalimentacion-rubrica');
+            const reiniciar = document.getElementById('reiniciar-evaluacion');
+
+            function esUrlValida(valor) {
+                try {
+                    const parsed = new URL(valor);
+                    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function validarUrlVisual() {
+                const valor = url.value.trim();
+
+                if (!valor) {
+                    mensajeUrl.textContent = 'Debe ser un enlace público que permita revisar el sitio.';
+                    mensajeUrl.className = 'text-xs text-slate-500 mt-2';
+                    return false;
+                }
+
+                if (!esUrlValida(valor)) {
+                    mensajeUrl.textContent = 'Escribe una dirección válida que comience con http:// o https://';
+                    mensajeUrl.className = 'text-xs text-red-600 mt-2';
+                    return false;
+                }
+
+                mensajeUrl.textContent = 'Enlace válido.';
+                mensajeUrl.className = 'text-xs text-emerald-600 mt-2';
+                return true;
+            }
+
+            function actualizarChecklist() {
+                const marcados = checkboxes.filter(c => c.checked).length;
+                progresoChecklist.textContent = `${marcados} de ${checkboxes.length} requisitos verificados`;
+                guardarEstado();
+            }
+
+            function actualizarRubrica() {
+                let total = 0;
+                let respondidos = 0;
+
+                for (let criterio = 1; criterio <= 4; criterio++) {
+                    const seleccionado = document.querySelector(`input[name="criterio-${criterio}"]:checked`);
+                    const salida = document.getElementById(`resultado-criterio-${criterio}`);
+                    const fila = document.querySelector(`[data-fila-criterio="${criterio}"]`);
+
+                    if (seleccionado) {
+                        const puntos = Number(seleccionado.value);
+                        total += puntos;
+                        respondidos++;
+                        salida.textContent = `${puntos} / 5`;
+                        fila.classList.add('fila-seleccionada');
+                    } else {
+                        salida.textContent = '— / 5';
+                        fila.classList.remove('fila-seleccionada');
+                    }
+                }
+
+                progresoRubrica.textContent = `${respondidos} de 4 criterios evaluados`;
+
+                if (respondidos < 4) {
+                    nota.textContent = '— / 20';
+                    porcentaje.textContent = 'Completa los 4 criterios';
+                    retro.className = 'hidden mt-5 rounded-xl border p-4 text-sm';
+                    retro.textContent = '';
+                } else {
+                    const pct = Math.round((total / 20) * 100);
+                    nota.textContent = `${total} / 20`;
+                    porcentaje.textContent = `${pct} %`;
+
+                    if (total >= 18) {
+                        retro.className = 'mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900';
+                        retro.textContent = 'El portafolio cumple ampliamente con los criterios. Realiza una última comprobación del enlace, navegación y contenido antes de entregar.';
+                    } else if (total >= 15) {
+                        retro.className = 'mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900';
+                        retro.textContent = 'El portafolio cumple con la mayoría de los criterios, pero todavía conviene revisar los aspectos marcados como Satisfactorio o Debe mejorar.';
+                    } else {
+                        retro.className = 'mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900';
+                        retro.textContent = 'La autoevaluación muestra varios aspectos por corregir. Revisa los criterios marcados como Debe mejorar antes de entregar el portafolio.';
+                    }
+                }
+
+                guardarEstado();
+            }
+
+            function guardarEstado() {
+                const estado = {
+                    nombre: nombre.value,
+                    fecha: fecha.value,
+                    orientacion: orientacion.value,
+                    url: url.value,
+                    checklist: checkboxes.map(c => c.checked),
+                    rubrica: {}
+                };
+
+                for (let criterio = 1; criterio <= 4; criterio++) {
+                    const seleccionado = document.querySelector(`input[name="criterio-${criterio}"]:checked`);
+                    if (seleccionado) {
+                        estado.rubrica[`criterio-${criterio}`] = seleccionado.value;
+                    }
+                }
+
+                try {
+                    localStorage.setItem(storageKey, JSON.stringify(estado));
+                } catch (e) {}
+            }
+
+            function restaurarEstado() {
+                try {
+                    const estado = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+                    nombre.value = estado.nombre || '';
+                    fecha.value = estado.fecha || '';
+                    orientacion.value = estado.orientacion || '';
+                    url.value = estado.url || '';
+
+                    if (Array.isArray(estado.checklist)) {
+                        checkboxes.forEach((c, i) => {
+                            c.checked = Boolean(estado.checklist[i]);
+                        });
+                    }
+
+                    if (estado.rubrica) {
+                        Object.entries(estado.rubrica).forEach(([grupo, valor]) => {
+                            const radio = document.querySelector(`input[name="${grupo}"][value="${valor}"]`);
+                            if (radio) radio.checked = true;
+                        });
+                    }
+                } catch (e) {}
+
+                validarUrlVisual();
+                actualizarChecklist();
+                actualizarRubrica();
+            }
+
+            [nombre, fecha, orientacion, url].forEach(campo => {
+                campo.addEventListener('input', guardarEstado);
+                campo.addEventListener('change', guardarEstado);
+            });
+
+            url.addEventListener('input', validarUrlVisual);
+
+            botonAbrir.addEventListener('click', () => {
+                const valor = url.value.trim();
+
+                if (!esUrlValida(valor)) {
+                    validarUrlVisual();
+                    alert('Primero escribe un enlace válido del portafolio.');
+                    return;
+                }
+
+                window.open(valor, '_blank', 'noopener,noreferrer');
+            });
+
+            checkboxes.forEach(c => c.addEventListener('change', actualizarChecklist));
+            radios.forEach(r => r.addEventListener('change', actualizarRubrica));
+
+            reiniciar.addEventListener('click', () => {
+                if (!confirm('¿Deseas borrar los datos, la lista de cotejo y la autoevaluación guardada en este navegador?')) {
+                    return;
+                }
+
+                nombre.value = '';
+                fecha.value = '';
+                orientacion.value = '';
+                url.value = '';
+                checkboxes.forEach(c => c.checked = false);
+                radios.forEach(r => r.checked = false);
+
+                try {
+                    localStorage.removeItem(storageKey);
+                } catch (e) {}
+
+                validarUrlVisual();
+                actualizarChecklist();
+                actualizarRubrica();
+            });
+
+            restaurarEstado();
+
+            window.imprimirRegistroFinal = function () {
+                const nombreValor = nombre.value.trim();
+                const fechaValor = fecha.value;
+                const orientacionValor = orientacion.value;
+                const urlValor = url.value.trim();
+
+                if (!nombreValor) {
+                    alert('Escribe el nombre completo del estudiante antes de imprimir.');
+                    nombre.focus();
+                    return;
+                }
+
+                if (!fechaValor) {
+                    alert('Selecciona la fecha antes de imprimir.');
+                    fecha.focus();
+                    return;
+                }
+
+                if (!orientacionValor) {
+                    alert('Selecciona la orientación del estudiante antes de imprimir.');
+                    orientacion.focus();
+                    return;
+                }
+
+                if (!esUrlValida(urlValor)) {
+                    alert('Escribe un enlace público válido del portafolio antes de imprimir.');
+                    url.focus();
+                    return;
+                }
+
+                const notaTexto = nota.textContent.trim();
+                const coincidencia = notaTexto.match(/(\d+)\s*\/\s*20/);
+
+                if (!coincidencia) {
+                    alert('Completa los cuatro criterios de la rúbrica antes de imprimir el resultado final.');
+                    document.getElementById('rubrica-autoevaluacion').scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+
+                const notaFinal = coincidencia[1];
+                const porcentajeFinal = `${Math.round((Number(notaFinal) / 20) * 100)} %`;
+
+                const partesFecha = fechaValor.split('-');
+                const fechaFormateada = partesFecha.length === 3
+                    ? `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`
+                    : fechaValor;
+
+                document.getElementById('registro-nombre').textContent = nombreValor;
+                document.getElementById('registro-fecha').textContent = fechaFormateada;
+                document.getElementById('registro-orientacion').textContent = orientacionValor;
+                document.getElementById('registro-url').textContent = urlValor;
+                document.getElementById('registro-nota').textContent = notaFinal;
+                document.getElementById('registro-porcentaje').textContent = porcentajeFinal;
+
+                window.print();
+            };
+        })();
+    </script>
+
+</body>
+</html>
